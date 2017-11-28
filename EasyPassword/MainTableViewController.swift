@@ -29,6 +29,8 @@ class MainTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
         // 默认创建一个Folder.plist用于存储Main页面的数据
+        PlistHelper.makeDefaulFolderPlis()
+        let folerArray = PlistHelper.readPlist(forResource: "Folder", ofType: "plist")
     }
 
     override func didReceiveMemoryWarning() {

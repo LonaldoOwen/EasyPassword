@@ -39,6 +39,34 @@ extension PlistHelper {
 }
 
 /// Read
+extension PlistHelper {
+    /// 读取plist返回数组
+    /// @forResource plist名称
+    /// @ofType plist类型
+    /// @return [Any]
+    public class func readPlist(forResource name: String?, ofType ext: String?) -> [Any]{
+        
+        let path = Bundle.main.path(forResource: name , ofType: ext)
+        let fileManager = FileManager.default
+        let plistData = fileManager.contents(atPath: path!)
+        
+        let tempArray: [[String: Any]] = try! PropertyListSerialization.propertyList(from: plistData!, options: [], format: nil) as! [[String : Any]]
+        
+        return tempArray
+    }
+    
+    /// 从沙盒路径读取plist
+    ///
+    ///
+    public class func readPlist(ofName name: String) -> [Any]{
+        
+        let fileManager = FileManager.default
+        let documentDirectory = try! fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+        let fileUrl = documentDirectory.appendingPathComponent(name, isDirectory: false)
+        if fileManager.fileexist
+    }
+}
+
 
 
 /// Write
