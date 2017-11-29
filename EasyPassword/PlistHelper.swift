@@ -22,9 +22,9 @@ class PlistHelper {
 }
 
 extension PlistHelper {
-    ///
+    /// 创建默认文件夹plist
     public class func makeDefaulFolderPlis() {
-        let defaultArray = [["type": "My IPHONE"], ["name": "备忘"], ["count": "0"]]
+        let defaultArray = [["type": "My IPHONE", "items": [["name": "备忘", "count": "0"]]], ["type": "iCloud", "items": [["name": "iCloud备忘", "count": "0"]]]]
         let serializedData = try! PropertyListSerialization.data(fromPropertyList: defaultArray, format: .xml, options: 0)
         let fileManager = FileManager.default
         let documentsDirectory = try! fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
@@ -40,6 +40,19 @@ extension PlistHelper {
 
 /// Read
 extension PlistHelper {
+    
+    /// 获取沙盒中directory中的plist路径
+    /// @ofName plist的完整名称，如：Folder.plist
+    /// @return String
+    public class func getPlistPath(ofName name: String) -> String {
+        let fileManager = FileManager.default
+        let documentDirectory = try! fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+        let fileUrl = documentDirectory.appendingPathComponent(name, isDirectory: false)
+        let filePath = fileUrl.path
+        return filePath
+    }
+    
+    
     /// 读取plist返回数组
     /// @forResource plist名称
     /// @ofType plist类型
@@ -56,15 +69,31 @@ extension PlistHelper {
     }
     
     /// 从沙盒路径读取plist
-    ///
-    ///
-    public class func readPlist(ofName name: String) -> [Any]{
+    /// @ofName plist完整名称，如：Folder.plist
+    /// @return 返回plist数据
+    public class func readPlist(ofName name: String) -> Any{
         
         let fileManager = FileManager.default
-        let documentDirectory = try! fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-        let fileUrl = documentDirectory.appendingPathComponent(name, isDirectory: false)
-        if fileManager.fileexist
+
+        let filePath = self.getPlistPath(ofName: name)
+        if fileManager.fileExists(atPath: filePath) {
+            let data = fileManager.contents(atPath: filePath)
+            let plist = try! PropertyListSerialization.propertyList(from: data!, options: PropertyListSerialization.MutabilityOptions.mutableContainersAndLeaves, format: nil)
+            print(plist)
+            return plist
+        } else {
+            print("File not exists at: \(filePath)")
+        }
+       return [Any]()
     }
+    
+    
+    
+    
+    
+    
+    
+    
 }
 
 

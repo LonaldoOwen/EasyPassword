@@ -18,6 +18,9 @@
 import UIKit
 
 class MainTableViewController: UITableViewController {
+    
+    //var folders = [[String: Any]]()
+    var folders = [FolderModel]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,9 +31,27 @@ class MainTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
-        // 默认创建一个Folder.plist用于存储Main页面的数据
-        PlistHelper.makeDefaulFolderPlis()
-        let folerArray = PlistHelper.readPlist(forResource: "Folder", ofType: "plist")
+        // 创建或读取plist数据（默认创建一个Folder.plist用于存储Main页面的数据）
+        let fileManager = FileManager.default
+        // 不存在，创建一个新的Folder.plist
+        if !fileManager.fileExists(atPath: PlistHelper.getPlistPath(ofName: "Folder.plist")) {
+            PlistHelper.makeDefaulFolderPlis()
+        }
+        // 如果Folder.plist在沙盒中存在，则读取它的数据
+        let tempFolders = PlistHelper.readPlist(ofName: "Folder.plist") as! [[String : Any]]
+        
+        // plist装换为model
+        folders = tempFolders.map {
+            FolderModel(
+                type: $0["type"] as! String,
+                items: ($0["items"] as! [[String: Any]]).map {
+                    FolderModel.item(
+                        name: $0["name"] as! String,
+                        count: $0["count"] as! String
+                    )
+                }
+            )
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -62,24 +83,24 @@ class MainTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 3
+        return folders.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 10
+        return folders[section].items.count
     }
 
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FolderCell", for: indexPath)
-
-        // Configure the cell...
-
+        let item = folders[indexPath.section].items[indexPath.row]
+        cell.textLabel?.text = item.name
+        cell.detailTextLabel?.text = item.count
         return cell
     }
  
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        // 验证section0为什么不显示
         if section == 0 {
             print("Section: 0")
         }
@@ -88,7 +109,9 @@ class MainTableViewController: UITableViewController {
         if sectionHeader == nil {
             sectionHeader = UITableViewHeaderFooterView(reuseIdentifier: "DefaulSectionHeader")
         }
-        sectionHeader?.textLabel?.text = "Header"
+        //sectionHeader?.textLabel?.text = "Header"
+        let folder = folders[section]
+        sectionHeader?.textLabel?.text = folder.type
         return sectionHeader
     }
     
