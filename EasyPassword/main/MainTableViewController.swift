@@ -7,8 +7,12 @@
 //
 /// 功能：主视图，
 /// 1、显示保存账户密码的文件夹
-/// 2、创建新文件夹
-/// 3、编辑
+/// 2、创建新文件夹:(使用Alert)
+/// 创建Alert、添加textField、actions；插入数据、插入cell、写入plist
+///
+/// 3、编辑:
+///
+///
 ///
 /// 问题：
 /// 1、Toolbar选择的是translucent，但是显示的时候却是opaque？？？
@@ -19,7 +23,7 @@ import UIKit
 
 class MainTableViewController: UITableViewController {
     
-    //var folders = [[String: Any]]()
+    var foldersArray = [[String: Any]]()
     var folders = [FolderModel]()
 
     override func viewDidLoad() {
@@ -39,7 +43,7 @@ class MainTableViewController: UITableViewController {
         }
         // 如果Folder.plist在沙盒中存在，则读取它的数据
         let tempFolders = PlistHelper.readPlist(ofName: "Folder.plist") as! [[String : Any]]
-        
+        foldersArray = tempFolders
         // plist装换为model
         folders = tempFolders.map {
             FolderModel(
@@ -70,8 +74,11 @@ class MainTableViewController: UITableViewController {
     // 处理创建新文件夹action
     @IBAction func handleCreateNewFolderAction(_ sender: UIBarButtonItem) {
         // show action sheet(可选不同类型)
+        
+        // show Alert
         // 创建新文件夹
         // 同时创建对应plist
+        showAlertToCreateNewFolder()
     }
     
     
@@ -130,7 +137,32 @@ class MainTableViewController: UITableViewController {
     
     // 显示Alert 用于创建新文件夹
     func showAlertToCreateNewFolder() {
-        
+        let alert = UIAlertController.init(title: "新建文件夹", message: "请为此文件夹输入名称", preferredStyle: .alert)
+        // 添加textField
+        alert.addTextField { (textField) in
+            textField.placeholder = "名称"
+        }
+        // 添加action
+        alert.addAction(UIAlertAction.init(title: "取消", style: UIAlertActionStyle.cancel, handler: nil))
+        alert.addAction(UIAlertAction.init(title: "存储", style: UIAlertActionStyle.destructive) { (save) in
+            // 保存新建的文件夹
+            print("save: \(String(describing: alert.textFields?.first?.text))")
+            // 获取textField的输入内容
+            let folderName = alert.textFields?.first?.text
+            // 插入到folders和foldersArray
+            let item = FolderModel.item(name: folderName!, count: "0")
+            self.folders.first?.items.append(item)
+            self.foldersArray = PlistHelper.readPlist(ofName: "Folder.plist") as! [[String: Any]]
+            // 插入cell
+            self.tableView.insertRows(at: [IndexPath.init(row: (self.folders.first?.items.count)! - 1, section: 0)], with: .automatic)
+            // 写入Folder.plist
+            let filePath = PlistHelper.getPlistPath(ofName: "Folder.plist")
+            PlistHelper.write(plist: self.foldersArray, toPath: filePath)
+            //
+            
+        })
+        // present modelly
+        self.present(alert, animated: true, completion: nil)
     }
     
 

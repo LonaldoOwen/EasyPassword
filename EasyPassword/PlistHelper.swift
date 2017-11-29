@@ -87,19 +87,31 @@ extension PlistHelper {
        return [Any]()
     }
     
+    ///
     
+    ///
     
-    
-    
-    
-    
-    
+    ///
+
 }
 
 
 
 /// Write
-
+extension PlistHelper {
+    
+    /// 将plist写入沙盒directory
+    public class func write(plist: Any, toPath: String) {
+        let serializedData = try! PropertyListSerialization.data(fromPropertyList: plist, format: .xml, options: 0)
+        let fileUrl = URL.init(fileURLWithPath: toPath)
+        do {
+            try serializedData.write(to: fileUrl, options: .atomic)
+        } catch let error {
+            print("Write plist failed: \(error)")
+        }
+    }
+    
+}
 
 
 
