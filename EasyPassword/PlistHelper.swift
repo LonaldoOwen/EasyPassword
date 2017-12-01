@@ -79,7 +79,7 @@ extension PlistHelper {
         if fileManager.fileExists(atPath: filePath) {
             let data = fileManager.contents(atPath: filePath)
             let plist = try! PropertyListSerialization.propertyList(from: data!, options: PropertyListSerialization.MutabilityOptions.mutableContainersAndLeaves, format: nil)
-            print(plist)
+            print("readPlist(ofName:) plist: \(plist)")
             return plist
         } else {
             print("File not exists at: \(filePath)")

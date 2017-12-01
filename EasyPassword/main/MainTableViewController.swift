@@ -42,10 +42,10 @@ class MainTableViewController: UITableViewController {
             PlistHelper.makeDefaulFolderPlis()
         }
         // 如果Folder.plist在沙盒中存在，则读取它的数据
-        let tempFolders = PlistHelper.readPlist(ofName: "Folder.plist") as! [[String : Any]]
-        foldersArray = tempFolders
+        let folderPlist = PlistHelper.readPlist(ofName: "Folder.plist") as! [[String : Any]]
+        foldersArray = folderPlist
         // plist装换为model
-        folders = tempFolders.map {
+        folders = folderPlist.map {
             FolderModel(
                 type: $0["type"] as! String,
                 items: ($0["items"] as! [[String: Any]]).map {
@@ -144,22 +144,30 @@ class MainTableViewController: UITableViewController {
         }
         // 添加action
         alert.addAction(UIAlertAction.init(title: "取消", style: UIAlertActionStyle.cancel, handler: nil))
-        alert.addAction(UIAlertAction.init(title: "存储", style: UIAlertActionStyle.destructive) { (save) in
+        alert.addAction(UIAlertAction.init(title: "存储", style: UIAlertActionStyle.destructive) { (saveAction) in
             // 保存新建的文件夹
-            print("save: \(String(describing: alert.textFields?.first?.text))")
+            print("save folder name: \(String(describing: alert.textFields?.first?.text))")
+            
             // 获取textField的输入内容
             let folderName = alert.textFields?.first?.text
-            // 插入到folders和foldersArray
+            // 插入到folders
             let item = FolderModel.item(name: folderName!, count: "0")
             self.folders.first?.items.append(item)
-            self.foldersArray = PlistHelper.readPlist(ofName: "Folder.plist") as! [[String: Any]]
+            // 插入到foldersArray
+            //self.foldersArray = PlistHelper.readPlist(ofName: "Folder.plist") as! [[String: Any]]
+            //(self.foldersArray[0]["items"] as! [[String: Any]]).append(["name": folderName, "count": "0"])
+            var items = (self.foldersArray[0]["items"] as! [[String: Any]])
+            items.append(["name": folderName as Any, "count": "0"])
+            self.foldersArray[0].updateValue(items, forKey: "items")
+            
             // 插入cell
             self.tableView.insertRows(at: [IndexPath.init(row: (self.folders.first?.items.count)! - 1, section: 0)], with: .automatic)
             // 写入Folder.plist
             let filePath = PlistHelper.getPlistPath(ofName: "Folder.plist")
             PlistHelper.write(plist: self.foldersArray, toPath: filePath)
-            //
-            
+            // 验证是否成功写入沙盒
+            let folderPlist = PlistHelper.readPlist(ofName: "Folder.plist") as! [[String : Any]]
+            print("验证Folder.plist in sandbox: \(folderPlist)")
         })
         // present modelly
         self.present(alert, animated: true, completion: nil)
