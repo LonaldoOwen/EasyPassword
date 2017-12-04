@@ -92,11 +92,7 @@
                         </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="文件夹" id="krs-Cn-Us2">
-                        <barButtonItem key="rightBarButtonItem" title="编辑" id="3aq-8a-p4w">
-                            <connections>
-                                <action selector="handleEditAction:" destination="ayS-OZ-rqq" id="jJt-iw-uq0"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="编辑" id="3aq-8a-p4w"/>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>

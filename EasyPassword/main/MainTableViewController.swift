@@ -68,7 +68,7 @@ class MainTableViewController: UITableViewController {
     
     // 处理编辑acion
     @IBAction func handleEditAction(_ sender: UIBarButtonItem) {
-        
+        print("#handleEditAction")
     }
     
     // 处理创建新文件夹action
@@ -81,7 +81,11 @@ class MainTableViewController: UITableViewController {
         showAlertToCreateNewFolder()
     }
     
-    
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: true)
+        //
+        print("#setEditing: \(editing)")
+    }
     
     
     
@@ -126,6 +130,23 @@ class MainTableViewController: UITableViewController {
     ///
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
+    }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        print("#canEditRowAt")
+        return true
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        print("#commit editingStyle:")
+    }
+    
+    
+    // MARK: - Table View delegate
+    
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        print("#editingStyleForRowAt")
+        return UITableViewCellEditingStyle.delete
     }
     
     
