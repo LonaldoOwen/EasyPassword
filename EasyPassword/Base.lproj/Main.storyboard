@@ -91,9 +91,7 @@
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" title="文件夹" id="krs-Cn-Us2">
-                        <barButtonItem key="rightBarButtonItem" title="编辑" id="3aq-8a-p4w"/>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="文件夹" id="krs-Cn-Us2"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="searchDisplayController" destination="Zcx-SL-th8" id="QQP-vR-gcU"/>

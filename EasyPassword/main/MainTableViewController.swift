@@ -33,7 +33,9 @@ class MainTableViewController: UITableViewController {
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        self.navigationItem.rightBarButtonItem = self.editButtonItem
+        //self.editButtonItem.title = "编辑"
+        self.tableView.allowsMultipleSelectionDuringEditing = true
         
         // 创建或读取plist数据（默认创建一个Folder.plist用于存储Main页面的数据）
         let fileManager = FileManager.default
@@ -67,9 +69,12 @@ class MainTableViewController: UITableViewController {
     // MARK: - Action
     
     // 处理编辑acion
-    @IBAction func handleEditAction(_ sender: UIBarButtonItem) {
-        print("#handleEditAction")
-    }
+//    @IBAction func handleEditAction(_ sender: UIBarButtonItem) {
+//        print("#handleEditAction")
+//        if self.tableView.isEditing {
+//            self.tableView.setEditing(false, animated: true)
+//        }
+//    }
     
     // 处理创建新文件夹action
     @IBAction func handleCreateNewFolderAction(_ sender: UIBarButtonItem) {
@@ -84,7 +89,13 @@ class MainTableViewController: UITableViewController {
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: true)
         //
+        //self.tableView.setEditing(editing, animated: true)
         print("#setEditing: \(editing)")
+        if self.tableView.isEditing {
+            self.editButtonItem.title = "完成"
+        } else {
+            self.editButtonItem.title = "编辑"
+        }
     }
     
     
@@ -103,6 +114,7 @@ class MainTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print("cellForRowAt")
         let cell = tableView.dequeueReusableCell(withIdentifier: "FolderCell", for: indexPath)
         let item = folders[indexPath.section].items[indexPath.row]
         cell.textLabel?.text = item.name
@@ -142,12 +154,29 @@ class MainTableViewController: UITableViewController {
     }
     
     
+    
     // MARK: - Table View delegate
     
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         print("#editingStyleForRowAt")
-        return UITableViewCellEditingStyle.delete
+        return UITableViewCellEditingStyle.none
     }
+    
+    // table view 的某个cell的background是否indent（缩进排版）
+    override func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        print("#shouldIndentWhileEditingRowAt")
+        if indexPath.row == 0 {
+            return true
+        }
+        
+        return false
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("#didSelectRowAt")
+        //let cell = tableView.cellForRow(at: indexPath)
+    }
+    
     
     
     // MARK: - Helper
