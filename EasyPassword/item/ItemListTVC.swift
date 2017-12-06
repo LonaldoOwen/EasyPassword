@@ -5,6 +5,14 @@
 //  Created by owen on 05/12/2017.
 //  Copyright © 2017 libowen. All rights reserved.
 //
+///  ItemListTVC
+/// 功能：item list
+/// 1、title显示用户名、detail显示密码
+/// 2、长按显示edit(?)，可以复制用户名、密码
+/// 3、
+///
+///
+///
 
 import UIKit
 

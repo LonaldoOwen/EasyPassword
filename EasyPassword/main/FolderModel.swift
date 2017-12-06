@@ -10,6 +10,12 @@
 /// 1、
 /// 2、
 
+/*
+ var persistent: String // 持久化方式
+ var folderName: String // 文件夹name
+ var itmes: [ItemModel] // 条目
+
+ */
 
 import Foundation
 

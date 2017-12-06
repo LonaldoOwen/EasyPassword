@@ -7,19 +7,23 @@
 //
 ///  ItemModel
 /// 功能：item list数据模型
-/// 1、title显示用户名、detail显示密码
-/// 2、长按显示edit(?)，可以复制用户名、密码
+/// 
+///
 ///
 
 import Foundation
 
-class Item {
+struct Item {
     
-    var username: String
-    var password: String
+    var username: String    // 非空
+    var password: String    // 非空
+    var website: String     //
+    var note: String        //
     
-    init(username: String, password: String) {
+    init(username: String, password: String, website: String, note: String) {
         self.username = username
         self.password = password
+        self.website = website
+        self.note = note
     }
 }
