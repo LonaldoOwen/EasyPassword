@@ -46,7 +46,7 @@ class MainTableViewController: UITableViewController {
         // 如果Folder.plist在沙盒中存在，则读取它的数据
         let folderPlist = PlistHelper.readPlist(ofName: "Folder.plist") as! [[String : Any]]
         foldersArray = folderPlist
-        // plist装换为model
+        // plist转换为model
         folders = folderPlist.map {
             FolderModel(
                 type: $0["type"] as! String,
