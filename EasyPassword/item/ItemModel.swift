@@ -13,10 +13,13 @@
 
 import Foundation
 
-struct Item {
+protocol Item { }
+
+// 登录模型
+struct Login: Item {
     
-    var username: String    // 非空
-    var password: String    // 非空
+    var username: String     // 非空
+    var password: String     // 非空
     var website: String     //
     var note: String        //
     
@@ -27,3 +30,10 @@ struct Item {
         self.note = note
     }
 }
+
+
+// 信用卡模型
+
+// 电影卡模型
+
+// 其他模型

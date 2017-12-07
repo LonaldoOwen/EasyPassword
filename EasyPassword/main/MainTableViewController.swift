@@ -23,8 +23,9 @@ import UIKit
 
 class MainTableViewController: UITableViewController {
     
-    var foldersArray = [[String: Any]]()
-    var folders = [FolderModel]()
+    //var iphoneArray = [[String: Any]]()
+    var iphoneFolders = [FolderModel]()
+    var folderPlist = [[[String: Any]]]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,16 +45,19 @@ class MainTableViewController: UITableViewController {
             PlistHelper.makeDefaulFolderPlis()
         }
         // 如果Folder.plist在沙盒中存在，则读取它的数据
-        let folderPlist = PlistHelper.readPlist(ofName: "Folder.plist") as! [[String : Any]]
-        foldersArray = folderPlist
+        let plist = PlistHelper.readPlist(ofName: "Folder.plist") as! [[[String: Any]]]
+        folderPlist = plist
         // plist装换为model
-        folders = folderPlist.map {
+        iphoneFolders = folderPlist[1].map {
             FolderModel(
-                type: $0["type"] as! String,
+                persistentType: $0["persistentType"] as! String,
+                itemType: $0["itemType"] as! String,
                 items: ($0["items"] as! [[String: Any]]).map {
-                    FolderModel.item(
-                        name: $0["name"] as! String,
-                        count: $0["count"] as! String
+                    Login(
+                        username: $0["username"] as! String,
+                        password: $0["password"] as! String,
+                        website: $0["website"] as! String,
+                        note: $0["note"] as! String
                     )
                 }
             )
@@ -105,36 +109,38 @@ class MainTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return folders.count
+        return folderPlist.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return folders[section].items.count
+        return folderPlist[section].count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print("cellForRowAt")
         let cell = tableView.dequeueReusableCell(withIdentifier: "FolderCell", for: indexPath)
-        let item = folders[indexPath.section].items[indexPath.row]
-        cell.textLabel?.text = item.name
-        cell.detailTextLabel?.text = item.count
+        if indexPath.section == 1 {
+            let folder = iphoneFolders[indexPath.row]
+            cell.textLabel?.text = folder.itemType
+            cell.detailTextLabel?.text = String(folder.items.count)
+        } else {
+            cell.textLabel?.text = folderPlist[0][0]["itemType"] as? String
+            cell.detailTextLabel?.text = String((folderPlist[0][0]["items"] as! [[String: Any]]).count)
+        }
+        
+        
         return cell
     }
  
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        // 验证section0为什么不显示
-        if section == 0 {
-            print("Section: 0")
-        }
         
         var sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: "DefaulSectionHeader")
         if sectionHeader == nil {
             sectionHeader = UITableViewHeaderFooterView(reuseIdentifier: "DefaulSectionHeader")
         }
-        //sectionHeader?.textLabel?.text = "Header"
-        let folder = folders[section]
-        sectionHeader?.textLabel?.text = folder.type
+        sectionHeader?.textLabel?.text = folderPlist[section].first?["persistentType"] as? String
+        
         return sectionHeader
     }
     
@@ -146,6 +152,9 @@ class MainTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         print("#canEditRowAt")
+        if indexPath.row == 0 {
+            return false
+        }
         return true
     }
     
@@ -163,18 +172,28 @@ class MainTableViewController: UITableViewController {
     }
     
     // table view 的某个cell的background是否indent（缩进排版）
+    // true: 缩进
     override func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         print("#shouldIndentWhileEditingRowAt")
-        if indexPath.row == 0 {
-            return true
-        }
-        
-        return false
+        return true
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("#didSelectRowAt")
         //let cell = tableView.cellForRow(at: indexPath)
+        // 非编辑状态时跳转到新VC
+        if !self.tableView.isEditing {
+            let itemListTVC: ItemListTVC = storyboard?.instantiateViewController(withIdentifier: "ItemListTVC") as! ItemListTVC
+            let cell = tableView.cellForRow(at: indexPath)
+            // 传值
+            itemListTVC.titleName = (cell?.textLabel?.text)!
+            itemListTVC.items = iphoneFolders[indexPath.row].items
+            self.show(itemListTVC, sender: nil)
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        print("#didDeselectRowAt")
     }
     
     
@@ -195,29 +214,33 @@ class MainTableViewController: UITableViewController {
         // 添加action
         alert.addAction(UIAlertAction.init(title: "取消", style: UIAlertActionStyle.cancel, handler: nil))
         alert.addAction(UIAlertAction.init(title: "存储", style: UIAlertActionStyle.destructive) { (saveAction) in
-            // 保存新建的文件夹
+            
+            // 保存新建的文件夹；添加到My IPHONE中
             print("save folder name: \(String(describing: alert.textFields?.first?.text))")
             
             // 获取textField的输入内容
             let folderName = alert.textFields?.first?.text
-            // 插入到folders
-            let item = FolderModel.item(name: folderName!, count: "0")
-            self.folders.first?.items.append(item)
-            // 插入到foldersArray
-            //self.foldersArray = PlistHelper.readPlist(ofName: "Folder.plist") as! [[String: Any]]
-            //(self.foldersArray[0]["items"] as! [[String: Any]]).append(["name": folderName, "count": "0"])
-            var items = (self.foldersArray[0]["items"] as! [[String: Any]])
-            items.append(["name": folderName as Any, "count": "0"])
-            self.foldersArray[0].updateValue(items, forKey: "items")
-            
+            // 插入到iphoneFolders
+            //let item = FolderModel.item(name: folderName!, count: "0")
+            let folder = FolderModel(persistentType: "My IPHONE", itemType: folderName!, items: [])
+            self.iphoneFolders.append(folder)
+            // 插入到iphoneArray
+            /// 为什么此时未插入到self.folderPlist？？？？
+            /// 原因：
+            /// 解决：
+            let tempDict = ["persistentType": "My IPHONE", "itemType": folderName!, "items": []] as [String : Any]
+            var iphoneArray = self.folderPlist[1]
+            iphoneArray.append(tempDict)
+            // 插入到plist
+            self.folderPlist[1] = iphoneArray
             // 插入cell
-            self.tableView.insertRows(at: [IndexPath.init(row: (self.folders.first?.items.count)! - 1, section: 0)], with: .automatic)
+            self.tableView.insertRows(at: [IndexPath.init(row: (self.iphoneFolders.count) - 1, section: 1)], with: .automatic)
             // 写入Folder.plist
             let filePath = PlistHelper.getPlistPath(ofName: "Folder.plist")
-            PlistHelper.write(plist: self.foldersArray, toPath: filePath)
+            PlistHelper.write(plist: self.folderPlist, toPath: filePath)
             // 验证是否成功写入沙盒
-            let folderPlist = PlistHelper.readPlist(ofName: "Folder.plist") as! [[String : Any]]
-            print("验证Folder.plist in sandbox: \(folderPlist)")
+            let plist = PlistHelper.readPlist(ofName: "Folder.plist") as! [[[String : Any]]]
+            print("验证Folder.plist in sandbox: \(plist)")
         })
         // present modelly
         self.present(alert, animated: true, completion: nil)

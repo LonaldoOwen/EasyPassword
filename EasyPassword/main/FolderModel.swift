@@ -21,16 +21,18 @@ import Foundation
 
 class FolderModel {
     
-    struct item {
-        var name: String
-        var count: String
+    /// 可以定义一个enum来处理相关操作()
+    enum PersistentType {
+        case iphone, icloud
     }
     
-    var type: String
-    var items: [item]
+    var persistentType: String
+    var itemType: String
+    var items: [Item]
     
-    init(type: String, items: [item]) {
-        self.type = type
+    init(persistentType: String, itemType: String, items: [Item]) {
+        self.persistentType = persistentType
+        self.itemType = itemType
         self.items = items
     }
     
