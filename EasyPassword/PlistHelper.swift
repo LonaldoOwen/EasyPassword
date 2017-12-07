@@ -22,9 +22,14 @@ class PlistHelper {
 }
 
 extension PlistHelper {
+    
     /// 创建默认文件夹plist
     public class func makeDefaulFolderPlis() {
-        let defaultArray = [["type": "My IPHONE", "items": [["name": "备忘", "count": "0"]]], ["type": "iCloud", "items": [["name": "iCloud备忘", "count": "0"]]]]
+        
+        let tempItem = ["username": "temp", "password": "123", "website": "temp.com", "note": "This is temp!"]
+        let icloudArray = [["itemType": "iCloud备忘", "persistentType": "ICLOUD", "items": [tempItem]]]
+        let iphoneArray = [["itemType": "备忘", "persistentType": "MyIPHONE","items": [tempItem]]]
+        let defaultArray = [icloudArray, iphoneArray]
         let serializedData = try! PropertyListSerialization.data(fromPropertyList: defaultArray, format: .xml, options: 0)
         let fileManager = FileManager.default
         let documentsDirectory = try! fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
@@ -109,6 +114,28 @@ extension PlistHelper {
         } catch let error {
             print("Write plist failed: \(error)")
         }
+    }
+    
+    
+    /// 向plist中插入item
+    /// 问题：存在插入不进去的情况？？？
+    public class func insert(_ item: [String: Any], ofPersistentType type: String, itemType: String) {
+        let plist = PlistHelper.readPlist(ofName: "Folder.plist") as! [[[String: Any]]]
+        var tempPlist = Array.init(plist)
+        //var items = [[String: Any]]()
+        if type == "MyIPHONE" {
+            let iphoneFolder = tempPlist[1]
+            for folder in iphoneFolder {
+                if folder["itemType"] as! String == itemType {
+                    var items = folder["items"] as! [[String: Any]]
+                    items.append(item)
+                    //folder["items"] = items
+                }
+            }
+            
+        }
+        // write plist
+        PlistHelper.write(plist: tempPlist, toPath: PlistHelper.getPlistPath(ofName: "Folder.plist"))
     }
     
 }

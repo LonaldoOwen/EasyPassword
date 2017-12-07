@@ -10,21 +10,29 @@
 /// 1、
 /// 2、
 
+/*
+ var persistent: String // 持久化方式
+ var folderName: String // 文件夹name
+ var itmes: [ItemModel] // 条目
+
+ */
 
 import Foundation
 
 class FolderModel {
     
-    struct item {
-        var name: String
-        var count: String
+    /// 可以定义一个enum来处理相关操作()
+    enum PersistentType {
+        case iphone, icloud
     }
     
-    var type: String
-    var items: [item]
+    var persistentType: String
+    var itemType: String
+    var items: [Item]
     
-    init(type: String, items: [item]) {
-        self.type = type
+    init(persistentType: String, itemType: String, items: [Item]) {
+        self.persistentType = persistentType
+        self.itemType = itemType
         self.items = items
     }
     
