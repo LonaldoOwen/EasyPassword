@@ -124,15 +124,20 @@ extension PlistHelper {
         var tempPlist = Array.init(plist)
         //var items = [[String: Any]]()
         if type == "MyIPHONE" {
-            let iphoneFolder = tempPlist[1]
-            for folder in iphoneFolder {
+            var iphoneFolder = tempPlist[1]
+            for (index, var folder) in iphoneFolder.enumerated() {
                 if folder["itemType"] as! String == itemType {
                     var items = folder["items"] as! [[String: Any]]
-                    items.append(item)
-                    //folder["items"] = items
+                    items.append(item)              // insert item
+                    folder["items"] = items         // update items
+                    print(items)
+                    iphoneFolder[index] = folder    // update iphoneFolder
+                    // 直接插入
+                    // Cannot use mutating member on immutable value of type '[[String : Any]]'
+                    //(folder["items"] as! [[String: Any]]).append(item)
                 }
             }
-            
+            tempPlist[1] = iphoneFolder             // update tempPlist
         }
         // write plist
         PlistHelper.write(plist: tempPlist, toPath: PlistHelper.getPlistPath(ofName: "Folder.plist"))
