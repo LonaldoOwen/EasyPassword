@@ -106,6 +106,8 @@ extension PlistHelper {
 extension PlistHelper {
     
     /// 将plist写入沙盒directory
+    /// @plist property list
+    /// @toPath Property list 路径（String）
     public class func write(plist: Any, toPath: String) {
         let serializedData = try! PropertyListSerialization.data(fromPropertyList: plist, format: .xml, options: 0)
         let fileUrl = URL.init(fileURLWithPath: toPath)
@@ -118,26 +120,26 @@ extension PlistHelper {
     
     
     /// 向plist中插入item
+    ///
+    ///
     /// 问题：存在插入不进去的情况？？？
     public class func insert(_ item: [String: Any], ofPersistentType type: String, itemType: String) {
         let plist = PlistHelper.readPlist(ofName: "Folder.plist") as! [[[String: Any]]]
-        var tempPlist = Array.init(plist)
-        //var items = [[String: Any]]()
+        //var tempPlist = Array.init(plist)
+        var tempPlist = plist                       // copy plist
         if type == "MyIPHONE" {
             var iphoneFolder = tempPlist[1]
-            for (index, var folder) in iphoneFolder.enumerated() {
+            for (index, folder) in iphoneFolder.enumerated() {
                 if folder["itemType"] as! String == itemType {
-                    var items = folder["items"] as! [[String: Any]]
-                    items.append(item)              // insert item
-                    folder["items"] = items         // update items
+                    var tempFolder = folder                             // copy folder
+                    var items = tempFolder["items"] as! [[String: Any]]
+                    items.insert(item, at: 0)                           // insert item
+                    tempFolder["items"] = items                         // update items
                     print(items)
-                    iphoneFolder[index] = folder    // update iphoneFolder
-                    // 直接插入
-                    // Cannot use mutating member on immutable value of type '[[String : Any]]'
-                    //(folder["items"] as! [[String: Any]]).append(item)
+                    iphoneFolder[index] = tempFolder                    // update iphoneFolder
                 }
             }
-            tempPlist[1] = iphoneFolder             // update tempPlist
+            tempPlist[1] = iphoneFolder                                 // update tempPlist
         }
         // write plist
         PlistHelper.write(plist: tempPlist, toPath: PlistHelper.getPlistPath(ofName: "Folder.plist"))

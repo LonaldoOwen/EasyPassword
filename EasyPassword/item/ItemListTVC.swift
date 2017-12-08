@@ -9,10 +9,16 @@
 /// 功能：item list
 /// 1、title显示用户名、detail显示密码
 /// 2、长按显示edit(?)，可以复制用户名、密码
-/// 3、
+/// 3、点返回，回到文件列表，需要刷新table view（在viewWillAppear中操作即可）
+/// 4、添加完新的item后，刷新当前table view
+/// 5、search bar使用？？？
 ///
 ///
 ///
+///
+
+
+
 
 import UIKit
 
@@ -35,6 +41,7 @@ class ItemListTVC: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        print("#ItemListTVC--viewWillAppear")
         // 接收传值，显示title
         self.title = titleName
         print("items: \(String(describing: items))")
@@ -48,13 +55,15 @@ class ItemListTVC: UITableViewController {
     
     @IBAction func handleAddAction(_ sender: UIBarButtonItem) {
         // 调起创建新itemVC
-        PlistHelper.insert(["username": "name", "password": "pass", "website": ".com", "note": "note..."], ofPersistentType: "MyIPHONE", itemType: "eee")
+        //PlistHelper.insert(["username": "name", "password": "pass", "website": ".com", "note": "note..."], ofPersistentType: "MyIPHONE", itemType: titleName)
         //
         //
     }
     
-    
-    
+    // 收起创建item VC
+    @IBAction func close(_ segue: UIStoryboardSegue) {
+        
+    }
     
     
 

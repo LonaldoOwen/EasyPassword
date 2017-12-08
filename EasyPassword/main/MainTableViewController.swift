@@ -6,12 +6,12 @@
 //  Copyright © 2017年 libowen. All rights reserved.
 //
 /// 功能：主视图，
-/// 1、显示保存账户密码的文件夹
-/// 2、创建新文件夹:(使用Alert)
-/// 创建Alert、添加textField、actions；插入数据、插入cell、写入plist
-///
+/// 1、根据存储类型分别显示保存账户密码的文件夹
+/// 2、创建新文件夹:(使用Alert：创建Alert、添加textField、actions；插入数据、插入cell、写入plist)
 /// 3、编辑:
-///
+///    选中cell删除（多选）
+///    修改文件夹名称
+/// 4、
 ///
 ///
 /// 问题：
@@ -44,9 +44,14 @@ class MainTableViewController: UITableViewController {
         if !fileManager.fileExists(atPath: PlistHelper.getPlistPath(ofName: "Folder.plist")) {
             PlistHelper.makeDefaulFolderPlis()
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        print("#MainTableViewController--viewWillAppear")
+        // 页面每次显示时，读取最新数据
         // 如果Folder.plist在沙盒中存在，则读取它的数据
         let plist = PlistHelper.readPlist(ofName: "Folder.plist") as! [[[String: Any]]]
-        folderPlist = plist
+        folderPlist = plist // copy plist
         // plist装换为model
         iphoneFolders = folderPlist[1].map {
             FolderModel(
@@ -62,6 +67,8 @@ class MainTableViewController: UITableViewController {
                 }
             )
         }
+        // 在此处刷新table view
+        self.tableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -80,14 +87,17 @@ class MainTableViewController: UITableViewController {
 //        }
 //    }
     
-    // 处理创建新文件夹action
-    @IBAction func handleCreateNewFolderAction(_ sender: UIBarButtonItem) {
-        // show action sheet(可选不同类型)
+    // 处理创建/删除文件夹action
+    @IBAction func handleCreateNewFolderAction(_ sender: Any) {
         
-        // show Alert
+        /// 根据sender的类型决定哪种操作
         // 创建新文件夹
+        // show action sheet(可选不同类型)
+        // show Alert
         // 同时创建对应plist
         showAlertToCreateNewFolder()
+        
+        // 删除文件夹及对应数据
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -180,7 +190,6 @@ class MainTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("#didSelectRowAt")
-        //let cell = tableView.cellForRow(at: indexPath)
         // 非编辑状态时跳转到新VC
         if !self.tableView.isEditing {
             let itemListTVC: ItemListTVC = storyboard?.instantiateViewController(withIdentifier: "ItemListTVC") as! ItemListTVC
@@ -189,11 +198,15 @@ class MainTableViewController: UITableViewController {
             itemListTVC.titleName = (cell?.textLabel?.text)!
             itemListTVC.items = iphoneFolders[indexPath.row].items
             self.show(itemListTVC, sender: nil)
+            // 释放cell的selected状态
+            tableView.deselectRow(at: indexPath, animated: false)
         }
+
     }
     
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         print("#didDeselectRowAt")
+        
     }
     
     
@@ -245,6 +258,12 @@ class MainTableViewController: UITableViewController {
         // present modelly
         self.present(alert, animated: true, completion: nil)
     }
+    
+    // 构造数据
+    func constructData() {
+        
+    }
+    
     
 
     /*
