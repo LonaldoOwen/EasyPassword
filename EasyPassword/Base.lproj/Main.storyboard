@@ -221,7 +221,7 @@
                                                                         <textInputTraits key="textInputTraits"/>
                                                                     </textField>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fos-Gw-Spj" userLabel="Line View">
-                                                                        <rect key="frame" x="114" y="85" width="261" height="0.5"/>
+                                                                        <rect key="frame" x="114" y="85" width="243" height="0.5"/>
                                                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="0.5" id="bQk-cp-VmP"/>
@@ -238,7 +238,7 @@
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstItem="dTz-hQ-o3z" firstAttribute="leading" secondItem="crz-Ro-eD8" secondAttribute="trailing" constant="18" id="08m-U7-FJa"/>
-                                                                    <constraint firstAttribute="trailing" secondItem="Fos-Gw-Spj" secondAttribute="trailing" id="DKr-TB-QXZ"/>
+                                                                    <constraint firstAttribute="trailing" secondItem="Fos-Gw-Spj" secondAttribute="trailing" constant="18" id="DKr-TB-QXZ"/>
                                                                     <constraint firstAttribute="bottom" secondItem="crz-Ro-eD8" secondAttribute="bottom" constant="20" id="FSV-Fl-2f2"/>
                                                                     <constraint firstItem="crz-Ro-eD8" firstAttribute="leading" secondItem="NgP-JZ-M2S" secondAttribute="leading" constant="16" id="GgO-JY-rdu"/>
                                                                     <constraint firstAttribute="trailing" secondItem="29h-gD-QpI" secondAttribute="trailing" id="LHF-CG-d8b"/>
@@ -451,6 +451,7 @@
                         <outlet property="logo" destination="crz-Ro-eD8" id="jYF-lZ-ruL"/>
                         <outlet property="password" destination="Qka-Dn-fch" id="ACQ-Xd-3bx"/>
                         <outlet property="saveBtn" destination="cOF-2c-FUa" id="Uen-NY-d5y"/>
+                        <outlet property="scrollView" destination="dVT-bi-SKO" id="oIh-zx-2OX"/>
                         <outlet property="showPassword" destination="4xf-rP-ZPK" id="KU6-qb-wfW"/>
                         <outlet property="userName" destination="Jl2-cZ-wwN" id="ERh-jj-fiP"/>
                         <outlet property="website" destination="AJI-sR-Hic" id="nP1-oJ-P00"/>
