@@ -21,8 +21,18 @@ import UIKit
 class CreateItemVC: UIViewController {
     
     
+    // MARK: - Properties
+    
     @IBOutlet weak var cancelBtn: UIBarButtonItem!
     @IBOutlet weak var saveBtn: UIBarButtonItem!
+    @IBOutlet weak var itemName: UITextField!
+    @IBOutlet weak var logo: UIImageView!
+    @IBOutlet weak var userName: UITextField!
+    @IBOutlet weak var password: UITextField!
+    @IBOutlet weak var showPassword: UIButton!
+    @IBOutlet weak var generatePassword: UIButton!
+    @IBOutlet weak var website: UITextField!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +46,9 @@ class CreateItemVC: UIViewController {
     }
     
     
+    
+    // MARK: - Actions
+    
     @IBAction func handleCancelAction(_ sender: UIBarButtonItem) {
         // 收起VC
     }
@@ -47,6 +60,7 @@ class CreateItemVC: UIViewController {
     }
     
 
+    
     /*
     // MARK: - Navigation
 

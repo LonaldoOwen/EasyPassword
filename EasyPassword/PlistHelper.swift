@@ -123,6 +123,8 @@ extension PlistHelper {
     ///
     ///
     /// 问题：存在插入不进去的情况？？？
+    /// 原因：
+    /// 解决：
     public class func insert(_ item: [String: Any], ofPersistentType type: String, itemType: String) {
         let plist = PlistHelper.readPlist(ofName: "Folder.plist") as! [[[String: Any]]]
         //var tempPlist = Array.init(plist)
