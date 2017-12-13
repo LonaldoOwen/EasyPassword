@@ -11,7 +11,7 @@
 /// 3、编辑:
 ///    选中cell删除（多选）
 ///    修改文件夹名称
-/// 4、
+/// 4、默认显示备忘文件夹；当添加新的文件夹后，同时增加一个“所有persistent”文件夹，用于显示当前存储类型中所有的item（）
 ///
 ///
 /// 问题：
@@ -59,6 +59,7 @@ class MainTableViewController: UITableViewController {
                 itemType: $0["itemType"] as! String,
                 items: ($0["items"] as! [[String: Any]]).map {
                     Login(
+                        itemname: $0["itemname"] as! String,
                         username: $0["username"] as! String,
                         password: $0["password"] as! String,
                         website: $0["website"] as! String,

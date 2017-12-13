@@ -7,11 +7,11 @@
 //
 /// CreateItemVC
 /// 功能：创建item
-/// 1、使用UIViewController，自定义创建页面
+/// 1、使用UIViewController，自定义创建页面(Storyboard auto layout)
 /// 2、点击cancel收起VC不存储
 /// 3、点击save，保存编辑内容，写入plist，收起VC；收起VC后更新item list
-///
-///
+/// 4、处理键盘遮挡页面（参考apple官方用法）
+/// 5、所有textField不能为空，只要有空的，save button置灰（监听textField）
 ///
 ///
 
@@ -24,6 +24,11 @@ class CreateItemVC: UIViewController {
     // MARK: - Properties
     
     var activeField: UITextField!
+    var login: Login!
+    var itemType:String!
+    // 定义closure用于刷新ItemListVC
+    var reloadItemListVC: ((Item) -> ())!
+    var textFields: [UITextField]!
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var cancelBtn: UIBarButtonItem!
@@ -45,10 +50,18 @@ class CreateItemVC: UIViewController {
         
         // 注册keyboard通知
         registerForKeyboardNotifications()
-        itemName.delegate = self
-        userName.delegate = self
-        password.delegate = self
-        website.delegate = self
+        
+        textFields = [itemName, userName, password, website]
+        for textField in textFields {
+            textField.delegate = self
+            // 监听所有textField
+            textField.addTarget(self, action: #selector(handleTextFieldTextChanged), for: .editingChanged)
+        }
+        saveBtn.isEnabled = false
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        print("#CreateItemVC--itemType: \(itemType)")
     }
 
     override func didReceiveMemoryWarning() {
@@ -61,13 +74,26 @@ class CreateItemVC: UIViewController {
     // MARK: - Actions
     
     @IBAction func handleCancelAction(_ sender: UIBarButtonItem) {
+        // 先收起键盘
+        if let textField = activeField {
+            textField.resignFirstResponder()
+        }
         // 收起VC
+        self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func handleSaveAction(_ sender: Any) {
         // item 写入plist
+        // 注意除了note字段，其他不许为空
+        login = Login(itemname: itemName.text!, username: userName.text!, password: password.text!, website: website.text!, note: "")
+        PlistHelper.insert(itemModel: login, ofPersistentType: "MyIPHONE", itemType: itemType)
         // 更新item list页面（选择方式？？？）
+        //reloadItemListVC(login)
         // 收起VC
+        self.dismiss(animated: true, completion: {
+            // 更新item list页面（选择方式？？？）
+            self.reloadItemListVC(self.login)
+        })
     }
     
     
@@ -111,6 +137,26 @@ class CreateItemVC: UIViewController {
         scrollView.contentInset = contentInsets
         scrollView.scrollIndicatorInsets = contentInsets
     }
+    
+    // 处理textField输入变化
+    @objc func handleTextFieldTextChanged(_ textField: UITextField) {
+        print("#handleTextFieldTextChanged")
+        if !textFieldsContainEmpty() && !(textField.text?.isEmpty)! {
+            saveBtn.isEnabled = true
+        } else {
+            saveBtn.isEnabled = false
+        }
+    }
+    
+    // 判断textFields中是否包含未输入的textField（true有，false没有）
+    private func textFieldsContainEmpty() -> Bool {
+        for textField in textFields {
+            if (textField.text?.isEmpty)! {
+                return true
+            }
+        }
+        return false
+    }
  
     
     /*
@@ -127,17 +173,54 @@ class CreateItemVC: UIViewController {
 
 
 // MARK: - UITextFieldDelegate
+
 extension CreateItemVC: UITextFieldDelegate {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         print("#CreateItemVC--textFieldDidBeginEditing")
         activeField = textField
+        // 每次输入完毕时判断是否所有textField都不为空，此时save button可用
+//        if textFieldsContainEmpty() {
+//            saveBtn.isEnabled = false
+//        } else {
+//            saveBtn.isEnabled = true
+//        }
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         print("#CreateItemVC--textFieldDidEndEditing")
         activeField = nil
+        // 每次输入完毕时判断是否所有textField都不为空，此时save button可用
+//        if textFieldsContainEmpty() {
+//            saveBtn.isEnabled = false
+//        } else {
+//            saveBtn.isEnabled = true
+//        }
+        
     }
+    
+//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//        print("#CreateItemVC--shouldChangeCharactersIn")
+//        // 每次输入完毕时判断是否所有textField都不为空，此时save button可用
+//        let currentText = textField.text
+//        let nextText = (currentText! as NSString).replacingCharacters(in: range, with: string)
+//        for text_feild in textFields {
+//            if text_feild != textField
+//
+//            if !(textField.text?.isEmpty)! && !(currentText?.isEmpty)! && nextText.count > 0{
+//                saveBtn.isEnabled = true
+//            } else {
+//                saveBtn.isEnabled = false
+//            }
+//        }
+////        if saveButtonIsEnable() {
+////            saveBtn.isEnabled = true
+////        } else {
+////            saveBtn.isEnabled = false
+////        }
+//        return true
+//    }
+    
     
     // 点击return收起键盘
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

@@ -26,7 +26,7 @@ extension PlistHelper {
     /// 创建默认文件夹plist
     public class func makeDefaulFolderPlis() {
         
-        let tempItem = ["username": "temp", "password": "123", "website": "temp.com", "note": "This is temp!"]
+        let tempItem = ["itemname": "Item", "username": "user", "password": "123", "website": "item.com", "note": "This is temp!"]
         let icloudArray = [["itemType": "iCloud备忘", "persistentType": "ICLOUD", "items": [tempItem]]]
         let iphoneArray = [["itemType": "备忘", "persistentType": "MyIPHONE","items": [tempItem]]]
         let defaultArray = [icloudArray, iphoneArray]
@@ -146,6 +146,18 @@ extension PlistHelper {
         // write plist
         PlistHelper.write(plist: tempPlist, toPath: PlistHelper.getPlistPath(ofName: "Folder.plist"))
     }
+    
+    /// 将ItemModel插入到plist
+    public class func insert(itemModel item: Item, ofPersistentType type: String, itemType: String) {
+        /// 判断struct遵从了协议
+        if let item = item as? Login {
+            let dict = ["itemname": item.itemname, "username": item.username, "password": item.password, "website": item.website, "note": item.note]
+            self.insert(dict, ofPersistentType: type, itemType: itemType)
+        }
+    }
+    
+    
+    
     
 }
 

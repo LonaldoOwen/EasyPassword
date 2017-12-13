@@ -18,12 +18,14 @@ protocol Item { }
 // 登录模型
 struct Login: Item {
     
+    var itemname: String
     var username: String     // 非空
     var password: String     // 非空
     var website: String     //
     var note: String        //
     
-    init(username: String, password: String, website: String, note: String) {
+    init(itemname: String, username: String, password: String, website: String, note: String) {
+        self.itemname = itemname
         self.username = username
         self.password = password
         self.website = website

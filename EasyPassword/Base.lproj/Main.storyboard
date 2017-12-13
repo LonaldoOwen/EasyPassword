@@ -161,7 +161,7 @@
                         <barButtonItem systemItem="add" id="oIO-7o-zNi">
                             <connections>
                                 <action selector="handleAddAction:" destination="Ux8-dN-F51" id="d1V-vc-AXr"/>
-                                <segue destination="Ye3-Kh-3gQ" kind="show" id="RLm-Xy-cUs"/>
+                                <segue destination="Ye3-Kh-3gQ" kind="presentation" identifier="PresentCreate" id="unS-j7-aK8"/>
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
@@ -186,7 +186,7 @@
         <!--Create ItemVC-->
         <scene sceneID="6t6-9k-byp">
             <objects>
-                <viewController id="dK0-IT-uft" customClass="CreateItemVC" customModule="EasyPassword" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CreateItemVC" id="dK0-IT-uft" customClass="CreateItemVC" customModule="EasyPassword" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kp9-Y0-WZY">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
