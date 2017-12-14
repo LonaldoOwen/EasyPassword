@@ -8,7 +8,7 @@
 /// ItemDetailTVC
 /// 功能：显示item详情
 /// 1、将item信息已列表形式显示；分4个section（登录目的地；用户名、密码；网站；备注）
-/// 2、
+/// 2、点击cell显示edit menu（copy、）--UIMenuController
 /// 3、
 ///
 ///
@@ -60,14 +60,15 @@ class ItemDetailTVC: UITableViewController {
         }
         //return 0
     }
-
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ItemDetailTVC.cellIdentifier, for: indexPath)
         let login = item as! Login
+        
         if indexPath.section == 0 {
             cell.textLabel?.text = login.itemname
             cell.detailTextLabel?.text = "登录信息"
+            cell.imageView?.image = UIImage(named: "wode1@3x")
         } else if indexPath.section == 1{
             if indexPath.row == 0 {
                 cell.textLabel?.text = "用户名"
@@ -76,7 +77,6 @@ class ItemDetailTVC: UITableViewController {
                 cell.textLabel?.text = "密码"
                 cell.detailTextLabel?.text = login.password
             }
-            
         } else if indexPath.section == 2 {
             cell.textLabel?.text = "网站"
             cell.detailTextLabel?.text = login.website
@@ -84,11 +84,44 @@ class ItemDetailTVC: UITableViewController {
             cell.textLabel?.text = "备注"
             cell.detailTextLabel?.text = login.note
         }
-
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        // 问题：设置为0，不起作用？？？
+        //return 0.0
+        return 0.01
     }
  
 
+    // MARK: - Table view delegate
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("#ItemDetailTVC--didSelectRowAt")
+        if let cell = tableView.cellForRow(at: indexPath) {
+            // show edit menu
+            //self.becomeFirstResponder()
+            let editMenu = UIMenuController.shared
+            //editMenu.update()
+//            let copyItem = UIMenuItem(title: "Copy", action: #selector(handleCopyAction))
+//            let otherItem = UIMenuItem(title: "Other", action: #selector(handleOtherAction))
+//            editMenu.menuItems = [copyItem, otherItem]
+            let rect: CGRect = cell.frame
+            let targetView = cell.superview!
+            editMenu.setTargetRect(rect, in: targetView)
+            editMenu.setMenuVisible(true, animated: true)
+            print("")
+        }
+    }
+    
+    
+    // Helper
+    @objc func handleCopyAction() {
+        
+    }
+    
+    @objc func handleOtherAction() {
+        
+    }
     
 
     /*
@@ -102,3 +135,6 @@ class ItemDetailTVC: UITableViewController {
     */
 
 }
+
+
+
