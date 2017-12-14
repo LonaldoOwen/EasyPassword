@@ -91,6 +91,12 @@ class ItemListTVC: UITableViewController {
         return cell
     }
     
+    
+    // MARK: - Table view delegate
+    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+    }
+    
 
     
     // MARK: - Navigation
@@ -99,6 +105,7 @@ class ItemListTVC: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+
         
         // 将item type传到创建页面
         if segue.identifier == "PresentCreate" {
@@ -109,6 +116,10 @@ class ItemListTVC: UITableViewController {
                 self.items?.insert(item, at: 0)
                 self.tableView.reloadData()
             }
+        } else if segue.identifier == "ShowDetail" {
+            let indexPath = tableView.indexPath(for: sender as! UITableViewCell)
+            let itemDetailVC: ItemDetailTVC = segue.destination as! ItemDetailTVC
+            itemDetailVC.item = items![(indexPath?.section)!]
         }
         
     }

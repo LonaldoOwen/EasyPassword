@@ -19,6 +19,7 @@
 		23B33D951FCD8069005403C1 /* PlistHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B33D941FCD8069005403C1 /* PlistHelper.swift */; };
 		23B33D981FCE666B005403C1 /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B33D971FCE666A005403C1 /* MainTableViewController.swift */; };
 		23B33D9B1FCE66AD005403C1 /* FolderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B33D9A1FCE66AD005403C1 /* FolderModel.swift */; };
+		23DC7C8E1FE274DC00D6A9BB /* ItemDetailTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DC7C8D1FE274DC00D6A9BB /* ItemDetailTVC.swift */; };
 		5AEF16141FD6F43F00FAD262 /* ItemListTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEF16131FD6F43F00FAD262 /* ItemListTVC.swift */; };
 		5AEF16161FD6F71A00FAD262 /* ItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEF16151FD6F71A00FAD262 /* ItemModel.swift */; };
 /* End PBXBuildFile section */
@@ -38,6 +39,7 @@
 		23B33D941FCD8069005403C1 /* PlistHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlistHelper.swift; sourceTree = "<group>"; };
 		23B33D971FCE666A005403C1 /* MainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
 		23B33D9A1FCE66AD005403C1 /* FolderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderModel.swift; sourceTree = "<group>"; };
+		23DC7C8D1FE274DC00D6A9BB /* ItemDetailTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailTVC.swift; sourceTree = "<group>"; };
 		5AEF16131FD6F43F00FAD262 /* ItemListTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemListTVC.swift; sourceTree = "<group>"; };
 		5AEF16151FD6F71A00FAD262 /* ItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -111,6 +113,7 @@
 				5AEF16131FD6F43F00FAD262 /* ItemListTVC.swift */,
 				5AEF16151FD6F71A00FAD262 /* ItemModel.swift */,
 				238FD9681FDA99F70015B855 /* CreateItemVC.swift */,
+				23DC7C8D1FE274DC00D6A9BB /* ItemDetailTVC.swift */,
 			);
 			path = item;
 			sourceTree = "<group>";
@@ -191,6 +194,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5AEF16141FD6F43F00FAD262 /* ItemListTVC.swift in Sources */,
+				23DC7C8E1FE274DC00D6A9BB /* ItemDetailTVC.swift in Sources */,
 				238FD9691FDA99F70015B855 /* CreateItemVC.swift in Sources */,
 				23B33D981FCE666B005403C1 /* MainTableViewController.swift in Sources */,
 				23B33D951FCD8069005403C1 /* PlistHelper.swift in Sources */,

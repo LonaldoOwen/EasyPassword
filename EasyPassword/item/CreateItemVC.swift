@@ -141,6 +141,7 @@ class CreateItemVC: UIViewController {
     // 处理textField输入变化
     @objc func handleTextFieldTextChanged(_ textField: UITextField) {
         print("#handleTextFieldTextChanged")
+        // textFields中text无空，且当前textField的text不为空，enable saveButton
         if !textFieldsContainEmpty() && !(textField.text?.isEmpty)! {
             saveBtn.isEnabled = true
         } else {
@@ -176,6 +177,11 @@ class CreateItemVC: UIViewController {
 
 extension CreateItemVC: UITextFieldDelegate {
     
+    // 点击return收起键盘
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        return textField.resignFirstResponder()
+    }
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         print("#CreateItemVC--textFieldDidBeginEditing")
         activeField = textField
@@ -199,6 +205,7 @@ extension CreateItemVC: UITextFieldDelegate {
         
     }
     
+    // 用这个方法判断合适enable saveButton不好
 //    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
 //        print("#CreateItemVC--shouldChangeCharactersIn")
 //        // 每次输入完毕时判断是否所有textField都不为空，此时save button可用
@@ -213,19 +220,10 @@ extension CreateItemVC: UITextFieldDelegate {
 //                saveBtn.isEnabled = false
 //            }
 //        }
-////        if saveButtonIsEnable() {
-////            saveBtn.isEnabled = true
-////        } else {
-////            saveBtn.isEnabled = false
-////        }
 //        return true
 //    }
     
     
-    // 点击return收起键盘
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        return textField.resignFirstResponder()
-    }
 }
 
 
