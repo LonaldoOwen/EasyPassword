@@ -41,8 +41,29 @@ class ItemDetailTVC: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    
+    // MARK: - UIResponder
+    
+    //
+    override var canBecomeFirstResponder: Bool{
+        return true
+    }
+    
+    //
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        if action == #selector(handleCopyAction) {
+            return true
+        } else if action == #selector(handleBigWordAction) {
+            return true
+        }
+        
+        return false
+    }
+    
+    
     // MARK: - Table view data source
 
+    //
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 3
@@ -97,30 +118,30 @@ class ItemDetailTVC: UITableViewController {
     // MARK: - Table view delegate
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("#ItemDetailTVC--didSelectRowAt")
-        if let cell = tableView.cellForRow(at: indexPath) {
+        
+        if let cell = tableView.cellForRow(at: indexPath), self.isFirstResponder {
             // show edit menu
-            //self.becomeFirstResponder()
             let editMenu = UIMenuController.shared
-            //editMenu.update()
-//            let copyItem = UIMenuItem(title: "Copy", action: #selector(handleCopyAction))
-//            let otherItem = UIMenuItem(title: "Other", action: #selector(handleOtherAction))
-//            editMenu.menuItems = [copyItem, otherItem]
-            let rect: CGRect = cell.frame
-            let targetView = cell.superview!
-            editMenu.setTargetRect(rect, in: targetView)
+            editMenu.menuItems = [
+                UIMenuItem(title: "COPY", action: #selector(handleCopyAction)),
+                UIMenuItem(title: "Big Word", action: #selector(handleBigWordAction))
+            ]
+            editMenu.setTargetRect(cell.frame, in: cell.superview!)
             editMenu.setMenuVisible(true, animated: true)
             print("")
         }
+        // 否则在先canBecomeFirstResponder中返回true，default=false
     }
     
     
-    // Helper
+    // MARK: - Helper
+    
     @objc func handleCopyAction() {
-        
+        print("Copy")
     }
     
-    @objc func handleOtherAction() {
-        
+    @objc func handleBigWordAction() {
+        print("Big word")
     }
     
 
