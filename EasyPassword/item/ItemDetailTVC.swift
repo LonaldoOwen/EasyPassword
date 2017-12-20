@@ -9,7 +9,7 @@
 /// 功能：显示item详情
 /// 1、将item信息已列表形式显示；分4个section（登录目的地；用户名、密码；网站；备注）
 /// 2、点击cell显示edit menu（copy、）--UIMenuController
-/// 3、
+/// 3、点击copy怎么将cell的内容复制到Pasteboard上？？？
 ///
 ///
 ///
@@ -33,7 +33,7 @@ class ItemDetailTVC: UITableViewController {
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
     override func didReceiveMemoryWarning() {
@@ -66,7 +66,7 @@ class ItemDetailTVC: UITableViewController {
     //
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 3
+        return 4
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -88,22 +88,22 @@ class ItemDetailTVC: UITableViewController {
         
         if indexPath.section == 0 {
             cell.textLabel?.text = login.itemname
-            cell.detailTextLabel?.text = "登录信息"
-            cell.imageView?.image = UIImage(named: "wode1@3x")
+            cell.detailTextLabel?.attributedText = NSAttributedString(string: "登录信息", attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray]) //attributedText("登录信息")
+            cell.imageView?.image = UIImage(named: "wode1")
         } else if indexPath.section == 1{
             if indexPath.row == 0 {
-                cell.textLabel?.text = "用户名"
+                cell.textLabel?.attributedText = attributedText("用户名")
                 cell.detailTextLabel?.text = login.username
             } else if indexPath.row == 1 {
-                cell.textLabel?.text = "密码"
+                cell.textLabel?.attributedText = attributedText("密码")
                 cell.detailTextLabel?.text = login.password
             }
         } else if indexPath.section == 2 {
-            cell.textLabel?.text = "网站"
+            cell.textLabel?.attributedText = attributedText("网站")
             cell.detailTextLabel?.text = login.website
         } else if indexPath.section == 3 {
-            cell.textLabel?.text = "备注"
-            cell.detailTextLabel?.text = login.note
+            cell.textLabel?.attributedText = attributedText("备注")
+            cell.detailTextLabel?.text = (login.note == "") ? "在这添加备注": login.note
         }
         return cell
     }
@@ -136,14 +136,28 @@ class ItemDetailTVC: UITableViewController {
     
     // MARK: - Helper
     
-    @objc func handleCopyAction() {
+    @objc func handleCopyAction(_ sender: Any) {
         print("Copy")
+        let gpPasteboard = UIPasteboard.general
+        
     }
     
-    @objc func handleBigWordAction() {
+    @objc func handleBigWordAction(_ sender: Any) {
         print("Big word")
     }
     
+    // 创建attributed string
+    func attributedText(_ string: String) -> NSAttributedString {
+        let attributes: [NSAttributedStringKey: Any]!
+        if #available(iOS 11.0, *) {
+            attributes = [NSAttributedStringKey.foregroundColor: UIColor.init(named: "DodgerBlue")!]
+        } else {
+            // Fallback on earlier versions
+            attributes = [NSAttributedStringKey.foregroundColor: UIColor.blue]
+        }
+        let attributedString = NSAttributedString(string: string, attributes: attributes)
+        return attributedString
+    }
 
     /*
     // MARK: - Navigation
