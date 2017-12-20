@@ -138,8 +138,22 @@ class ItemDetailTVC: UITableViewController {
     
     @objc func handleCopyAction(_ sender: Any) {
         print("Copy")
-        let gpPasteboard = UIPasteboard.general
+        var copyString = ""
+        // 找到点击的cell
+        let subviews = self.tableView.subviews
+        for view in subviews {
+            if let cell = view as? UITableViewCell, cell.isSelected == true {
+                if cell.detailTextLabel?.text == "登录信息" {
+                    copyString = (cell.textLabel?.text)!
+                } else {
+                    copyString = (cell.detailTextLabel?.text)!
+                }
+            }
+        }
         
+        // 创建pasteboard，将cell内容写入
+        let gpBoard = UIPasteboard.general
+        gpBoard.string = copyString
     }
     
     @objc func handleBigWordAction(_ sender: Any) {
