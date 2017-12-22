@@ -110,8 +110,8 @@
 		5AEF16121FD6F0BD00FAD262 /* item */ = {
 			isa = PBXGroup;
 			children = (
-				5AEF16131FD6F43F00FAD262 /* ItemListTVC.swift */,
 				5AEF16151FD6F71A00FAD262 /* ItemModel.swift */,
+				5AEF16131FD6F43F00FAD262 /* ItemListTVC.swift */,
 				238FD9681FDA99F70015B855 /* CreateItemVC.swift */,
 				23DC7C8D1FE274DC00D6A9BB /* ItemDetailTVC.swift */,
 			);

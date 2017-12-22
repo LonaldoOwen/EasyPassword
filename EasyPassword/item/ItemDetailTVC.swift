@@ -9,8 +9,8 @@
 /// 功能：显示item详情
 /// 1、将item信息已列表形式显示；分4个section（登录目的地；用户名、密码；网站；备注）
 /// 2、点击cell显示edit menu（copy、）--UIMenuController
-/// 3、点击copy怎么将cell的内容复制到Pasteboard上？？？
-///
+/// 3、点击copy怎么将cell的内容复制到Pasteboard上？？？（获取cell，将内容设置给Pasteboard实例）
+/// 4、点击edit button显示编辑页面
 ///
 ///
 
@@ -140,7 +140,14 @@ class ItemDetailTVC: UITableViewController {
         print("Copy")
         var copyString = ""
         // 找到点击的cell
-        let subviews = self.tableView.subviews
+        // 注意：iOS11之后，table view的UI层级发生了变化
+        //let subviews = self.tableView.subviews
+        let subviews: [Any]!
+        if #available(iOS 11.0, *) {
+            subviews = self.tableView.subviews
+        } else {
+            subviews = self.tableView.subviews[0].subviews
+        }
         for view in subviews {
             if let cell = view as? UITableViewCell, cell.isSelected == true {
                 if cell.detailTextLabel?.text == "登录信息" {
