@@ -34,6 +34,17 @@ class ItemDetailTVC: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        // 进入详情页面，隐藏ToolBar
+        self.navigationController?.isToolbarHidden = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        // 离开详情页面，显示ToolBar
+        self.navigationController?.isToolbarHidden = false
     }
 
     override func didReceiveMemoryWarning() {

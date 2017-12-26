@@ -93,10 +93,12 @@ class ItemListTVC: UITableViewController {
     
     
     // MARK: - Table view delegate
-    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+//    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+//        tableView.deselectRow(at: indexPath, animated: false)
+//    }
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
     }
-    
 
     
     // MARK: - Navigation
@@ -119,7 +121,7 @@ class ItemListTVC: UITableViewController {
         } else if segue.identifier == "ShowDetail" {
             let indexPath = tableView.indexPath(for: sender as! UITableViewCell)
             let itemDetailVC: ItemDetailTVC = segue.destination as! ItemDetailTVC
-            itemDetailVC.item = items![(indexPath?.section)!]
+            itemDetailVC.item = items![(indexPath?.row)!]
         }
         
     }

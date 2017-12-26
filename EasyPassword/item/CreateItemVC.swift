@@ -12,8 +12,14 @@
 /// 3、点击save，保存编辑内容，写入plist，收起VC；收起VC后更新item list
 /// 4、处理键盘遮挡页面（参考apple官方用法）
 /// 5、所有textField不能为空，只要有空的，save button置灰（监听textField）
+/// 6、显示密码功能：
+///       点击显示密码，再次点击隐藏密码
+///       输入的字符使用“*”替代 ？？？(设置isSecureTextEntry属性为true即可）
+/// 7、
 ///
 ///
+///
+
 
 
 import UIKit
@@ -29,6 +35,8 @@ class CreateItemVC: UIViewController {
     // 定义closure用于刷新ItemListVC
     var reloadItemListVC: ((Item) -> ())!
     var textFields: [UITextField]!
+    var passwordIsShow: Bool = false
+    //var realPassword: String!
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var cancelBtn: UIBarButtonItem!
@@ -37,7 +45,7 @@ class CreateItemVC: UIViewController {
     @IBOutlet weak var logo: UIImageView!
     @IBOutlet weak var userName: UITextField!
     @IBOutlet weak var password: UITextField!
-    @IBOutlet weak var showPassword: UIButton!
+    @IBOutlet weak var showPassword: UILabel!
     @IBOutlet weak var generatePassword: UIButton!
     @IBOutlet weak var website: UITextField!
     
@@ -58,10 +66,20 @@ class CreateItemVC: UIViewController {
             textField.addTarget(self, action: #selector(handleTextFieldTextChanged), for: .editingChanged)
         }
         saveBtn.isEnabled = false
+        
+        // 设置“显示密码”
+        if #available(iOS 11.0, *) {
+            self.showPassword.attributedText = NSAttributedString.init(string: "显示密码", attributes: [NSAttributedStringKey.foregroundColor: UIColor.init(named: "DodgerBlue")!])
+        } else {
+            // Fallback on earlier versions
+            self.showPassword.attributedText = NSAttributedString.init(string: "显示密码", attributes: [NSAttributedStringKey.foregroundColor: UIColor.blue])
+        }
+        self.showPassword.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapOnShowPassword)))
     }
     
     override func viewWillAppear(_ animated: Bool) {
         print("#CreateItemVC--itemType: \(itemType)")
+       
     }
 
     override func didReceiveMemoryWarning() {
@@ -96,6 +114,16 @@ class CreateItemVC: UIViewController {
         })
     }
     
+    @IBAction func handleShowPasswordAction(_ sender: Any) {
+        // 切换密码显示
+        let btn = sender as! UIButton
+        if !passwordIsShow {
+            btn.setTitle(password.text, for: UIControlState.normal)
+        } else {
+            btn.setTitle("显示密码", for: .normal)
+        }
+        passwordIsShow = !passwordIsShow
+    }
     
     // MARK: - Helper
     
@@ -141,16 +169,21 @@ class CreateItemVC: UIViewController {
     // 处理textField输入变化
     @objc func handleTextFieldTextChanged(_ textField: UITextField) {
         print("#handleTextFieldTextChanged")
+        
         // textFields中text无空，且当前textField的text不为空，enable saveButton
         if !textFieldsContainEmpty() && !(textField.text?.isEmpty)! {
             saveBtn.isEnabled = true
         } else {
             saveBtn.isEnabled = false
         }
+        // 显示密码，更新
+        if passwordIsShow {
+            showPassword.text = password.text
+        }
     }
     
     // 判断textFields中是否包含未输入的textField（true有，false没有）
-    private func textFieldsContainEmpty() -> Bool {
+    fileprivate func textFieldsContainEmpty() -> Bool {
         for textField in textFields {
             if (textField.text?.isEmpty)! {
                 return true
@@ -159,6 +192,22 @@ class CreateItemVC: UIViewController {
         return false
     }
  
+    @objc func handleTapOnShowPassword(sender: UITapGestureRecognizer) {
+        print("Tap showPassword")
+        // 切换密码显示
+        let label = sender.view as! UILabel
+        if !passwordIsShow {
+            label.text = password.text
+        } else {
+            if #available(iOS 11.0, *) {
+                self.showPassword.attributedText = NSAttributedString.init(string: "显示密码", attributes: [NSAttributedStringKey.foregroundColor: UIColor.init(named: "DodgerBlue")!])
+            } else {
+                // Fallback on earlier versions
+                self.showPassword.attributedText = NSAttributedString.init(string: "显示密码", attributes: [NSAttributedStringKey.foregroundColor: UIColor.blue])
+            }
+        }
+        passwordIsShow = !passwordIsShow
+    }
     
     /*
     // MARK: - Navigation
@@ -180,6 +229,13 @@ extension CreateItemVC: UITextFieldDelegate {
     // 点击return收起键盘
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         return textField.resignFirstResponder()
+    }
+    
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if textField == self.password!  {
+            // 如果想禁止某个textField输入，返回false
+        }
+        return true
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
