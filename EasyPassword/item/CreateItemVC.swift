@@ -14,9 +14,9 @@
 /// 5、所有textField不能为空，只要有空的，save button置灰（监听textField）
 /// 6、显示密码功能：
 ///       点击显示密码，再次点击隐藏密码
-///       输入的字符使用“*”替代 ？？？(设置isSecureTextEntry属性为true即可）
-/// 7、
-///
+///       输入的字符使用“*”替代 (设置isSecureTextEntry属性为true即可）
+/// 7、遵从GeneratePasswordDelegate，实现代理方法，显示生成的密码
+/// 8、位数、数字、符号联动变化？？？
 ///
 ///
 
@@ -24,7 +24,7 @@
 
 import UIKit
 
-class CreateItemVC: UIViewController {
+class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     
     
     // MARK: - Properties
@@ -37,6 +37,12 @@ class CreateItemVC: UIViewController {
     var textFields: [UITextField]!
     var passwordIsShow: Bool = false
     //var realPassword: String!
+    var generateView: GenerateView = {
+        let view = Bundle.main.loadNibNamed("GenerateView", owner: self, options: nil)?.first as! GenerateView
+//        let view = UIView()
+//        view.backgroundColor = UIColor.orange
+        return view
+    }()
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var cancelBtn: UIBarButtonItem!
@@ -45,6 +51,7 @@ class CreateItemVC: UIViewController {
     @IBOutlet weak var logo: UIImageView!
     @IBOutlet weak var userName: UITextField!
     @IBOutlet weak var password: UITextField!
+    @IBOutlet weak var generateContent: UIView!
     @IBOutlet weak var showPassword: UILabel!
     @IBOutlet weak var generatePassword: UIButton!
     @IBOutlet weak var website: UITextField!
@@ -75,6 +82,8 @@ class CreateItemVC: UIViewController {
             self.showPassword.attributedText = NSAttributedString.init(string: "显示密码", attributes: [NSAttributedStringKey.foregroundColor: UIColor.blue])
         }
         self.showPassword.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapOnShowPassword)))
+        
+        //
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -114,16 +123,28 @@ class CreateItemVC: UIViewController {
         })
     }
     
-    @IBAction func handleShowPasswordAction(_ sender: Any) {
-        // 切换密码显示
-        let btn = sender as! UIButton
-        if !passwordIsShow {
-            btn.setTitle(password.text, for: UIControlState.normal)
-        } else {
-            btn.setTitle("显示密码", for: .normal)
-        }
-        passwordIsShow = !passwordIsShow
+    @IBAction func handleGeneratePasswordAction(_ sender: Any) {
+        // 移除重新生成密码button，添加新生成密码view
+        let generateBtn = sender as! UIButton
+        let contentView = generateBtn.superview
+        generateBtn.removeFromSuperview()
+        contentView?.addSubview(generateView)
+        generateView.translatesAutoresizingMaskIntoConstraints = false
+        generateView.leadingAnchor.constraint(equalTo: (contentView?.leadingAnchor)!, constant: 20).isActive = true
+        generateView.trailingAnchor.constraint(equalTo: (contentView?.trailingAnchor)!, constant: -20).isActive = true
+        generateView.topAnchor.constraint(equalTo: (contentView?.topAnchor)!, constant: 10).isActive = true
+        generateView.bottomAnchor.constraint(equalTo: (contentView?.bottomAnchor)!, constant: -10).isActive = true
+        generateView.delegate = self
     }
+    
+    
+    // MARK: - GeneratePasswordDelegate
+    func passwordDidGenerated(password: String) {
+        print(password)
+        self.password.text = password
+        self.showPassword.text = self.password.text
+    }
+    
     
     // MARK: - Helper
     
@@ -232,9 +253,9 @@ extension CreateItemVC: UITextFieldDelegate {
     }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        if textField == self.password!  {
-            // 如果想禁止某个textField输入，返回false
-        }
+//        if textField == self.password!  {
+//            // 如果想禁止某个textField输入，返回false
+//        }
         return true
     }
     
