@@ -76,10 +76,59 @@ class GenerateView: UIView {
         symbolValue.text = String(showValue)
     }
     
+    
+    // MARK: - Helper
+    
+    enum PasswordType {
+        case letter, digit, symbol
+    }
+    
+    // 生成密码方法
+    func randomString(withLength length: Int, ofType type: PasswordType) -> String {
+        var passwordPool: String = ""
+        var typeLength: UInt32 = 0
+        switch type {
+        case .letter:
+            passwordPool = "AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz"// 52
+            typeLength = 52
+        case .digit:
+            passwordPool = "0123456789" // 10
+            typeLength = 10
+        case .symbol:
+            passwordPool = "~!@#$%^&*()_+" // 13
+            typeLength = 13
+        default:
+            passwordPool = "" //
+        }
+        //srandom(10)
+        var randomString = ""
+        for _ in 0..<length {
+            let randomIndex: Int = Int(arc4random() % typeLength)
+            let index = passwordPool.index(passwordPool.startIndex, offsetBy: randomIndex)
+            let subString = String.init(passwordPool[index])
+            randomString += subString
+        }
+        
+        return randomString
+    }
+    
     // 生成密码方法
     func generatePassword(ofLength length: Int, digit: Int, symbol: Int) -> String {
-        return "Password123"
+        let digitLength: Int = Int(digitValue.text!)!
+        let symbolLength: Int = Int(symbolValue.text!)!
+        let letterLength: Int = length - digitLength - symbolLength
+        var password: String = ""
+        let digitString = randomString(withLength: digitLength, ofType: PasswordType.digit)
+        let symbolString = randomString(withLength: symbolLength, ofType: PasswordType.symbol)
+        let letterString = randomString(withLength: letterLength, ofType: PasswordType.letter)
+        
+        // 分别将数字、符号随机插入到字母中
+        
+        
+        return password
+        //return "Password123"
     }
+    
     
     // 生成随机数方法
     

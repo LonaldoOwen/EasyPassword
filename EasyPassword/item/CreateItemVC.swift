@@ -138,16 +138,6 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     }
     
     
-    // MARK: - GeneratePasswordDelegate
-    func passwordDidGenerated(password: String) {
-        print(password)
-        self.password.text = password
-        self.showPassword.text = self.password.text
-    }
-    
-    
-    // MARK: - Helper
-    
     // Call this method somewhere in your view controller setup code.
     fileprivate func registerForKeyboardNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown), name: .UIKeyboardDidShow, object: nil)
@@ -230,6 +220,19 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
         passwordIsShow = !passwordIsShow
     }
     
+    
+    // MARK: - GeneratePasswordDelegate
+    func passwordDidGenerated(password: String) {
+        print(password)
+        self.password.text = password
+        self.showPassword.text = self.password.text
+    }
+    
+    
+    // MARK: - Helper
+    
+    
+    
     /*
     // MARK: - Navigation
 
@@ -241,6 +244,7 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     */
 
 }
+
 
 
 // MARK: - UITextFieldDelegate
