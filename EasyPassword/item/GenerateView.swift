@@ -48,7 +48,7 @@ class GenerateView: UIView {
     
     @IBAction func handleReGeneratePasswordAction(_ sender: Any) {
         // 根据设置条件重新生成一个密码
-        let password = generatePassword(ofLength: 0, digit: 0, symbol: 0)
+        let password = generatePassword()
         delegate.passwordDidGenerated(password: password)
     }
     
@@ -100,7 +100,7 @@ class GenerateView: UIView {
         default:
             passwordPool = "" //
         }
-        //srandom(10)
+        
         var randomString = ""
         for _ in 0..<length {
             let randomIndex: Int = Int(arc4random() % typeLength)
@@ -113,23 +113,76 @@ class GenerateView: UIView {
     }
     
     // 生成密码方法
-    func generatePassword(ofLength length: Int, digit: Int, symbol: Int) -> String {
+    func generatePassword() -> String {
+        // 读取slider值
+        let length: Int = Int(lengthValue.text!)!
         let digitLength: Int = Int(digitValue.text!)!
         let symbolLength: Int = Int(symbolValue.text!)!
-        let letterLength: Int = length - digitLength - symbolLength
+        //let letterLength: Int = length - digitLength - symbolLength
+        // 计算真实值
+        var realDigit: Int = 0
+        var realSymbol: Int = 0
+        var realLetter: Int = 4         // 默认长度不少于4位
+        if digitLength < length {
+            realDigit = digitLength
+            if symbolLength < (length - digitLength) {
+                realSymbol = symbolLength
+            } else {
+                realSymbol = length - digitLength
+            }
+            realLetter = length - realDigit - realSymbol
+        } else {
+            realDigit = length
+            realSymbol = 0
+            realLetter = 0
+        }
+        
+        //
         var password: String = ""
-        let digitString = randomString(withLength: digitLength, ofType: PasswordType.digit)
-        let symbolString = randomString(withLength: symbolLength, ofType: PasswordType.symbol)
-        let letterString = randomString(withLength: letterLength, ofType: PasswordType.letter)
+        let digitString = randomString(withLength: realDigit, ofType: PasswordType.digit)
+        let symbolString = randomString(withLength: realSymbol, ofType: PasswordType.symbol)
+        let letterString = randomString(withLength: realLetter, ofType: PasswordType.letter)
         
         // 分别将数字、符号随机插入到字母中
-        
+        //password = letterString
+        if letterString.count > 0 {
+            password = letterString
+            if digitString.count > 0 {
+                password = insertString(string: digitString, toString: password)
+                password = insertString(string: symbolString, toString: password)
+            } else {
+                // digitString为空
+                if symbolString.count > 0 {
+                    password = insertString(string: symbolString, toString: password)
+                } 
+            }
+        } else {
+            // letterString为空
+            if digitString.count > 0 {
+                password = digitString
+                if symbolString.count > 0 {
+                    password = insertString(string: symbolString, toString: password)
+                }
+            } else {
+                // digitString为空
+                password = symbolString
+            }
+        }
         
         return password
-        //return "Password123"
     }
     
     
-    // 生成随机数方法
-    
+    // 生成string1插入到string2
+    /// 这里其实可以加一步对toString是否为空的判断，如果为空，直接返回newString = string；这样是不是就不用在上面判断哪部分为空了？？？
+    func insertString(string: String, toString: String) -> String {
+        var newString = toString
+        for i in 0..<string.count {
+            let randomIndex: Int = Int(arc4random() % uint(newString.count))
+            let insertIndex = newString.index(newString.startIndex, offsetBy: randomIndex)
+            let element = string[string.index(string.startIndex, offsetBy: i)]
+            newString.insert(element, at: insertIndex)
+        }
+        return newString
+    }
 }

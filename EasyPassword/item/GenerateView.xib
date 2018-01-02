@@ -52,14 +52,14 @@
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" minValue="0.0" maxValue="64" translatesAutoresizingMaskIntoConstraints="NO" id="meb-a4-KoR">
-                            <rect key="frame" x="41" y="0.0" width="293.5" height="31"/>
+                        <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="4" minValue="4" maxValue="64" translatesAutoresizingMaskIntoConstraints="NO" id="meb-a4-KoR">
+                            <rect key="frame" x="41" y="0.0" width="293" height="31"/>
                             <connections>
                                 <action selector="handleLengthChange:" destination="iN0-l3-epB" eventType="valueChanged" id="v04-Ah-fd4"/>
                             </connections>
                         </slider>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k1B-t0-IbT">
-                            <rect key="frame" x="340.5" y="0.0" width="10.5" height="30"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="4" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k1B-t0-IbT">
+                            <rect key="frame" x="340" y="0.0" width="11" height="30"/>
                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
