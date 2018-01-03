@@ -16,7 +16,8 @@
 ///       点击显示密码，再次点击隐藏密码
 ///       输入的字符使用“*”替代 (设置isSecureTextEntry属性为true即可）
 /// 7、遵从GeneratePasswordDelegate，实现代理方法，显示生成的密码
-/// 8、位数、数字、符号联动变化？？？
+/// 8、位数、数字、符号联动变化（不联动，位数定了就不会变，）
+/// 9、note：UITextView的placeholder、遮挡处理、键盘监听处理；点击note弹起键盘，略微遮挡？？？
 ///
 ///
 
@@ -30,6 +31,7 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     // MARK: - Properties
     
     var activeField: UITextField!
+    var activeTextView: UITextView!
     var login: Login!
     var itemType:String!
     // 定义closure用于刷新ItemListVC
@@ -55,6 +57,7 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     @IBOutlet weak var showPassword: UILabel!
     @IBOutlet weak var generatePassword: UIButton!
     @IBOutlet weak var website: UITextField!
+    @IBOutlet weak var note: UITextView!
     
     
     
@@ -83,7 +86,10 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
         }
         self.showPassword.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapOnShowPassword)))
         
-        //
+        // 配置textView
+        note.delegate = self
+        note.text = "add some note here!"
+        note.textColor = UIColor.lightGray
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -112,7 +118,7 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     @IBAction func handleSaveAction(_ sender: Any) {
         // item 写入plist
         // 注意除了note字段，其他不许为空
-        login = Login(itemname: itemName.text!, username: userName.text!, password: password.text!, website: website.text!, note: "")
+        login = Login(itemname: itemName.text!, username: userName.text!, password: password.text!, website: website.text!, note: note.text!)
         PlistHelper.insert(itemModel: login, ofPersistentType: "MyIPHONE", itemType: itemType)
         // 更新item list页面（选择方式？？？）
         //reloadItemListVC(login)
@@ -161,9 +167,39 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
             // Your app might not need or want this behavior.
             var aRect = self.view.frame
             aRect.size.height -= keyboardBounds.size.height
-            if !aRect.contains(activeField.frame.origin) {
-                self.scrollView.scrollRectToVisible(activeField.frame, animated: true)
+            
+            /// 问题：当textField和textView同时存在时，此处crash
+            /// 原因：当点击textView时，下面activeField=nil
+            /// 解决：添加一步optional binding，明确不为nil的时候才执行
+//            if !aRect.contains(activeField.frame.origin) {
+//                self.scrollView.scrollRectToVisible(activeField.frame, animated: true)
+//            }
+            if let textField = activeField {
+                /// 注意这个origin的相对关系，是相对super，还是相对self.view？？？
+//                if !aRect.contains(textField.frame.origin) {
+//                    self.scrollView.scrollRectToVisible(textField.frame, animated: true)
+//                }
+                /// 问题：textField这块逻辑有与否，实际并不影响tableView的滚动，？？？
+                /// 原因：
+                /// 解决：
+                let point = textField.convert(textField.frame.origin, to: self.view)
+                if !aRect.contains(point) {
+                    let rect = textField.convert(textField.frame, to: self.view)
+                    self.scrollView.scrollRectToVisible(rect, animated: true)
+                }
             }
+            
+            /// 问题：当为textView时，滚动的距离有点大？？？
+            ///
+            ///
+            if let textView = activeTextView {
+                let point = textView.convert(textView.frame.origin, to: self.view)
+                if !aRect.contains(point) {
+                    let rect = textView.convert(textView.frame, to: self.view)
+                    self.scrollView.scrollRectToVisible(rect, animated: true)
+                }
+            }
+            
         }
     }
     
@@ -257,6 +293,7 @@ extension CreateItemVC: UITextFieldDelegate {
     }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        print("#textFieldShouldBeginEditing")
 //        if textField == self.password!  {
 //            // 如果想禁止某个textField输入，返回false
 //        }
@@ -308,6 +345,34 @@ extension CreateItemVC: UITextFieldDelegate {
 }
 
 
+
+// MARK: - UITextViewDelegate
+
+extension CreateItemVC: UITextViewDelegate {
+    
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        print("#textViewShouldBeginEditing")
+        return true
+    }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        print("#textViewDidBeginEditing")
+        activeTextView = textView
+        if textView.text == "add some note here!" {
+            textView.text = ""
+            textView.textColor = UIColor.black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        print("#textViewDidEndEditing")
+        activeTextView = nil
+        if textView.text.count < 1 {
+            note.text = "add some note here!"
+            note.textColor = UIColor.lightGray
+        }
+    }
+}
 
 
 

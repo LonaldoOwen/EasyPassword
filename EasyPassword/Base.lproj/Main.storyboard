@@ -266,10 +266,10 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="acv-11-OG4" userLabel="Content View">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="614"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="576"/>
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="1n2-XG-1E1">
-                                                <rect key="frame" x="0.0" y="10" width="375" height="584"/>
+                                                <rect key="frame" x="0.0" y="10" width="375" height="546"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Voi-cL-C0R">
                                                         <rect key="frame" x="0.0" y="0.0" width="375" height="120"/>
@@ -491,10 +491,10 @@
                                                         </subviews>
                                                     </stackView>
                                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="JNV-JY-a8r">
-                                                        <rect key="frame" x="0.0" y="468" width="375" height="116"/>
+                                                        <rect key="frame" x="0.0" y="468" width="375" height="78"/>
                                                         <subviews>
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="asN-55-t1Z">
-                                                                <rect key="frame" x="0.0" y="0.0" width="375" height="116"/>
+                                                                <rect key="frame" x="0.0" y="0.0" width="375" height="78"/>
                                                                 <subviews>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="备注" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B0c-HC-5mY">
                                                                         <rect key="frame" x="18" y="8" width="339" height="20.5"/>
@@ -503,7 +503,7 @@
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" text="add some text here" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="IZc-wE-G4d">
-                                                                        <rect key="frame" x="18" y="37" width="339" height="71"/>
+                                                                        <rect key="frame" x="18" y="37" width="339" height="33"/>
                                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -512,7 +512,7 @@
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstItem="B0c-HC-5mY" firstAttribute="leading" secondItem="asN-55-t1Z" secondAttribute="leading" constant="18" id="79a-zk-9A5"/>
-                                                                    <constraint firstAttribute="bottom" secondItem="IZc-wE-G4d" secondAttribute="bottom" constant="8" id="Goh-Fb-NHd"/>
+                                                                    <constraint firstAttribute="bottom" secondItem="IZc-wE-G4d" secondAttribute="bottom" constant="8" id="Caz-AE-oXd"/>
                                                                     <constraint firstItem="IZc-wE-G4d" firstAttribute="top" secondItem="B0c-HC-5mY" secondAttribute="bottom" constant="8" id="VQi-au-sTi"/>
                                                                     <constraint firstItem="B0c-HC-5mY" firstAttribute="top" secondItem="asN-55-t1Z" secondAttribute="top" constant="8" id="b8z-IN-bKB"/>
                                                                     <constraint firstItem="IZc-wE-G4d" firstAttribute="leading" secondItem="asN-55-t1Z" secondAttribute="leading" constant="18" id="jIe-vv-UEG"/>
@@ -571,6 +571,7 @@
                         <outlet property="generatePassword" destination="PS5-9s-4bm" id="1RO-Ex-qLq"/>
                         <outlet property="itemName" destination="dTz-hQ-o3z" id="g3W-O4-QU2"/>
                         <outlet property="logo" destination="crz-Ro-eD8" id="jYF-lZ-ruL"/>
+                        <outlet property="note" destination="IZc-wE-G4d" id="s5Y-fa-F8k"/>
                         <outlet property="password" destination="Qka-Dn-fch" id="ACQ-Xd-3bx"/>
                         <outlet property="saveBtn" destination="cOF-2c-FUa" id="Uen-NY-d5y"/>
                         <outlet property="scrollView" destination="dVT-bi-SKO" id="oIh-zx-2OX"/>
@@ -1029,7 +1030,7 @@
         <!--Navigation Controller-->
         <scene sceneID="hCH-uD-c2H">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Ye3-Kh-3gQ" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="CreateItemVCNav" automaticallyAdjustsScrollViewInsets="NO" id="Ye3-Kh-3gQ" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="KPS-6g-UZg">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
