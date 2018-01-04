@@ -30,6 +30,10 @@ class ItemDetailTVC: UITableViewController {
     
     // Properties
     var item: Item!
+    var itemType: String!
+    
+    // 定义closure用于更新ItemListVC的cell，反向传值
+    var updateCellOfListVC: ((Item) -> ())!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,13 +53,29 @@ class ItemDetailTVC: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        print("#ItemDetailTVC--viewWillAppear")
         // 进入详情页面，隐藏ToolBar
         self.navigationController?.isToolbarHidden = true
+        // 返回详情页面后，更新页面
+        //self.tableView.reloadData()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        print("#ItemDetailTVC--viewDidAppear")
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        print("#ItemDetailTVC--viewWillDisappear")
         // 离开详情页面，显示ToolBar
         self.navigationController?.isToolbarHidden = false
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        // 发送通知--传递new item model
+        //NotificationCenter.default.post(name: NSNotification.Name(rawValue: "PassBackItemFromDetail"), object: self, userInfo: ["item": self.item])
+        // closure 传值
+        self.updateCellOfListVC(self.item)
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -69,8 +89,18 @@ class ItemDetailTVC: UITableViewController {
         
         // CreateItemVC嵌入到navigationController，present时，VC是nav，才会带导航栏
         let createItemVCNav = self.storyboard?.instantiateViewController(withIdentifier: "CreateItemVCNav")
+        // 传值
+        let createItemVC: CreateItemVC = ((createItemVCNav as! UINavigationController).topViewController as? CreateItemVC)!
+        createItemVC.itemType = itemType
+        createItemVC.item = item
+        createItemVC.passBackNewItemDetail = { login in
+            // 获取返回值，更新table
+            self.item = login
+            self.tableView.reloadData()
+        }
+        //
         createItemVCNav?.modalTransitionStyle = .crossDissolve
-        createItemVCNav?.modalPresentationStyle = .overFullScreen
+        createItemVCNav?.modalPresentationStyle = .fullScreen
         self.present(createItemVCNav!, animated: true, completion: nil)
     }
 
@@ -138,7 +168,7 @@ class ItemDetailTVC: UITableViewController {
             }
         } else if indexPath.section == 2 {
             cell.textLabel?.attributedText = attributedText("网站")
-            cell.detailTextLabel?.text = login.website
+            cell.detailTextLabel?.text = login.website.count > 0 ? login.website : "http://example.com"
         } else if indexPath.section == 3 {
 //            cell.textLabel?.attributedText = attributedText("备注")
 //            cell.detailTextLabel?.text = (login.note == "") ? "在这添加备注": login.note

@@ -171,3 +171,51 @@ extension PlistHelper {
 
 
 
+/// Delete
+extension PlistHelper {
+    
+    // delete item in plist
+    public class func delete(_ item: [String: Any], ofPersistentType type: String, itemType: String) {
+        let plist = PlistHelper.readPlist(ofName: "Folder.plist") as! [[[String: Any]]]
+        //var tempPlist = Array.init(plist)
+        var tempPlist = plist                       // copy plist
+        if type == "MyIPHONE" {
+            var iphoneFolder = tempPlist[1]
+            for (index, folder) in iphoneFolder.enumerated() {
+                if folder["itemType"] as! String == itemType {
+                    var tempFolder = folder                             // copy folder
+                    var items = tempFolder["items"] as! [[String: Any]]
+                    // delete item
+                    for (index, element) in items.enumerated() {
+                        // 报错“Binary operator '==' cannot be applied to two 'Dictionary<String, Any>.Values' operands”
+//                        if element == item {
+//                            items.remove(at: index)
+//                        }
+                        if (element as NSDictionary).isEqual(to: ((item as NSDictionary) as! [AnyHashable : Any])) {
+                            items.remove(at: index)
+                        }
+                    }
+                    tempFolder["items"] = items                         // update items
+                    print(items)
+                    iphoneFolder[index] = tempFolder                    // update iphoneFolder
+                }
+            }
+            tempPlist[1] = iphoneFolder                                 // update tempPlist
+        }
+        // write plist
+        PlistHelper.write(plist: tempPlist, toPath: PlistHelper.getPlistPath(ofName: "Folder.plist"))
+    }
+    
+    // delete item Model
+    public class func delete(itemModel item: Item, ofPersistentType type: String, itemType: String) {
+        if let item = item as? Login {
+            let dict = ["itemname": item.itemname, "username": item.username, "password": item.password, "website": item.website, "note": item.note]
+            PlistHelper.delete(dict, ofPersistentType: type, itemType: itemType)
+        }
+    }
+    
+    
+}
+
+
+

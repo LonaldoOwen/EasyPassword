@@ -19,6 +19,8 @@
 /// 8、位数、数字、符号联动变化（不联动，位数定了就不会变，）
 /// 9、note：UITextView的placeholder、遮挡处理、键盘监听处理；点击note弹起键盘，略微遮挡？？？
 /// 10、从详情页面跳转过来时，要把数据带上并显示；保存数据时要保存到原Model，不要创建新的
+/// 11、使用了closure用于反向传值
+///
 ///
 
 
@@ -31,22 +33,22 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     // MARK: - Properties
     
     var item: Item!
-    
-    var activeField: UITextField!
-    var activeTextView: UITextView!
+    var itemType: String!
     var login: Login!
-    var itemType:String!
-    // 定义closure用于刷新ItemListVC
-    var reloadItemListVC: ((Item) -> ())!
     var textFields: [UITextField]!
     var passwordIsShow: Bool = false
+    var activeField: UITextField!
+    var activeTextView: UITextView!
     //var realPassword: String!
     var generateView: GenerateView = {
         let view = Bundle.main.loadNibNamed("GenerateView", owner: self, options: nil)?.first as! GenerateView
-//        let view = UIView()
-//        view.backgroundColor = UIColor.orange
         return view
     }()
+    
+    // 定义closure用于刷新ItemListVC
+    var reloadItemListVC: ((Item) -> ())!
+    // 定义closure用于刷新ItemDetailVC
+    var passBackNewItemDetail: ((Item) -> ())!
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var cancelBtn: UIBarButtonItem!
@@ -96,7 +98,21 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         print("#CreateItemVC--itemType: \(itemType)")
-       
+        // 显示传入的item数据
+        if let item = item {
+            let login: Login = item as! Login
+            itemName.text = login.itemname
+            userName.text = login.username
+            password.text = login.password
+            website.text = login.website
+            note.text = login.note
+        }
+        // textFields中text无空，且当前textField的text不为空，enable saveButton
+        if !textFieldsContainEmpty() {
+            saveBtn.isEnabled = true
+        } else {
+            saveBtn.isEnabled = false
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -119,16 +135,32 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     
     @IBAction func handleSaveAction(_ sender: Any) {
         // item 写入plist
-        // 注意除了note字段，其他不许为空
-        login = Login(itemname: itemName.text!, username: userName.text!, password: password.text!, website: website.text!, note: note.text!)
-        PlistHelper.insert(itemModel: login, ofPersistentType: "MyIPHONE", itemType: itemType)
-        // 更新item list页面（选择方式？？？）
-        //reloadItemListVC(login)
-        // 收起VC
-        self.dismiss(animated: true, completion: {
+        if let item = item {
+            // 更新item，先删除旧item，再插入新item
+            print(item)
+            PlistHelper.delete(itemModel: item, ofPersistentType: "MyIPHONE", itemType: itemType)
+            login = Login(itemname: itemName.text!, username: userName.text!, password: password.text!, website: website.text!, note: note.text!)
+            PlistHelper.insert(itemModel: login, ofPersistentType: "MyIPHONE", itemType: itemType)
+            // 收起VC
+            self.dismiss(animated: true, completion: {
+                // 回传值new item
+                self.passBackNewItemDetail(self.login)
+            })
+        } else {
+            // 创建新item
+            // 注意除了note字段，其他不许为空
+            login = Login(itemname: itemName.text!, username: userName.text!, password: password.text!, website: website.text!, note: note.text!)
+            PlistHelper.insert(itemModel: login, ofPersistentType: "MyIPHONE", itemType: itemType)
+            
             // 更新item list页面（选择方式？？？）
-            self.reloadItemListVC(self.login)
-        })
+            //reloadItemListVC(login)
+            // 收起VC
+            self.dismiss(animated: true, completion: {
+                // 更新item list页面（选择方式？？？）
+                self.reloadItemListVC(self.login)
+            })
+        }
+        
     }
     
     @IBAction func handleGeneratePasswordAction(_ sender: Any) {
@@ -234,6 +266,9 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     // 判断textFields中是否包含未输入的textField（true有，false没有）
     fileprivate func textFieldsContainEmpty() -> Bool {
         for textField in textFields {
+            if textField == website {
+                break
+            }
             if (textField.text?.isEmpty)! {
                 return true
             }

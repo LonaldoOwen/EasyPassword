@@ -11,8 +11,8 @@
 /// 2、长按显示edit(?)，可以复制用户名、密码
 /// 3、点返回，回到文件列表，需要刷新table view（在viewWillAppear中操作即可）
 /// 4、添加完新的item后，刷新当前table view
-/// 5、search bar使用？？？
-///
+/// 5、search bar使用？？？（）
+/// 6、缺少删除cell的功能（）
 ///
 ///
 ///
@@ -25,7 +25,7 @@ import UIKit
 class ItemListTVC: UITableViewController {
     
     var titleName: String = ""  // 用于传值
-    var items: [Item]?
+    var items: [Item]?          // 用于传值
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,15 +36,15 @@ class ItemListTVC: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
          self.navigationItem.rightBarButtonItem = self.editButtonItem
         
-        //
-        
+        // 注册通知--用于接收详情页面传来item model（未用到）
+        //NotificationCenter.default.addObserver(self, selector: #selector(handlePassBackItemNotification), name: NSNotification.Name(rawValue: "PassBackItemFromDetail"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         print("#ItemListTVC--viewWillAppear")
         // 接收传值，显示title
         self.title = titleName
-        print("items: \(String(describing: items))")
+        self.tableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -65,7 +65,10 @@ class ItemListTVC: UITableViewController {
         
     }
     
-    
+    @objc func handlePassBackItemNotification(_ notification: Notification) {
+        print("#handlePassBackItemNotification: \(notification)")
+        
+    }
 
     // MARK: - Table view data source
 
@@ -89,6 +92,19 @@ class ItemListTVC: UITableViewController {
         cell.detailTextLabel?.text = item.username
 
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        // 删除cell
+        if editingStyle == UITableViewCellEditingStyle.delete {
+            let item = self.items![indexPath.row]
+            // 删除model对应数据
+            self.items?.remove(at: indexPath.row)
+            // 删除cell
+            tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+            // 删除对应plist中数据
+            PlistHelper.delete(itemModel: item, ofPersistentType: "MyIPHONE", itemType: titleName)
+        }
     }
     
     
@@ -119,9 +135,16 @@ class ItemListTVC: UITableViewController {
                 self.tableView.reloadData()
             }
         } else if segue.identifier == "ShowDetail" {
+            //let cell = sender as! UITableViewCell
             let indexPath = tableView.indexPath(for: sender as! UITableViewCell)
             let itemDetailVC: ItemDetailTVC = segue.destination as! ItemDetailTVC
             itemDetailVC.item = items![(indexPath?.row)!]
+            itemDetailVC.itemType = titleName
+            // 设置closure，更新cell
+            itemDetailVC.updateCellOfListVC = { item in
+                self.items![(indexPath?.row)!] = item
+                self.tableView.reloadRows(at: [indexPath!], with: UITableViewRowAnimation.automatic)
+            }
         }
         
     }
