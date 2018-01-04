@@ -18,7 +18,7 @@
 /// 7、遵从GeneratePasswordDelegate，实现代理方法，显示生成的密码
 /// 8、位数、数字、符号联动变化（不联动，位数定了就不会变，）
 /// 9、note：UITextView的placeholder、遮挡处理、键盘监听处理；点击note弹起键盘，略微遮挡？？？
-///
+/// 10、从详情页面跳转过来时，要把数据带上并显示；保存数据时要保存到原Model，不要创建新的
 ///
 
 
@@ -29,6 +29,8 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     
     
     // MARK: - Properties
+    
+    var item: Item!
     
     var activeField: UITextField!
     var activeTextView: UITextView!

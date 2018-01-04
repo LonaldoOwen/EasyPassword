@@ -123,6 +123,7 @@ class GenerateView: UIView {
         var realDigit: Int = 0
         var realSymbol: Int = 0
         var realLetter: Int = 4         // 默认长度不少于4位
+        
         if digitLength < length {
             realDigit = digitLength
             if symbolLength < (length - digitLength) {

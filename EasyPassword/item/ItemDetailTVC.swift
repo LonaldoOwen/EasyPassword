@@ -61,11 +61,13 @@ class ItemDetailTVC: UITableViewController {
     override func setEditing(_ editing: Bool, animated: Bool) {
         print("#setEditing")
         // 调起创建秘密页面、动画为fade in out
+        // 直接present CreateItemVC，不显示导航栏
 //        let createItemVC: CreateItemVC = self.storyboard?.instantiateViewController(withIdentifier: ItemDetailTVC.createItemVCIdentifier) as! CreateItemVC
 //        createItemVC.modalTransitionStyle = .crossDissolve
 //        createItemVC.modalPresentationStyle = .overFullScreen
 //        self.present(createItemVC, animated: true, completion: nil)
         
+        // CreateItemVC嵌入到navigationController，present时，VC是nav，才会带导航栏
         let createItemVCNav = self.storyboard?.instantiateViewController(withIdentifier: "CreateItemVCNav")
         createItemVCNav?.modalTransitionStyle = .crossDissolve
         createItemVCNav?.modalPresentationStyle = .overFullScreen
