@@ -118,6 +118,7 @@
                     <navigationItem key="navigationItem" title="文件夹" id="krs-Cn-Us2"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="addFolderItem" destination="NtE-8J-Lh3" id="g4L-b5-ec4"/>
                         <outlet property="searchDisplayController" destination="Zcx-SL-th8" id="QQP-vR-gcU"/>
                     </connections>
                 </tableViewController>

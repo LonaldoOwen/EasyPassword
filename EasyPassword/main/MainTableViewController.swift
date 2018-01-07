@@ -24,6 +24,9 @@ import UIKit
 
 class MainTableViewController: UITableViewController {
     
+    @IBOutlet weak var addFolderItem: UIBarButtonItem!
+    
+    
     //var iphoneArray = [[String: Any]]()
     var iphoneFolders = [FolderModel]()
     var folderPlist = [[[String: Any]]]()
@@ -81,25 +84,21 @@ class MainTableViewController: UITableViewController {
     
     // MARK: - Action
     
-    // 处理编辑acion
-//    @IBAction func handleEditAction(_ sender: UIBarButtonItem) {
-//        print("#handleEditAction")
-//        if self.tableView.isEditing {
-//            self.tableView.setEditing(false, animated: true)
-//        }
-//    }
-    
     // 处理创建/删除文件夹action
     @IBAction func handleCreateNewFolderAction(_ sender: Any) {
         
-        /// 根据sender的类型决定哪种操作
-        // 创建新文件夹
-        // show action sheet(可选不同类型)
-        // show Alert
-        // 同时创建对应plist
-        showAlertToCreateNewFolder()
-        
-        // 删除文件夹及对应数据
+        if isEditing {
+            // 删除文件夹及对应数据
+            deleteSelectedFolders()
+        } else {
+            // 创建新文件夹
+            /// 根据sender的类型决定哪种操作
+            // 创建新文件夹
+            // show action sheet(可选不同类型)
+            // show Alert
+            // 同时创建对应plist
+            showAlertToCreateNewFolder()
+        }
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -112,6 +111,8 @@ class MainTableViewController: UITableViewController {
         } else {
             self.editButtonItem.title = "编辑"
         }
+        //
+        configureItemInToobar()
     }
     
     
@@ -192,6 +193,8 @@ class MainTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("#didSelectRowAt")
+        //
+        configureItemInToobar()
         // 非编辑状态时跳转到新VC
         if !self.tableView.isEditing {
             let itemListTVC: ItemListTVC = storyboard?.instantiateViewController(withIdentifier: "ItemListTVC") as! ItemListTVC
@@ -208,12 +211,32 @@ class MainTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         print("#didDeselectRowAt")
-        
+        configureItemInToobar()
     }
     
     
     
     // MARK: - Helper
+    
+    // 判断toolbar中item的名称和状态
+    func configureItemInToobar() {
+        if isEditing {
+            // 删除
+            addFolderItem.title = "删除"
+            /// tableView的indexPathsForSelectedRows保存了选中的cell的indexPath
+            /// 通过它来判断
+            if let selectedRows = tableView.indexPathsForSelectedRows {
+                addFolderItem.isEnabled = selectedRows.count > 0
+            } else {
+                addFolderItem.isEnabled = false
+            }
+            
+        } else {
+            // 创建文件夹
+            addFolderItem.title = "创建文件夹"
+            addFolderItem.isEnabled = true
+        }
+    }
     
     func showActionSheet() {
         
@@ -259,6 +282,27 @@ class MainTableViewController: UITableViewController {
         })
         // present modelly
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    // 删除选择的文件夹及对应数据
+    func deleteSelectedFolders() {
+        print("Delete selected folders")
+        //
+        if let indexPathsForSelectedRows = tableView.indexPathsForSelectedRows {
+            /// 注意：这种根据IndexPath删除多个数组element的，要从后往前进行，否则会出现越界
+            ///
+            for (index, _) in indexPathsForSelectedRows.enumerated().reversed() {
+                print("")
+                // 删除model
+                iphoneFolders.remove(at: index)
+                // 删除plist
+                folderPlist[1].remove(at: index)
+                PlistHelper.deleteFolder(at: index)
+            }
+            tableView.beginUpdates()
+            tableView.deleteRows(at: indexPathsForSelectedRows, with: UITableViewRowAnimation.automatic)
+            tableView.endUpdates()
+        }
     }
     
     // 构造数据
