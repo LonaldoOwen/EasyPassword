@@ -12,7 +12,7 @@
 /// 3、点返回，回到文件列表，需要刷新table view（在viewWillAppear中操作即可）
 /// 4、添加完新的item后，刷新当前table view
 /// 5、search bar使用？？？（）
-/// 6、缺少删除cell的功能（）
+/// 6、缺少删除cell的功能、多选、移动到其他文件夹（）
 ///
 ///
 ///

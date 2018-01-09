@@ -214,6 +214,16 @@ extension PlistHelper {
         }
     }
     
+    // delete folder in plist
+    public class func deleteFolder(at index: Int) {
+        let plist = PlistHelper.readPlist(ofName: "Folder.plist") as! [[[String: Any]]]
+        var tempPlist = plist                       // copy plist
+        var iphoneFolders = tempPlist[1]
+        iphoneFolders.remove(at: index)
+        tempPlist[1] = iphoneFolders                                 // update tempPlist
+        // write plist
+        PlistHelper.write(plist: tempPlist, toPath: PlistHelper.getPlistPath(ofName: "Folder.plist"))
+    }
     
 }
 
