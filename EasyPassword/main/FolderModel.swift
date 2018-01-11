@@ -30,10 +30,10 @@ class FolderModel {
     var itemType: String
     var items: [Item]
     
-    init(persistentType: String, itemType: String, items: [Item]) {
+    init(persistentType: String, itemType: String, items: [Item]?) {
         self.persistentType = persistentType
         self.itemType = itemType
-        self.items = items
+        self.items = items != nil ? items! : [Item]()
     }
     
     

@@ -22,14 +22,40 @@
 
 import UIKit
 
+extension Login: SQLTable {
+    static var createStatement: String {
+        return """
+        CREATE TABLE Login(
+            Item_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+            Item_name CHAR(255),
+            User_name CHAR(255),
+            Password CHAR(255),
+            Website CHAR(255),
+            Note CHAR(255),
+            Item_type INT,
+            Persistent_type INT,
+            Create_time DATATIME,
+            Update_time DATATIME,
+            Is_discard BOOLEAN
+        );
+        """
+    }
+    
+}
+
 class MainTableViewController: UITableViewController {
     
     @IBOutlet weak var addFolderItem: UIBarButtonItem!
     
     
     //var iphoneArray = [[String: Any]]()
-    var iphoneFolders = [FolderModel]()
+    //var iphoneFolders = [FolderModel]()
+    var iphoneFolders: [FolderModel]!
     var folderPlist = [[[String: Any]]]()
+    
+    
+    var db: SQLiteDatabase!
+    var logins: [Login]!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,16 +68,33 @@ class MainTableViewController: UITableViewController {
         //self.editButtonItem.title = "编辑"
         self.tableView.allowsMultipleSelectionDuringEditing = true
         
+        /*
+        /// 使用property list 存储
         // 创建或读取plist数据（默认创建一个Folder.plist用于存储Main页面的数据）
         let fileManager = FileManager.default
         // 不存在，创建一个新的Folder.plist
         if !fileManager.fileExists(atPath: PlistHelper.getPlistPath(ofName: "Folder.plist")) {
             PlistHelper.makeDefaulFolderPlis()
         }
+        */
+        /// 使用sqlite存储
+        // 创建db实例
+        let dbPath = try! String.init(contentsOf: SQLiteDatabase.getDBPath())
+        //var db: SQLiteDatabase
+        do {
+             db = try SQLiteDatabase.open(path: dbPath)
+            print("Successfully opened connection to database.")
+        } catch SQLiteError.OpenDatabase(let message) {
+            print("Unable to open database. :\(message)")
+        } catch {
+            print("Others errors")
+        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         print("#MainTableViewController--viewWillAppear")
+        /*
         // 页面每次显示时，读取最新数据
         // 如果Folder.plist在沙盒中存在，则读取它的数据
         let plist = PlistHelper.readPlist(ofName: "Folder.plist") as! [[[String: Any]]]
@@ -72,6 +115,12 @@ class MainTableViewController: UITableViewController {
                 }
             )
         }
+        */
+        
+        // 页面每次显示时，query db
+        queryData()
+        
+        
         // 在此处刷新table view
         self.tableView.reloadData()
     }
@@ -97,7 +146,18 @@ class MainTableViewController: UITableViewController {
             // show action sheet(可选不同类型)
             // show Alert
             // 同时创建对应plist
-            showAlertToCreateNewFolder()
+            //showAlertToCreateNewFolder()
+            
+            // 临时：点击新建文件夹，创建Login Table
+            try? db.createTable(table: Login.self)
+            
+            // 插入login item
+//            let insertSQL = "INSERT INTO Login (Item_name, User_name, Password, Website, Note, Item_type, Persistent_type, Create_time, Update_time, Is_discard) VALUES ('Login', 'ZhangSan', 'abc12345', 'abc.com', 'temp login item', '1', '1', '2018-01-11 00:00:00', '', '0');"
+//            try? db.insert(sql: insertSQL)
+            
+            queryData()
+            
+            self.tableView.reloadData()
         }
     }
     
@@ -122,17 +182,34 @@ class MainTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return folderPlist.count
+        //return folderPlist.count
+        
+        //return iphoneFolders.count > 0 ? iphoneFolders.count : 0
+        if let iphoneFolders = iphoneFolders {
+            return iphoneFolders.count
+        }
+        return 0
+    
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return folderPlist[section].count
+        //return folderPlist[section].count
+        
+        //return iphoneFolders.count > 0 ? iphoneFolders[section].items.count : 0
+        if let iphoneFolders = iphoneFolders {
+            return iphoneFolders.count
+        }
+        return 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print("cellForRowAt")
         let cell = tableView.dequeueReusableCell(withIdentifier: "FolderCell", for: indexPath)
+        
+        
+        /*
+         // 使用property list
         if indexPath.section == 1 {
             let folder = iphoneFolders[indexPath.row]
             cell.textLabel?.text = folder.itemType
@@ -141,7 +218,11 @@ class MainTableViewController: UITableViewController {
             cell.textLabel?.text = folderPlist[0][0]["itemType"] as? String
             cell.detailTextLabel?.text = String((folderPlist[0][0]["items"] as! [[String: Any]]).count)
         }
-        
+        */
+        // 使用sqlite db
+        let iphoneFolder = iphoneFolders[indexPath.section]
+        cell.textLabel?.text = iphoneFolder.itemType
+        cell.detailTextLabel?.text = String(logins.count)
         
         return cell
     }
@@ -152,7 +233,8 @@ class MainTableViewController: UITableViewController {
         if sectionHeader == nil {
             sectionHeader = UITableViewHeaderFooterView(reuseIdentifier: "DefaulSectionHeader")
         }
-        sectionHeader?.textLabel?.text = folderPlist[section].first?["persistentType"] as? String
+        //sectionHeader?.textLabel?.text = folderPlist[section].first?["persistentType"] as? String
+        sectionHeader?.textLabel?.text = iphoneFolders[section].persistentType
         
         return sectionHeader
     }
@@ -305,9 +387,20 @@ class MainTableViewController: UITableViewController {
         }
     }
     
-    // 构造数据
-    func constructData() {
-        
+    // queryData
+    func queryData() {
+        var folders = [FolderModel]()
+        let queryAllSQL = "SELECT * FROM Login"
+        if let logins = db.queryAll(sql: queryAllSQL) {
+            self.logins = logins
+            let iphoneFolder = FolderModel.init(persistentType: "Local", itemType: "Login", items: logins)
+            // Fatal error: Index out of range
+            //iphoneFolders[0] = iphoneFolder
+            folders.append(iphoneFolder)
+            iphoneFolders = folders
+        } else {
+            print("# DB have no Tables!")
+        }
     }
     
     
