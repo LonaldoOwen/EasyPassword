@@ -17,19 +17,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
-        // 创建sqlite db
-        let dbUrl = SQLiteDatabase.getDBPath()
-        let dbPath = dbUrl.path
-        //var db: SQLiteDatabase
-        do {
-            _ = try SQLiteDatabase.open(path: dbPath)
-            print("Successfully opened connection to database.")
-        } catch SQLiteError.OpenDatabase(let message) {
-            print("Unable to open database. :\(message)")
-        } catch {
-            print("Others error")
-        }
-        
+//        // 创建sqlite db
+//        let dbUrl = SQLiteDatabase.getDBPath()
+//        let dbPath = dbUrl.path
+//        //var db: SQLiteDatabase
+//        do {
+//            _ = try SQLiteDatabase.open(path: dbPath)
+//            print("Successfully opened connection to database.")
+//        } catch SQLiteError.OpenDatabase(let message) {
+//            print("Unable to open database. :\(message)")
+//        } catch {
+//            print("Others error")
+//        }
         
         return true
     }

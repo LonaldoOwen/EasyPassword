@@ -24,7 +24,7 @@ import UIKit
 
 class ItemListTVC: UITableViewController {
     
-    var titleName: String = ""  // 用于传值
+    var itemType: String = ""  // 用于传值
     var items: [Item]?          // 用于传值
 
     override func viewDidLoad() {
@@ -43,7 +43,7 @@ class ItemListTVC: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         print("#ItemListTVC--viewWillAppear")
         // 接收传值，显示title
-        self.title = titleName
+        self.title = itemType
         self.tableView.reloadData()
     }
 
@@ -65,10 +65,10 @@ class ItemListTVC: UITableViewController {
         
     }
     
-    @objc func handlePassBackItemNotification(_ notification: Notification) {
-        print("#handlePassBackItemNotification: \(notification)")
-        
-    }
+//    @objc func handlePassBackItemNotification(_ notification: Notification) {
+//        print("#handlePassBackItemNotification: \(notification)")
+//
+//    }
 
     // MARK: - Table view data source
 
@@ -82,7 +82,6 @@ class ItemListTVC: UITableViewController {
         return (items?.count)!
     }
 
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath)
 
@@ -103,7 +102,7 @@ class ItemListTVC: UITableViewController {
             // 删除cell
             tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
             // 删除对应plist中数据
-            PlistHelper.delete(itemModel: item, ofPersistentType: "MyIPHONE", itemType: titleName)
+            //PlistHelper.delete(itemModel: item, ofPersistentType: "MyIPHONE", itemType: titleName)
         }
     }
     
@@ -139,7 +138,7 @@ class ItemListTVC: UITableViewController {
             let indexPath = tableView.indexPath(for: sender as! UITableViewCell)
             let itemDetailVC: ItemDetailTVC = segue.destination as! ItemDetailTVC
             itemDetailVC.item = items![(indexPath?.row)!]
-            itemDetailVC.itemType = titleName
+            itemDetailVC.itemType = itemType
             // 设置closure，更新cell
             itemDetailVC.updateCellOfListVC = { item in
                 self.items![(indexPath?.row)!] = item

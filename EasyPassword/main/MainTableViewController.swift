@@ -13,7 +13,7 @@
 ///    修改文件夹名称（）
 /// 4、默认显示备忘文件夹；当添加新的文件夹后，同时增加一个“所有persistent”文件夹，用于显示当前存储类型中所有的item（）
 /// 5、缺少修改文件夹名称、删除文夹功能（）
-///
+/// 6、添加sqlite db
 ///
 /// 问题：
 /// 1、Toolbar选择的是translucent，但是显示的时候却是opaque？？？
@@ -68,8 +68,8 @@ class MainTableViewController: UITableViewController {
         //self.editButtonItem.title = "编辑"
         self.tableView.allowsMultipleSelectionDuringEditing = true
         
-        /*
         /// 使用property list 存储
+        /*
         // 创建或读取plist数据（默认创建一个Folder.plist用于存储Main页面的数据）
         let fileManager = FileManager.default
         // 不存在，创建一个新的Folder.plist
@@ -79,8 +79,8 @@ class MainTableViewController: UITableViewController {
         */
         /// 使用sqlite存储
         // 创建db实例
-        let dbPath = try! String.init(contentsOf: SQLiteDatabase.getDBPath())
-        //var db: SQLiteDatabase
+        let dbUrl = SQLiteDatabase.getDBPath()
+        let dbPath = dbUrl.path
         do {
              db = try SQLiteDatabase.open(path: dbPath)
             print("Successfully opened connection to database.")
@@ -282,7 +282,7 @@ class MainTableViewController: UITableViewController {
             let itemListTVC: ItemListTVC = storyboard?.instantiateViewController(withIdentifier: "ItemListTVC") as! ItemListTVC
             let cell = tableView.cellForRow(at: indexPath)
             // 传值
-            itemListTVC.titleName = (cell?.textLabel?.text)!
+            itemListTVC.itemType = (cell?.textLabel?.text)!
             itemListTVC.items = iphoneFolders[indexPath.row].items
             self.show(itemListTVC, sender: nil)
             // 释放cell的selected状态

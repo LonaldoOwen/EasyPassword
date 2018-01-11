@@ -5,6 +5,12 @@
 //  Created by libowen on 2018/1/11.
 //  Copyright © 2018年 libowen. All rights reserved.
 //
+/// SQLiteHelper.swift
+/// 功能：封装sqlite3语法，使用Swift风格
+/// 
+///
+
+
 
 import Foundation
 import SQLite3
@@ -46,6 +52,7 @@ class SQLiteDatabase {
     deinit {
         // 关闭sqlite db
         sqlite3_close(dbPointer)
+        print("#close sqlite db!")
     }
     
     // 定义open db方法
@@ -60,6 +67,7 @@ class SQLiteDatabase {
             defer {
                 if db != nil {
                     sqlite3_close(db)
+                    print("db != nil, close sqlite db! ???")
                 }
             }
             // 处理error

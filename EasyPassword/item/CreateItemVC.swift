@@ -49,6 +49,7 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     var reloadItemListVC: ((Item) -> ())!
     // 定义closure用于刷新ItemDetailVC
     var passBackNewItemDetail: ((Item) -> ())!
+    var db: SQLiteDatabase!
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var cancelBtn: UIBarButtonItem!
@@ -71,7 +72,7 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
         // Do any additional setup after loading the view.
         
         // 注册keyboard通知
-        registerForKeyboardNotifications()
+        //registerForKeyboardNotifications()
         
         textFields = [itemName, userName, password, website]
         for textField in textFields {
@@ -94,6 +95,19 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
         note.delegate = self
         note.text = "add some note here!"
         note.textColor = UIColor.lightGray
+        
+        /// 使用sqlite存储
+        // 创建db实例
+        let dbUrl = SQLiteDatabase.getDBPath()
+        let dbPath = dbUrl.path
+        do {
+            db = try SQLiteDatabase.open(path: dbPath)
+            print("Successfully opened connection to database.")
+        } catch SQLiteError.OpenDatabase(let message) {
+            print("Unable to open database. :\(message)")
+        } catch {
+            print("Others errors")
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -148,9 +162,16 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
             })
         } else {
             // 创建新item
-            // 注意除了note字段，其他不许为空
-            login = Login(itemname: itemName.text!, username: userName.text!, password: password.text!, website: website.text!, note: note.text!)
-            PlistHelper.insert(itemModel: login, ofPersistentType: "MyIPHONE", itemType: itemType)
+            if itemType == "Login" {
+                // 注意除了note字段，其他不许为空
+                login = Login(itemname: itemName.text!, username: userName.text!, password: password.text!, website: website.text!, note: note.text!)
+                // 插入plist
+                //PlistHelper.insert(itemModel: login, ofPersistentType: "MyIPHONE", itemType: itemType)
+                // 插入db
+                let insertSQL = "INSERT INTO Login (Item_name, User_name, Password, Website, Note, Item_type, Persistent_type, Create_time, Update_time, Is_discard) VALUES('\(login.itemname)', '\(login.username)', '\(login.password)', '\(login.website)', '\(login.note)', '1', '1', '2018-01-11 00:00:00', '', '0');"
+                try? db.insert(sql: insertSQL)
+                
+            }
             
             // 更新item list页面（选择方式？？？）
             //reloadItemListVC(login)
