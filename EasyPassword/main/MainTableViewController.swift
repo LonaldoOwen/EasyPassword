@@ -204,7 +204,7 @@ class MainTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("cellForRowAt")
+        print("#cellForRowAt")
         let cell = tableView.dequeueReusableCell(withIdentifier: "FolderCell", for: indexPath)
         
         
@@ -389,6 +389,15 @@ class MainTableViewController: UITableViewController {
     
     // queryData
     func queryData() {
+        /// 验证querySql中每步结果
+        // 查询整个Table
+        //let tempArray = db.querySql(sql: "SELECT * FROM Login")
+        // 条件查询
+        //let tempArray = db.querySql(sql: "SELECT Item_id, Item_name, User_name  FROM  Login WHERE Item_id = 2 OR User_name = 'aaa';")
+        // 条件查询，并降序排列
+        let tempArray = db.querySql(sql: "SELECT Item_id, Item_name, User_name  FROM  Login WHERE Item_id = 2 OR User_name = 'aaa' ORDER BY Item_id  DESC;")
+        
+        // 查询所有item的数据
         var folders = [FolderModel]()
         let queryAllSQL = "SELECT * FROM Login"
         if let logins = db.queryAll(sql: queryAllSQL) {

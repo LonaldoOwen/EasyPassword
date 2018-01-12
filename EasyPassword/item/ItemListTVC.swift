@@ -102,7 +102,7 @@ class ItemListTVC: UITableViewController {
             // 删除cell
             tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
             // 删除对应plist中数据
-            //PlistHelper.delete(itemModel: item, ofPersistentType: "MyIPHONE", itemType: titleName)
+            PlistHelper.delete(itemModel: item, ofPersistentType: "MyIPHONE", itemType: itemType)
         }
     }
     

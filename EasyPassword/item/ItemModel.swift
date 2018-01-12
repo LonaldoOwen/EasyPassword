@@ -7,15 +7,17 @@
 //
 ///  ItemModel
 /// 功能：item list数据模型
-/// 
+/// 1、model为cell需要显示的信息，可以根据db查询结果，取需要的即可
 ///
 ///
 
 import Foundation
 
+// MARK: - 类型通用协议
 protocol Item { }
 
-// 登录模型
+
+// MARK: - 登录模型
 struct Login: Item {
     
     var itemname: String

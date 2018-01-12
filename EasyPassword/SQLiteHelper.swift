@@ -158,6 +158,7 @@ extension SQLiteDatabase {
             while sqlite3_step(queryStatement) == SQLITE_ROW {
                 // 处理查询结果，生成data model
                 let id = sqlite3_column_int(queryStatement, 0)
+                print("\(id) not use in model!")
                 let queryResultCol1 = sqlite3_column_text(queryStatement, 1)
                 let itemname = String.init(cString: queryResultCol1!)
                 let queryResultCol2 = sqlite3_column_text(queryStatement, 2)
@@ -170,8 +171,10 @@ extension SQLiteDatabase {
                 let note = String.init(cString: queryResultCol5!)
                 let queryResultCol6 = sqlite3_column_text(queryStatement, 6)
                 let itemType = String.init(cString: queryResultCol6!)
+                print("\(itemType) not use in model!")
                 let queryResultCol7 = sqlite3_column_text(queryStatement, 7)
                 let persistentType = String.init(cString: queryResultCol7!)
+                print("\(persistentType) not use in model!")
                 
                 let login = Login(itemname: itemname, username: username, password: password, website: website, note: note)
                 logins.append(login)
@@ -183,6 +186,62 @@ extension SQLiteDatabase {
         
         return logins
     }
+    
+    /// 说明：
+    /// 调试证明，此方法可以进行各类复杂查询，如：条件、排序。。。
+    ///
+    // query all -- generic
+    func querySql(sql: String) -> [[String: Any]]? {
+        var tempArray: [[String: Any]] = []
+        if let queryStatement = try? prepareStatement(sql: sql) {
+            defer {
+                sqlite3_finalize(queryStatement)
+            }
+            
+            while sqlite3_step(queryStatement) == SQLITE_ROW {
+                let columns = sqlite3_column_count(queryStatement)
+                var row: [String: Any] = Dictionary()
+                for i in 0..<columns {
+                    let type = sqlite3_column_type(queryStatement, i)
+                    let chars = UnsafePointer<CChar>(sqlite3_column_name(queryStatement, i))
+                    let name = String.init(cString: chars!, encoding: String.Encoding.utf8)
+                    var value: Any
+                    switch type {
+                    case SQLITE_INTEGER:
+                        value = sqlite3_column_int(queryStatement, i)
+                    case SQLITE_FLOAT:
+                        value = sqlite3_column_double(queryStatement, i)
+                    case SQLITE_TEXT:
+                        let chars = UnsafePointer<CUnsignedChar>(sqlite3_column_text(queryStatement, i))
+                        value = String.init(cString: chars!)
+                    case SQLITE_BLOB:
+                        let data = sqlite3_column_blob(queryStatement, i)
+                        let size = sqlite3_column_bytes(queryStatement, i)
+                        value = NSData.init(bytes: data, length: Int(size))
+                    default:
+                        value = ""
+                    }
+                    // 存储一条结果
+                    row.updateValue(value, forKey: "\(name!)")
+                }
+                // 存储所有结果
+                tempArray.append(row)
+            }
+            if tempArray.count == 0 {
+                return nil
+            } else {
+                return tempArray
+            }
+        } else {
+            print("SELECT statement could not be prepared")
+            return nil
+        }
+
+    }
+    
+    // query -- 部分Keys
+    
+    
 }
 
 // 扩展SQLiteDatabase--封装 UPDATE
