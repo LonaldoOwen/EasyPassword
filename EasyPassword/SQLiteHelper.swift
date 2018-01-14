@@ -30,6 +30,7 @@ enum SQLiteError: Error {
 }
 
 // 创建一个SQLiteDatabase
+/// 封装SQLite3对象
 class SQLiteDatabase {
     // 定义私有属性
     fileprivate var dbPointer: OpaquePointer?   // stored property
@@ -81,9 +82,14 @@ class SQLiteDatabase {
     }
 }
 
-// 扩展SQLiteDatabase--封装 sqlite3_prepare()方法
+// 扩展SQLiteDatabase--封装 sqlite3基础方法
 extension SQLiteDatabase {
-    // 准备statement 对象
+
+    /// 封装 sqlite3_prepare()方法，返回prepared statement对象
+    ///
+    /// - Parameter sql: SQL语句
+    /// - Returns: 指针类型，返回prepared statement对象
+    /// - Throws: 抛出error
     func prepareStatement(sql: String) throws -> OpaquePointer? {
         var statement: OpaquePointer? = nil
         guard sqlite3_prepare_v2(dbPointer, sql, -1, &statement, nil) == SQLITE_OK else {
@@ -93,12 +99,12 @@ extension SQLiteDatabase {
         return statement
     }
     
-}
-
-
-// 扩展SQLiteDatabase--封装s qlite3_exec()方法
-extension SQLiteDatabase {
-    //
+    
+    /// 封装s qlite3_exec()方法
+    ///
+    /// - Parameter sql: SQL语句
+    /// - Returns: Bool type, 执行成功返回true，否则报错
+    /// - Throws: 抛出error
     func execSql(_ sql: String) throws -> Bool {
         var err: UnsafeMutablePointer<Int8>? = nil
         guard sqlite3_exec(dbPointer, sql, nil, nil, &err) == SQLITE_OK else {
@@ -111,12 +117,12 @@ extension SQLiteDatabase {
         }
         return true
     }
-    
 }
+
 
 // 扩展SQLiteDatabase--封装 CREATE Table
 extension SQLiteDatabase {
-    //
+    // create table
     func createTable(table: SQLTable.Type) throws {
         // 1
         let createTableStatement = try prepareStatement(sql: table.createStatement)
@@ -134,7 +140,7 @@ extension SQLiteDatabase {
 
 // 扩展SQLiteDatabase--封装 INSERT
 extension SQLiteDatabase {
-    //
+    // execute Insert
     func insert(sql: String) throws {
         guard try execSql(sql) == true else {
             throw SQLiteError.Exec(message: errorMessage)
@@ -146,51 +152,52 @@ extension SQLiteDatabase {
 
 // 扩展SQLiteDatabase--封装 SELECT
 extension SQLiteDatabase {
-    //
-    func queryAll(sql: String) -> [Login]? {
-        var logins = [Login]()
-        //let queryStatement = try! prepareStatement(sql: sql)
-        if let queryStatement = try? prepareStatement(sql: sql) {
-            defer {
-                sqlite3_finalize(queryStatement)
-            }
-            
-            while sqlite3_step(queryStatement) == SQLITE_ROW {
-                // 处理查询结果，生成data model
-                let id = sqlite3_column_int(queryStatement, 0)
-                print("\(id) not use in model!")
-                let queryResultCol1 = sqlite3_column_text(queryStatement, 1)
-                let itemname = String.init(cString: queryResultCol1!)
-                let queryResultCol2 = sqlite3_column_text(queryStatement, 2)
-                let username = String.init(cString: queryResultCol2!)
-                let queryResultCol3 = sqlite3_column_text(queryStatement, 3)
-                let password = String.init(cString: queryResultCol3!)
-                let queryResultCol4 = sqlite3_column_text(queryStatement, 4)
-                let website = String.init(cString: queryResultCol4!)
-                let queryResultCol5 = sqlite3_column_text(queryStatement, 5)
-                let note = String.init(cString: queryResultCol5!)
-                let queryResultCol6 = sqlite3_column_text(queryStatement, 6)
-                let itemType = String.init(cString: queryResultCol6!)
-                print("\(itemType) not use in model!")
-                let queryResultCol7 = sqlite3_column_text(queryStatement, 7)
-                let persistentType = String.init(cString: queryResultCol7!)
-                print("\(persistentType) not use in model!")
-                
-                let login = Login(itemname: itemname, username: username, password: password, website: website, note: note)
-                logins.append(login)
-            }
-        } else {
-            print("SELECT statement could not be prepared")
-            return nil
-        }
-        
-        return logins
-    }
+    // 有了下面的方法，这个方法就可以废弃了，而且显得非常笨拙
+//    func queryAll(sql: String) -> [Login]? {
+//        var logins = [Login]()
+//        //let queryStatement = try! prepareStatement(sql: sql)
+//        if let queryStatement = try? prepareStatement(sql: sql) {
+//            defer {
+//                sqlite3_finalize(queryStatement)
+//            }
+//
+//            while sqlite3_step(queryStatement) == SQLITE_ROW {
+//                // 处理查询结果，生成data model
+//                let id = sqlite3_column_int(queryStatement, 0)
+//                print("\(id) not use in model!")
+//                let queryResultCol1 = sqlite3_column_text(queryStatement, 1)
+//                let itemname = String.init(cString: queryResultCol1!)
+//                let queryResultCol2 = sqlite3_column_text(queryStatement, 2)
+//                let username = String.init(cString: queryResultCol2!)
+//                let queryResultCol3 = sqlite3_column_text(queryStatement, 3)
+//                let password = String.init(cString: queryResultCol3!)
+//                let queryResultCol4 = sqlite3_column_text(queryStatement, 4)
+//                let website = String.init(cString: queryResultCol4!)
+//                let queryResultCol5 = sqlite3_column_text(queryStatement, 5)
+//                let note = String.init(cString: queryResultCol5!)
+//                let queryResultCol6 = sqlite3_column_text(queryStatement, 6)
+//                let itemType = String.init(cString: queryResultCol6!)
+//                print("\(itemType) not use in model!")
+//                let queryResultCol7 = sqlite3_column_text(queryStatement, 7)
+//                let persistentType = String.init(cString: queryResultCol7!)
+//                print("\(persistentType) not use in model!")
+//
+//                let login = Login(itemId: String(id), itemName: itemname, userName: username, password: password, website: website, note: note)
+//                logins.append(login)
+//            }
+//        } else {
+//            print("SELECT statement could not be prepared")
+//            return nil
+//        }
+//
+//        return logins
+//    }
     
-    /// 说明：
-    /// 调试证明，此方法可以进行各类复杂查询，如：条件、排序。。。
+    
+    /// 通用Query方法
     ///
-    // query all -- generic
+    /// - Parameter sql: SQL语句
+    /// - Returns: 返回数组类型，可以为nil，数组里面存储的是字典类型
     func querySql(sql: String) -> [[String: Any]]? {
         var tempArray: [[String: Any]] = []
         if let queryStatement = try? prepareStatement(sql: sql) {
@@ -241,12 +248,42 @@ extension SQLiteDatabase {
     
     // query -- 部分Keys
     
+    // 统计Table中rows的数量
+    /// 统计Table中rows的数量
+    ///
+    /// - Parameter table: String type, table name
+    /// - Returns: Int type, count of rows in table
+    func numberOfRowsInTable(_ table: String) -> Int {
+        let queryResult = querySql(sql: "SELECT COUNT(*) FROM \(table);")
+        let tableRowsCount: Int = Int(queryResult?.first!["COUNT(*)"] as! Int32)
+        
+        return tableRowsCount
+    }
+    
+    
+    /// sqlite中sqlite_master中是否包含table
+    ///
+    /// - Parameter table: String type，table name
+    /// - Returns: Bool type，包含返回true，不包含返回false
+    func masterContainTable(_ table: String) -> Bool? {
+        let queryMasterResult = querySql(sql: "SELECT tbl_name FROM sqlite_master WHERE type = 'table';")
+        let hasTable = queryMasterResult?.contains(where: { (row) -> Bool in
+            let value = row["tbl_name"] as! String
+            if value == table {
+                return true
+            }
+            return false
+        })
+        
+        return hasTable
+    }
+    
     
 }
 
 // 扩展SQLiteDatabase--封装 UPDATE
 extension SQLiteDatabase {
-    //
+    // execute Update
     func update(sql: String) throws {
         guard try execSql(sql) == true else {
             throw SQLiteError.Exec(message: errorMessage)
@@ -258,7 +295,7 @@ extension SQLiteDatabase {
 
 // 扩展SQLiteDatabase--封装 DELETE
 extension SQLiteDatabase {
-    //
+    // execute Delete
     func delete(sql: String) throws {
         guard try execSql(sql) == true else {
             throw SQLiteError.Exec(message: errorMessage)
@@ -271,10 +308,10 @@ extension SQLiteDatabase {
 // 扩展SQLiteDatabase--获取db path
 extension SQLiteDatabase {
     //
-    static func getDBPath() -> URL {
+    static func getDBPath(_ path: String) -> URL {
         let fileManager = FileManager.default
         let documentDirectory = try! fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-        let dbUrl = documentDirectory.appendingPathComponent("EasyPassword.sqlite", isDirectory: false)
+        let dbUrl = documentDirectory.appendingPathComponent(path, isDirectory: false)
         
         return dbUrl
     }

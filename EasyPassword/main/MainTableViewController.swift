@@ -43,19 +43,40 @@ extension Login: SQLTable {
     
 }
 
+extension Note: SQLTable {
+    static var createStatement: String {
+        return """
+        CREATE TABLE Note(
+        Item_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        Text TEXT,
+        Create_time DATATIME,
+        Update_time DATATIME,
+        Is_discard BOOLEAN
+        );
+        """
+    }
+    
+    
+}
+
 class MainTableViewController: UITableViewController {
     
     @IBOutlet weak var addFolderItem: UIBarButtonItem!
     
-    
+    // plist存储
     //var iphoneArray = [[String: Any]]()
     //var iphoneFolders = [FolderModel]()
-    var iphoneFolders: [FolderModel]!
-    var folderPlist = [[[String: Any]]]()
+    //var folderPlist = [[[String: Any]]]()
+    
+    // sqlite db存储
+    var icloudFolders: [FolderModel]!   // iCloud
+    var iphoneFolders: [FolderModel]!   // 本地
+    var folders: [Any]!                 //
+    
     
     
     var db: SQLiteDatabase!
-    var logins: [Login]!
+    //var logins: [Login]!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,7 +100,7 @@ class MainTableViewController: UITableViewController {
         */
         /// 使用sqlite存储
         // 创建db实例
-        let dbUrl = SQLiteDatabase.getDBPath()
+        let dbUrl = SQLiteDatabase.getDBPath("EasyPassword.sqlite")
         let dbPath = dbUrl.path
         do {
              db = try SQLiteDatabase.open(path: dbPath)
@@ -94,6 +115,7 @@ class MainTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         print("#MainTableViewController--viewWillAppear")
+        // plist存储
         /*
         // 页面每次显示时，读取最新数据
         // 如果Folder.plist在沙盒中存在，则读取它的数据
@@ -117,10 +139,9 @@ class MainTableViewController: UITableViewController {
         }
         */
         
-        // 页面每次显示时，query db
+        // sqlite db存储
+        // 页面每次显示时，query db，只查询需要的字段即可，区别plist
         queryData()
-        
-        
         // 在此处刷新table view
         self.tableView.reloadData()
     }
@@ -140,6 +161,7 @@ class MainTableViewController: UITableViewController {
             // 删除文件夹及对应数据
             deleteSelectedFolders()
         } else {
+            /// plist存储
             // 创建新文件夹
             /// 根据sender的类型决定哪种操作
             // 创建新文件夹
@@ -148,16 +170,13 @@ class MainTableViewController: UITableViewController {
             // 同时创建对应plist
             //showAlertToCreateNewFolder()
             
+            // sqlite db 存储
             // 临时：点击新建文件夹，创建Login Table
-            try? db.createTable(table: Login.self)
+//            try? db.createTable(table: Login.self)
+//            queryData()
+//            self.tableView.reloadData()
             
-            // 插入login item
-//            let insertSQL = "INSERT INTO Login (Item_name, User_name, Password, Website, Note, Item_type, Persistent_type, Create_time, Update_time, Is_discard) VALUES ('Login', 'ZhangSan', 'abc12345', 'abc.com', 'temp login item', '1', '1', '2018-01-11 00:00:00', '', '0');"
-//            try? db.insert(sql: insertSQL)
-            
-            queryData()
-            
-            self.tableView.reloadData()
+            showActionSheet()
         }
     }
     
@@ -185,11 +204,12 @@ class MainTableViewController: UITableViewController {
         //return folderPlist.count
         
         //return iphoneFolders.count > 0 ? iphoneFolders.count : 0
-        if let iphoneFolders = iphoneFolders {
-            return iphoneFolders.count
-        }
-        return 0
+//        if let iphoneFolders = iphoneFolders {
+//            return iphoneFolders.count
+//        }
+//        return 0
     
+        return 2
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -197,9 +217,21 @@ class MainTableViewController: UITableViewController {
         //return folderPlist[section].count
         
         //return iphoneFolders.count > 0 ? iphoneFolders[section].items.count : 0
-        if let iphoneFolders = iphoneFolders {
-            return iphoneFolders.count
+//        if let iphoneFolders = iphoneFolders {
+//            return iphoneFolders.count
+//        }
+//        return 0
+        
+        if section == 0 {
+            // section 0 默认留给iCloud使用
+            return 1
+        } else if section == 1 {
+            if let iphones = iphoneFolders {
+                return iphones.count
+            }
+            return 0
         }
+        
         return 0
     }
 
@@ -207,9 +239,8 @@ class MainTableViewController: UITableViewController {
         print("#cellForRowAt")
         let cell = tableView.dequeueReusableCell(withIdentifier: "FolderCell", for: indexPath)
         
-        
+        /// 使用property list
         /*
-         // 使用property list
         if indexPath.section == 1 {
             let folder = iphoneFolders[indexPath.row]
             cell.textLabel?.text = folder.itemType
@@ -219,10 +250,20 @@ class MainTableViewController: UITableViewController {
             cell.detailTextLabel?.text = String((folderPlist[0][0]["items"] as! [[String: Any]]).count)
         }
         */
-        // 使用sqlite db
-        let iphoneFolder = iphoneFolders[indexPath.section]
-        cell.textLabel?.text = iphoneFolder.itemType
-        cell.detailTextLabel?.text = String(logins.count)
+        
+        /// 使用sqlite db
+        if indexPath.section == 0 {
+            // iCloud
+            cell.textLabel?.text = "iCloud备忘"
+            cell.detailTextLabel?.text = "0"
+        } else if indexPath.section == 1 {
+            // iphone
+            if let iphoneFolders = iphoneFolders {
+                let iphoneFolder = iphoneFolders[indexPath.row]
+                cell.textLabel?.text = iphoneFolder.itemType
+                cell.detailTextLabel?.text = String(iphoneFolder.count)
+            }
+        }
         
         return cell
     }
@@ -234,7 +275,12 @@ class MainTableViewController: UITableViewController {
             sectionHeader = UITableViewHeaderFooterView(reuseIdentifier: "DefaulSectionHeader")
         }
         //sectionHeader?.textLabel?.text = folderPlist[section].first?["persistentType"] as? String
-        sectionHeader?.textLabel?.text = iphoneFolders[section].persistentType
+        //sectionHeader?.textLabel?.text = iphoneFolders[section].persistentType
+        if section == 0 {
+            sectionHeader?.textLabel?.text = "ICLOUD"
+        } else if section == 1 {
+            sectionHeader?.textLabel?.text = "IPHONE"
+        }
         
         return sectionHeader
     }
@@ -281,9 +327,24 @@ class MainTableViewController: UITableViewController {
         if !self.tableView.isEditing {
             let itemListTVC: ItemListTVC = storyboard?.instantiateViewController(withIdentifier: "ItemListTVC") as! ItemListTVC
             let cell = tableView.cellForRow(at: indexPath)
+            
+            // 使用plist存储--传递items；
+            /*
             // 传值
             itemListTVC.itemType = (cell?.textLabel?.text)!
             itemListTVC.items = iphoneFolders[indexPath.row].items
+            */
+            
+            if indexPath.section == 1 {
+                //let iphoneFolders = folders[1] as! [FolderModel]
+                //let iphoneFolder: FolderModel = iphoneFolders[indexPath.row]
+                let iphoneFolder: FolderModel = iphoneFolders[indexPath.row]
+                // 使用sqlite db存储，传递itemType、persistentType（？）
+                itemListTVC.itemType = (cell?.textLabel?.text)!
+                itemListTVC.persistentType = iphoneFolder.persistentType
+            }
+            
+            // 显示itemListTVC
             self.show(itemListTVC, sender: nil)
             // 释放cell的selected状态
             tableView.deselectRow(at: indexPath, animated: false)
@@ -321,9 +382,64 @@ class MainTableViewController: UITableViewController {
     }
     
     func showActionSheet() {
+        // 显示可以创建的类型
+        let sheet = UIAlertController.init(title: "新建类型", message: "选择要创建的类型", preferredStyle: UIAlertControllerStyle.actionSheet)
+        sheet.addAction(UIAlertAction.init(title: "登录信息", style: UIAlertActionStyle.default, handler: { (action) in
+            // 处理登陆操作
+            // 1、第一次创建，创建一个新Login table
+            // 2、非第一次，不创建table，而是跳到list页面，调起CreateVC页面
+            let dbTableCount = self.db.numberOfRowsInTable("sqlite_master")
+            if dbTableCount > 0 {
+                // db不为空
+                if self.db.masterContainTable("Login")! {
+                    // 执行2
+                    print("跳转到list页面-->CreateVC页面。")
+                } else {
+                    // 执行1
+                    try? self.db.createTable(table: Login.self)
+                }
+            } else {
+                // db为空，直接创建Login table
+                try? self.db.createTable(table: Login.self)
+            }
+            
+            self.queryData()
+            self.tableView.reloadData()
+            print("Login action")
+        }))
+        sheet.addAction(UIAlertAction.init(title: "备注信息", style: UIAlertActionStyle.default, handler: { (action) in
+            // 处理备注操作
+            // 1、第一次创建，创建一个新Note table
+            // 2、非第一次，不创建table，而是跳到list页面，调起CreateVC页面
+            let dbTableCount = self.db.numberOfRowsInTable("sqlite_master")
+            if dbTableCount > 0 {
+                // db不为空
+                if self.db.masterContainTable("Note")! {
+                    // 执行2
+                    print("跳转到list页面-->CreateVC页面。")
+                } else {
+                    // 执行1
+                    try? self.db.createTable(table: Note.self)
+                }
+            } else {
+                // db为空，直接创建Note table
+                try? self.db.createTable(table: Note.self)
+            }
+            
+            self.queryData()
+            self.tableView.reloadData()
+            print("Note action")
+        }))
+        sheet.addAction(UIAlertAction.init(title: "取消", style: UIAlertActionStyle.cancel, handler: nil))
+//        sheet.addAction(UIAlertAction.init(title: "存储", style: UIAlertActionStyle.destructive) { (saveAction) in
+//            // 处理存储操作
+//        })
         
+        // present modelly
+        self.present(sheet, animated: true, completion: nil)
     }
     
+    /*
     // 显示Alert 用于创建新文件夹
     func showAlertToCreateNewFolder() {
         let alert = UIAlertController.init(title: "新建文件夹", message: "请为此文件夹输入名称", preferredStyle: .alert)
@@ -362,9 +478,11 @@ class MainTableViewController: UITableViewController {
             let plist = PlistHelper.readPlist(ofName: "Folder.plist") as! [[[String : Any]]]
             print("验证Folder.plist in sandbox: \(plist)")
         })
+        
         // present modelly
         self.present(alert, animated: true, completion: nil)
     }
+    */
     
     // 删除选择的文件夹及对应数据
     func deleteSelectedFolders() {
@@ -375,11 +493,18 @@ class MainTableViewController: UITableViewController {
             ///
             for (index, _) in indexPathsForSelectedRows.enumerated().reversed() {
                 print("")
+                /// plist存储
+                /*
                 // 删除model
                 iphoneFolders.remove(at: index)
                 // 删除plist
                 folderPlist[1].remove(at: index)
                 PlistHelper.deleteFolder(at: index)
+                */
+                
+                /// sqlite db存储
+                // 删除model
+                // Update table，Set Is_discard='1'
             }
             tableView.beginUpdates()
             tableView.deleteRows(at: indexPathsForSelectedRows, with: UITableViewRowAnimation.automatic)
@@ -389,29 +514,69 @@ class MainTableViewController: UITableViewController {
     
     // queryData
     func queryData() {
+        print("queryData")
+        
         /// 验证querySql中每步结果
         // 查询整个Table
         //let tempArray = db.querySql(sql: "SELECT * FROM Login")
         // 条件查询
         //let tempArray = db.querySql(sql: "SELECT Item_id, Item_name, User_name  FROM  Login WHERE Item_id = 2 OR User_name = 'aaa';")
         // 条件查询，并降序排列
-        let tempArray = db.querySql(sql: "SELECT Item_id, Item_name, User_name  FROM  Login WHERE Item_id = 2 OR User_name = 'aaa' ORDER BY Item_id  DESC;")
+        //let tempArray = db.querySql(sql: "SELECT Item_id, Item_name, User_name  FROM  Login WHERE Item_id = 2 OR User_name = 'aaa' ORDER BY Item_id  DESC;")
         
-        // 查询所有item的数据
-        var folders = [FolderModel]()
-        let queryAllSQL = "SELECT * FROM Login"
-        if let logins = db.queryAll(sql: queryAllSQL) {
-            self.logins = logins
-            let iphoneFolder = FolderModel.init(persistentType: "Local", itemType: "Login", items: logins)
-            // Fatal error: Index out of range
-            //iphoneFolders[0] = iphoneFolder
-            folders.append(iphoneFolder)
-            iphoneFolders = folders
+        var tempFolders = [Any]()
+        /// 查询iCloud
+        // 将结果保存在icloudFolders
+        // 并添加到folders中
+        // var tempIcloudFolders = ["IcloudModel"]()
+        
+        /// 查询iphone
+        var tempIphoneFolders = [FolderModel]()
+        // 先查询db中的Table--从sqlite_master表中查
+        let masterTableRows = db.numberOfRowsInTable("sqlite_master")
+        if masterTableRows > 1 {
+            // 有自己创建的Table，获取table name
+            // 查询所有table name
+            if db.masterContainTable("Login")! {
+                // Table--Login
+                let login = buildLoginModel()
+                tempIphoneFolders.append(login)
+            }
+            if db.masterContainTable("Note")! {
+                // Table--Note
+                print("Table Note")
+                let note = buildNoteModel()
+                tempIphoneFolders.append(note)
+            }
+            self.iphoneFolders = tempIphoneFolders
+            // 统计所有类型
+            
+            tempFolders.append(tempIphoneFolders)
         } else {
-            print("# DB have no Tables!")
+            print("# There is no tables in db.")
         }
+        self.folders = tempFolders
     }
     
+    // 构造login data model
+    func buildLoginModel() -> FolderModel{
+        // 查询所有Login的数据
+        // 问题：numberOfRowsInTable()计算的是所有rows，实际需要的是非Is_discard的rows
+        // 解决：查询Table中条件是Is_discard='0'的rows
+        let loginTableRows = db.numberOfRowsInTable("Login") 
+        let iphoneFolder = FolderModel.init(persistentType: "IPHONE", itemType: "Login", count: String(loginTableRows))
+        
+        return iphoneFolder
+    }
+    
+    // 构造Note data model
+    func buildNoteModel() -> FolderModel {
+        // 查询所有Note的数据
+        let noteTableRows = db.numberOfRowsInTable("Note")
+        let iphoneFolder = FolderModel.init(persistentType: "IPHONE", itemType: "Note", count: String(noteTableRows))
+        
+        return iphoneFolder
+    }
     
 
     /*

@@ -112,12 +112,12 @@ class ItemDetailTVC: UITableViewController {
     
     // MARK: - UIResponder
     
-    //
+    // 1.0
     override var canBecomeFirstResponder: Bool{
         return true
     }
     
-    //
+    // 1.2
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         if action == #selector(handleCopyAction) {
             return true
@@ -152,16 +152,17 @@ class ItemDetailTVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ItemDetailTVC.cellIdentifier, for: indexPath)
-        let login = item as! Login
         
+        /// 处理Type--Login
+        let login = item as! Login
         if indexPath.section == 0 {
-            cell.textLabel?.text = login.itemname
+            cell.textLabel?.text = login.itemName
             cell.detailTextLabel?.attributedText = NSAttributedString(string: "登录信息", attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray]) //attributedText("登录信息")
             cell.imageView?.image = UIImage(named: "国内游")
         } else if indexPath.section == 1{
             if indexPath.row == 0 {
                 cell.textLabel?.attributedText = attributedText("用户名")
-                cell.detailTextLabel?.text = login.username
+                cell.detailTextLabel?.text = login.userName
             } else if indexPath.row == 1 {
                 cell.textLabel?.attributedText = attributedText("密码")
                 cell.detailTextLabel?.text = login.password
@@ -201,7 +202,7 @@ class ItemDetailTVC: UITableViewController {
         print("#ItemDetailTVC--didSelectRowAt")
         
         if let cell = tableView.cellForRow(at: indexPath), self.isFirstResponder {
-            // show edit menu
+            // 1.1 show edit menu
             let editMenu = UIMenuController.shared
             editMenu.menuItems = [
                 UIMenuItem(title: "COPY", action: #selector(handleCopyAction)),

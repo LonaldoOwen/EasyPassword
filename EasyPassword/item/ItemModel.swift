@@ -20,21 +20,38 @@ protocol Item { }
 // MARK: - 登录模型
 struct Login: Item {
     
-    var itemname: String
-    var username: String     // 非空
+    var itemId: String
+    var itemName: String
+    var userName: String     // 非空
     var password: String     // 非空
     var website: String     //
     var note: String        //
+    //var updateTime: String
     
-    init(itemname: String, username: String, password: String, website: String, note: String) {
-        self.itemname = itemname
-        self.username = username
+    init(itemId: String, itemName: String, userName: String, password: String, website: String, note: String) {
+        self.itemId = itemId
+        self.itemName = itemName
+        self.userName = userName
         self.password = password
         self.website = website
         self.note = note
+        
+    }
+
+}
+
+extension Login: Equatable {
+    static func ==(lhs: Login, rhs: Login) -> Bool {
+        return lhs.itemId == rhs.itemId && lhs.itemName == rhs.itemName && lhs.userName == rhs.userName && lhs.password == rhs.password && lhs.website == rhs.website && lhs.note == rhs.note
     }
 }
 
+
+// Note
+struct Note: Item {
+    var id: String
+    var text: String
+}
 
 // 信用卡模型
 

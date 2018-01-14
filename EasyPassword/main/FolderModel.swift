@@ -29,6 +29,8 @@ class FolderModel {
         case iphone, icloud
     }
     
+    // plist存储--data model
+    /*
     var persistentType: String
     var itemType: String
     var items: [Item]
@@ -38,8 +40,18 @@ class FolderModel {
         self.itemType = itemType
         self.items = items != nil ? items! : [Item]()
     }
+    */
     
-
+    // sqlite db存储--data model
+    var persistentType: String
+    var itemType: String
+    var count: String
+    
+    init(persistentType: String, itemType: String, count: String) {
+        self.persistentType = persistentType
+        self.itemType = itemType
+        self.count = count
+    }
 }
 
 

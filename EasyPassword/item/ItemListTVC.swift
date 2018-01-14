@@ -24,8 +24,10 @@ import UIKit
 
 class ItemListTVC: UITableViewController {
     
-    var itemType: String = ""  // 用于传值
-    var items: [Item]?          // 用于传值
+    var itemType: String = ""       // 用于传值
+    var persistentType: String = "" // 用于传值
+    var items: [Item]?
+    var db: SQLiteDatabase!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,12 +40,28 @@ class ItemListTVC: UITableViewController {
         
         // 注册通知--用于接收详情页面传来item model（未用到）
         //NotificationCenter.default.addObserver(self, selector: #selector(handlePassBackItemNotification), name: NSNotification.Name(rawValue: "PassBackItemFromDetail"), object: nil)
+        
+        /// 使用sqlite存储
+        // 创建db实例
+        let dbUrl = SQLiteDatabase.getDBPath("EasyPassword.sqlite")
+        let dbPath = dbUrl.path
+        do {
+            db = try SQLiteDatabase.open(path: dbPath)
+            print("Successfully opened connection to database.")
+        } catch SQLiteError.OpenDatabase(let message) {
+            print("Unable to open database. :\(message)")
+        } catch {
+            print("Others errors")
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         print("#ItemListTVC--viewWillAppear")
         // 接收传值，显示title
         self.title = itemType
+        // 如果使用db，根据itemType查询db，显示tableView
+        queryData()
+        // 刷新UI
         self.tableView.reloadData()
     }
 
@@ -79,16 +97,22 @@ class ItemListTVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return (items?.count)!
+        if let items = items {
+            return items.count
+        }
+        
+        return 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath)
 
         // Configure the cell...
-        let item: Login = items?[indexPath.row] as! Login
-        cell.textLabel?.text = item.itemname
-        cell.detailTextLabel?.text = item.username
+        if let items = items {
+            let item: Login = items[indexPath.row] as! Login
+            cell.textLabel?.text = item.itemName
+            cell.detailTextLabel?.text = item.userName
+        }
 
         return cell
     }
@@ -101,8 +125,18 @@ class ItemListTVC: UITableViewController {
             self.items?.remove(at: indexPath.row)
             // 删除cell
             tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-            // 删除对应plist中数据
-            PlistHelper.delete(itemModel: item, ofPersistentType: "MyIPHONE", itemType: itemType)
+            // plist存储--删除对应plist中数据
+            //PlistHelper.delete(itemModel: item, ofPersistentType: "MyIPHONE", itemType: itemType)
+            // sqlite存储--删除Table中相应row
+            // 这个考虑一下，是不是不真正删除，只修改Is_discard为1？？？
+            if itemType == "Login" {
+                // 处理Type--Login
+                let deleteSQL = "DELETE FROM Login WHERE Item_id = '\((item as! Login).itemId)';"
+                try? db.delete(sql: deleteSQL)
+                // 删除完cell后，取消编辑状态
+                self.setEditing(false, animated: true)
+            }
+            // Other type goes there
         }
     }
     
@@ -126,14 +160,17 @@ class ItemListTVC: UITableViewController {
         
         // 将item type传到创建页面
         if segue.identifier == "PresentCreate" {
+            // 创建新item
             let createItemVC: CreateItemVC = (segue.destination as! UINavigationController).topViewController as! CreateItemVC
             createItemVC.itemType = self.title
             // 调用closure，更新UI
             createItemVC.reloadItemListVC = { item in
-                self.items?.insert(item, at: 0)
-                self.tableView.reloadData()
+//                self.items?.insert(item, at: 0)
+//                self.tableView.reloadData()
+                print("#Update list")
             }
         } else if segue.identifier == "ShowDetail" {
+            // 显示详情页
             //let cell = sender as! UITableViewCell
             let indexPath = tableView.indexPath(for: sender as! UITableViewCell)
             let itemDetailVC: ItemDetailTVC = segue.destination as! ItemDetailTVC
@@ -148,5 +185,38 @@ class ItemListTVC: UITableViewController {
         
     }
     
+    
+    // MARK: - Helper
+    
+    func queryData() {
+        print("#ItemListTVC--Query db")
+        /// 处理iCloud存储
+        
+        /// 处理IPHONE存储
+        if itemType == "Login" {
+            // Type--Login
+            print("#Query Login type!")
+            queryLogin()
+        } else {
+            // 其他类型
+            print("#Query other types!")
+        }
+    }
+    
+    // 查询Table--Login
+    func queryLogin() {
+        let loginSQL = "SELECT Item_id, Item_name, User_name, Password, Website, Note FROM Login WHERE Is_discard = 0;"
+        if let loginResults = db.querySql(sql: loginSQL) {
+            var tempItems = [Item]()
+            for row in loginResults {
+                let id: String = String(Int(row["Item_id"] as! Int32))
+                let login: Login = Login.init(itemId: id, itemName: row["Item_name"] as! String, userName: row["User_name"] as! String, password: row["Password"] as! String, website: row["Website"] as! String, note: row["Note"] as! String)
+                tempItems.append(login)
+            }
+            items = tempItems
+        } else {
+            print("#Table Login has no items!")
+        }
+    }
 
 }

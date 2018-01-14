@@ -106,8 +106,10 @@ extension PlistHelper {
 extension PlistHelper {
     
     /// 将plist写入沙盒directory
-    /// @plist property list
-    /// @toPath Property list 路径（String）
+    ///
+    /// - Parameters:
+    ///   - plist: property list
+    ///   - toPath: Property list 路径（String）
     public class func write(plist: Any, toPath: String) {
         let serializedData = try! PropertyListSerialization.data(fromPropertyList: plist, format: .xml, options: 0)
         let fileUrl = URL.init(fileURLWithPath: toPath)
@@ -125,6 +127,13 @@ extension PlistHelper {
     /// 问题：存在插入不进去的情况？？？
     /// 原因：
     /// 解决：
+    
+    /// 向plist中插入item
+    ///
+    /// - Parameters:
+    ///   - item: item model
+    ///   - type: 存储类型
+    ///   - itemType: item类型
     public class func insert(_ item: [String: Any], ofPersistentType type: String, itemType: String) {
         let plist = PlistHelper.readPlist(ofName: "Folder.plist") as! [[[String: Any]]]
         //var tempPlist = Array.init(plist)
@@ -151,7 +160,7 @@ extension PlistHelper {
     public class func insert(itemModel item: Item, ofPersistentType type: String, itemType: String) {
         /// 判断struct遵从了协议
         if let item = item as? Login {
-            let dict = ["itemname": item.itemname, "username": item.username, "password": item.password, "website": item.website, "note": item.note]
+            let dict = ["itemname": item.itemName, "username": item.userName, "password": item.password, "website": item.website, "note": item.note]
             self.insert(dict, ofPersistentType: type, itemType: itemType)
         }
     }
@@ -209,7 +218,7 @@ extension PlistHelper {
     // delete item Model
     public class func delete(itemModel item: Item, ofPersistentType type: String, itemType: String) {
         if let item = item as? Login {
-            let dict = ["itemname": item.itemname, "username": item.username, "password": item.password, "website": item.website, "note": item.note]
+            let dict = ["itemname": item.itemName, "username": item.userName, "password": item.password, "website": item.website, "note": item.note]
             PlistHelper.delete(dict, ofPersistentType: type, itemType: itemType)
         }
     }

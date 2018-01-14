@@ -129,8 +129,8 @@
 		23B33D961FCE666A005403C1 /* main */ = {
 			isa = PBXGroup;
 			children = (
-				23B33D971FCE666A005403C1 /* MainTableViewController.swift */,
 				23B33D9A1FCE66AD005403C1 /* FolderModel.swift */,
+				23B33D971FCE666A005403C1 /* MainTableViewController.swift */,
 				233BC9AE1FD8E30900C615C5 /* Items.plist */,
 			);
 			path = main;
