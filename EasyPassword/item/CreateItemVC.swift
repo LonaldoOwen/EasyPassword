@@ -164,9 +164,11 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
             login = Login(itemId: (item as! Login).itemId, itemName: itemName.text!, userName: userName.text!, password: password.text!, website: website.text!, note: note.text!)
             if login != (item as! Login) {
                 // 时间格式需要处理？？？
+                
                 let updateSQL = "UPDATE Login SET Item_name = '\(login.itemName)', User_name = '\(login.userName)', Password = '\(login.password)', Website = '\(login.website)', Note = '\(login.note)', Update_time = '\(20180113)' WHERE Item_id = '\(login.itemId)';"
                 try? db.update(sql: updateSQL)
                 // 更新完login item，将password写入历史表？？？
+                
             }
            
             // 收起VC
@@ -175,7 +177,7 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
                 self.passBackNewItemDetail(self.login)
             })
         } else {
-            // 创建新item
+            // 非编辑模式，创建新item
             if itemType == "Login" {
                 // 查询Login表中，最后一行的id
                 var id: Int = 0

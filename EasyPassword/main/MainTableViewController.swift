@@ -209,7 +209,7 @@ class MainTableViewController: UITableViewController {
 //        }
 //        return 0
     
-        return 2
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -222,14 +222,19 @@ class MainTableViewController: UITableViewController {
 //        }
 //        return 0
         
-        if section == 0 {
-            // section 0 默认留给iCloud使用
-            return 1
-        } else if section == 1 {
-            if let iphones = iphoneFolders {
-                return iphones.count
-            }
-            return 0
+        //
+//        if section == 0 {
+//            // section 0 默认留给iCloud使用
+//            return 1
+//        } else if section == 1 {
+//            if let iphones = iphoneFolders {
+//                return iphones.count
+//            }
+//            return 0
+//        }
+        
+        if let iphones = iphoneFolders {
+            return iphones.count
         }
         
         return 0
@@ -252,17 +257,24 @@ class MainTableViewController: UITableViewController {
         */
         
         /// 使用sqlite db
-        if indexPath.section == 0 {
-            // iCloud
-            cell.textLabel?.text = "iCloud备忘"
-            cell.detailTextLabel?.text = "0"
-        } else if indexPath.section == 1 {
-            // iphone
-            if let iphoneFolders = iphoneFolders {
-                let iphoneFolder = iphoneFolders[indexPath.row]
-                cell.textLabel?.text = iphoneFolder.itemType
-                cell.detailTextLabel?.text = String(iphoneFolder.count)
-            }
+//        if indexPath.section == 0 {
+//            // iCloud
+//            cell.textLabel?.text = "iCloud备忘"
+//            cell.detailTextLabel?.text = "0"
+//        } else if indexPath.section == 1 {
+//            // iphone
+//            if let iphoneFolders = iphoneFolders {
+//                let iphoneFolder = iphoneFolders[indexPath.row]
+//                cell.textLabel?.text = iphoneFolder.itemType
+//                cell.detailTextLabel?.text = String(iphoneFolder.count)
+//            }
+//        }
+        
+        // iphone
+        if let iphoneFolders = iphoneFolders {
+            let iphoneFolder = iphoneFolders[indexPath.row]
+            cell.textLabel?.text = iphoneFolder.itemType != "All" ? iphoneFolder.itemType : "All Type on IPHONE"
+            cell.detailTextLabel?.text = String(iphoneFolder.count)
         }
         
         return cell
@@ -276,11 +288,12 @@ class MainTableViewController: UITableViewController {
         }
         //sectionHeader?.textLabel?.text = folderPlist[section].first?["persistentType"] as? String
         //sectionHeader?.textLabel?.text = iphoneFolders[section].persistentType
-        if section == 0 {
-            sectionHeader?.textLabel?.text = "ICLOUD"
-        } else if section == 1 {
-            sectionHeader?.textLabel?.text = "IPHONE"
-        }
+//        if section == 0 {
+//            sectionHeader?.textLabel?.text = "ICLOUD"
+//        } else if section == 1 {
+//            sectionHeader?.textLabel?.text = "IPHONE"
+//        }
+        sectionHeader?.textLabel?.text = "IPHONE"
         
         return sectionHeader
     }
@@ -335,14 +348,20 @@ class MainTableViewController: UITableViewController {
             itemListTVC.items = iphoneFolders[indexPath.row].items
             */
             
-            if indexPath.section == 1 {
-                //let iphoneFolders = folders[1] as! [FolderModel]
-                //let iphoneFolder: FolderModel = iphoneFolders[indexPath.row]
-                let iphoneFolder: FolderModel = iphoneFolders[indexPath.row]
-                // 使用sqlite db存储，传递itemType、persistentType（？）
-                itemListTVC.itemType = (cell?.textLabel?.text)!
-                itemListTVC.persistentType = iphoneFolder.persistentType
-            }
+//            if indexPath.section == 1 {
+//                //let iphoneFolders = folders[1] as! [FolderModel]
+//                //let iphoneFolder: FolderModel = iphoneFolders[indexPath.row]
+//                let iphoneFolder: FolderModel = iphoneFolders[indexPath.row]
+//                // 使用sqlite db存储，传递itemType、persistentType（？）
+//                itemListTVC.itemType = (cell?.textLabel?.text)!
+//                itemListTVC.persistentType = iphoneFolder.persistentType
+//            }
+            
+            //
+            let iphoneFolder: FolderModel = iphoneFolders[indexPath.row]
+            // 使用sqlite db存储，传递itemType、persistentType（？）
+            itemListTVC.itemType = iphoneFolder.itemType
+            itemListTVC.persistentType = iphoneFolder.persistentType
             
             // 显示itemListTVC
             self.show(itemListTVC, sender: nil)
@@ -376,7 +395,7 @@ class MainTableViewController: UITableViewController {
             
         } else {
             // 创建文件夹
-            addFolderItem.title = "创建文件夹"
+            addFolderItem.title = "新建类型"
             addFolderItem.isEnabled = true
         }
     }
@@ -537,20 +556,25 @@ class MainTableViewController: UITableViewController {
         if masterTableRows > 1 {
             // 有自己创建的Table，获取table name
             // 查询所有table name
+            var countAll: Int = 0
             if db.masterContainTable("Login")! {
                 // Table--Login
                 let login = buildLoginModel()
                 tempIphoneFolders.append(login)
+                countAll += Int(login.count)!
             }
             if db.masterContainTable("Note")! {
                 // Table--Note
                 print("Table Note")
                 let note = buildNoteModel()
                 tempIphoneFolders.append(note)
+                countAll += Int(note.count)!
             }
-            self.iphoneFolders = tempIphoneFolders
             // 统计所有类型
+            let all = FolderModel.init(persistentType: "IPHONE", itemType: "All", count: String(countAll))
+            tempIphoneFolders.insert(all, at: 0)
             
+            self.iphoneFolders = tempIphoneFolders
             tempFolders.append(tempIphoneFolders)
         } else {
             print("# There is no tables in db.")

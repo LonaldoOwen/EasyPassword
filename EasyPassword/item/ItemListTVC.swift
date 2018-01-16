@@ -75,7 +75,15 @@ class ItemListTVC: UITableViewController {
         // 调起创建新itemVC
         //PlistHelper.insert(["username": "name", "password": "pass", "website": ".com", "note": "note..."], ofPersistentType: "MyIPHONE", itemType: titleName)
         //
+        
         //
+        if itemType == "Login" {
+            // present create login VC
+        } else if itemType == "Note" {
+            // present create note VC
+        } else if itemType == "All" {
+            // present select type action sheet
+        }
     }
     
     // 收起创建item VC
