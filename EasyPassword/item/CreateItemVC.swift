@@ -27,6 +27,21 @@
 
 import UIKit
 
+extension PasswordHistory: SQLTable {
+    static var createStatement: String {
+        return """
+        CREATE TABLE PasswordHistory(
+            Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+            Item_id CHAR(255),
+            Password CHAR(255),
+            Create_time DATETIME
+        );
+        """
+    }
+    
+    
+}
+
 class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     
     
@@ -149,6 +164,20 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     }
     
     @IBAction func handleSaveAction(_ sender: Any) {
+        // 时间、日期格式
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let now = Date()
+        let dateStr = formatter.string(from: now)
+        
+        // 创建PasswordHistory Table
+        if let passwordHistoryTable = db.masterContainTable("PasswordHistory") {
+            if !passwordHistoryTable {
+                // 创建
+                try? db.createTable(table: PasswordHistory.self)
+            }
+        }
+        
         // 存储item
         if let item = item {
             // 编辑模式，更新item，先删除旧item，再插入新item
@@ -165,10 +194,12 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
             if login != (item as! Login) {
                 // 时间格式需要处理？？？
                 
-                let updateSQL = "UPDATE Login SET Item_name = '\(login.itemName)', User_name = '\(login.userName)', Password = '\(login.password)', Website = '\(login.website)', Note = '\(login.note)', Update_time = '\(20180113)' WHERE Item_id = '\(login.itemId)';"
+                let updateSQL = "UPDATE Login SET Item_name = '\(login.itemName)', User_name = '\(login.userName)', Password = '\(login.password)', Website = '\(login.website)', Note = '\(login.note)', Update_time = '\(dateStr)' WHERE Item_id = '\(login.itemId)';"
                 try? db.update(sql: updateSQL)
-                // 更新完login item，将password写入历史表？？？
-                
+                // 更新完login item，判断password是否更改，是：将password写入历史表，否：不写？？？
+                if login.password != (item as! Login).password {
+                    try? db.insert(sql: "INSERT INTO PasswordHistory (Item_id, Password, Create_time) VALUES('\(login.itemId)', '\(login.password)', '\(dateStr)');")
+                }
             }
            
             // 收起VC
@@ -190,9 +221,14 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
                 // 插入db
                 /// 问题：
                 /// 时间类型待处理？？？
-                let insertSQL = "INSERT INTO Login (Item_name, User_name, Password, Website, Note, Item_type, Persistent_type, Create_time, Update_time, Is_discard) VALUES('\(login.itemName)', '\(login.userName)', '\(login.password)', '\(login.website)', '\(login.note)', '1', '1', '2018-01-11 00:00:00', '', '0');"
-                try? db.insert(sql: insertSQL)
-                
+                // 创建新item时，设置Update_time等于Create_time
+                let insertSQL = "INSERT INTO Login (Item_name, User_name, Password, Website, Note, Item_type, Persistent_type, Create_time, Update_time, Is_discard) VALUES('\(login.itemName)', '\(login.userName)', '\(login.password)', '\(login.website)', '\(login.note)', '1', '1', '\(dateStr)', '\(dateStr)', '0');"
+//                try? db.insert(sql: insertSQL)
+                // 新建item时，同时将password写入password history表
+                if let itemId = try? db.insertIntoTable("Login", sql: insertSQL) {
+                    let idString = String(itemId!)
+                    try? db.insert(sql: "INSERT INTO PasswordHistory (Item_id, Password, Create_time) VALUES('\(idString)', '\(login.password)', '\(dateStr)');")
+                }
             } else {
                 print("Handle other item types!")
                 // 其他类型在这里处理

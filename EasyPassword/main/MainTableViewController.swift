@@ -257,18 +257,6 @@ class MainTableViewController: UITableViewController {
         */
         
         /// 使用sqlite db
-//        if indexPath.section == 0 {
-//            // iCloud
-//            cell.textLabel?.text = "iCloud备忘"
-//            cell.detailTextLabel?.text = "0"
-//        } else if indexPath.section == 1 {
-//            // iphone
-//            if let iphoneFolders = iphoneFolders {
-//                let iphoneFolder = iphoneFolders[indexPath.row]
-//                cell.textLabel?.text = iphoneFolder.itemType
-//                cell.detailTextLabel?.text = String(iphoneFolder.count)
-//            }
-//        }
         
         // iphone
         if let iphoneFolders = iphoneFolders {
@@ -288,11 +276,7 @@ class MainTableViewController: UITableViewController {
         }
         //sectionHeader?.textLabel?.text = folderPlist[section].first?["persistentType"] as? String
         //sectionHeader?.textLabel?.text = iphoneFolders[section].persistentType
-//        if section == 0 {
-//            sectionHeader?.textLabel?.text = "ICLOUD"
-//        } else if section == 1 {
-//            sectionHeader?.textLabel?.text = "IPHONE"
-//        }
+
         sectionHeader?.textLabel?.text = "IPHONE"
         
         return sectionHeader
@@ -347,15 +331,6 @@ class MainTableViewController: UITableViewController {
             itemListTVC.itemType = (cell?.textLabel?.text)!
             itemListTVC.items = iphoneFolders[indexPath.row].items
             */
-            
-//            if indexPath.section == 1 {
-//                //let iphoneFolders = folders[1] as! [FolderModel]
-//                //let iphoneFolder: FolderModel = iphoneFolders[indexPath.row]
-//                let iphoneFolder: FolderModel = iphoneFolders[indexPath.row]
-//                // 使用sqlite db存储，传递itemType、persistentType（？）
-//                itemListTVC.itemType = (cell?.textLabel?.text)!
-//                itemListTVC.persistentType = iphoneFolder.persistentType
-//            }
             
             //
             let iphoneFolder: FolderModel = iphoneFolders[indexPath.row]

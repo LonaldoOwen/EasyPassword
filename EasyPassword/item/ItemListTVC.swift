@@ -213,7 +213,8 @@ class ItemListTVC: UITableViewController {
     
     // 查询Table--Login
     func queryLogin() {
-        let loginSQL = "SELECT Item_id, Item_name, User_name, Password, Website, Note FROM Login WHERE Is_discard = 0;"
+        //let loginSQL = "SELECT Item_id, Item_name, User_name, Password, Website, Note FROM Login WHERE Is_discard = 0;"
+        let loginSQL = "SELECT Item_id, Item_name, User_name, Password, Website, Note FROM Login WHERE Is_discard = 0 ORDER BY Create_time DESC;"   // 增加根据更新时间倒序排序
         if let loginResults = db.querySql(sql: loginSQL) {
             var tempItems = [Item]()
             for row in loginResults {

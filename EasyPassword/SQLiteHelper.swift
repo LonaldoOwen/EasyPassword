@@ -148,6 +148,19 @@ extension SQLiteDatabase {
         print("Successfully inserted row.")
     
     }
+    
+    // execute Insert--返回Item_id
+    func insertIntoTable(_ table: String, sql: String) throws -> Int? {
+        guard try execSql(sql) == true else {
+            throw SQLiteError.Exec(message: errorMessage)
+        }
+        print("Successfully inserted row.")
+        if let queryResult = querySql(sql: "SELECT Item_id FROM \(table);") {
+            return Int(queryResult.last?["Item_id"] as! Int32)
+        }
+        
+        return nil
+    }
 }
 
 // 扩展SQLiteDatabase--封装 SELECT
