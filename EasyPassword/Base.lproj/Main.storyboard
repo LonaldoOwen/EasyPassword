@@ -258,7 +258,7 @@
         <!--Create ItemVC-->
         <scene sceneID="6t6-9k-byp">
             <objects>
-                <viewController storyboardIdentifier="CreateItemVC" id="dK0-IT-uft" customClass="CreateItemVC" customModule="EasyPassword" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CreateItemVC" automaticallyAdjustsScrollViewInsets="NO" id="dK0-IT-uft" customClass="CreateItemVC" customModule="EasyPassword" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="kp9-Y0-WZY">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
