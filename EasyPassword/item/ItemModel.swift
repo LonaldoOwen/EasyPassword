@@ -58,3 +58,23 @@ struct Note: Item {
 // 电影卡模型
 
 // 其他模型
+
+struct PasswordHistory {
+    var id: String
+    var itemId: String
+    var password: String
+    var createTime: String
+    
+    init(id: String, itemId: String, password: String, createTime: String) {
+        self.id = id
+        self.itemId = itemId
+        self.password = password
+        self.createTime = createTime
+    }
+}
+
+
+
+
+
+
