@@ -9,10 +9,6 @@
 /* Begin PBXBuildFile section */
 		231416981FFCC28800F113FC /* NoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231416961FFCC28800F113FC /* NoteCell.swift */; };
 		231416991FFCC28800F113FC /* NoteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 231416971FFCC28800F113FC /* NoteCell.xib */; };
-		2314169B1FFCE12D00F113FC /* 国内游@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2314169A1FFCE12D00F113FC /* 国内游@3x.png */; };
-		2314169F1FFCE2BB00F113FC /* fcyHLwlg_400x400.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2314169E1FFCE2BB00F113FC /* fcyHLwlg_400x400.jpg */; };
-		2335B0011FDFDA1E00E2A922 /* tingdan1@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2335AFFF1FDFDA1E00E2A922 /* tingdan1@3x.png */; };
-		2335B0021FDFDA1E00E2A922 /* wode1@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2335B0001FDFDA1E00E2A922 /* wode1@3x.png */; };
 		233BC9AF1FD8E30900C615C5 /* Items.plist in Resources */ = {isa = PBXBuildFile; fileRef = 233BC9AE1FD8E30900C615C5 /* Items.plist */; };
 		234C10222007050500CF23B0 /* SQLiteHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234C10212007050500CF23B0 /* SQLiteHelper.swift */; };
 		234C102520076BE300CF23B0 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 234C102420076BE200CF23B0 /* libsqlite3.0.tbd */; };
@@ -26,6 +22,11 @@
 		23B33D981FCE666B005403C1 /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B33D971FCE666A005403C1 /* MainTableViewController.swift */; };
 		23B33D9B1FCE66AD005403C1 /* FolderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B33D9A1FCE66AD005403C1 /* FolderModel.swift */; };
 		23DC7C8E1FE274DC00D6A9BB /* ItemDetailTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DC7C8D1FE274DC00D6A9BB /* ItemDetailTVC.swift */; };
+		5A073EC12013B63F00BBD3F5 /* Group login@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A073EBF2013B63F00BBD3F5 /* Group login@2x.png */; };
+		5A073EC22013B63F00BBD3F5 /* login@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A073EC02013B63F00BBD3F5 /* login@2x.png */; };
+		5A073EC62013B96500BBD3F5 /* Type icon 40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A073EC52013B96400BBD3F5 /* Type icon 40@2x.png */; };
+		5A073EC820148AE100BBD3F5 /* note36@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A073EC720148AE000BBD3F5 /* note36@2x.png */; };
+		5A073ECA20149B0000BBD3F5 /* note create@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A073EC920149B0000BBD3F5 /* note create@2x.png */; };
 		5A93B55A1FF37829003C94FC /* GenerateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A93B5591FF37829003C94FC /* GenerateView.swift */; };
 		5A93B55C1FF37838003C94FC /* GenerateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5A93B55B1FF37838003C94FC /* GenerateView.xib */; };
 		5AEF16141FD6F43F00FAD262 /* ItemListTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEF16131FD6F43F00FAD262 /* ItemListTVC.swift */; };
@@ -35,10 +36,6 @@
 /* Begin PBXFileReference section */
 		231416961FFCC28800F113FC /* NoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCell.swift; sourceTree = "<group>"; };
 		231416971FFCC28800F113FC /* NoteCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoteCell.xib; sourceTree = "<group>"; };
-		2314169A1FFCE12D00F113FC /* 国内游@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "国内游@3x.png"; sourceTree = "<group>"; };
-		2314169E1FFCE2BB00F113FC /* fcyHLwlg_400x400.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = fcyHLwlg_400x400.jpg; sourceTree = "<group>"; };
-		2335AFFF1FDFDA1E00E2A922 /* tingdan1@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "tingdan1@3x.png"; sourceTree = "<group>"; };
-		2335B0001FDFDA1E00E2A922 /* wode1@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "wode1@3x.png"; sourceTree = "<group>"; };
 		233BC9AE1FD8E30900C615C5 /* Items.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Items.plist; sourceTree = "<group>"; };
 		234C10212007050500CF23B0 /* SQLiteHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteHelper.swift; sourceTree = "<group>"; };
 		234C102420076BE200CF23B0 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
@@ -54,6 +51,11 @@
 		23B33D971FCE666A005403C1 /* MainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
 		23B33D9A1FCE66AD005403C1 /* FolderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderModel.swift; sourceTree = "<group>"; };
 		23DC7C8D1FE274DC00D6A9BB /* ItemDetailTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailTVC.swift; sourceTree = "<group>"; };
+		5A073EBF2013B63F00BBD3F5 /* Group login@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Group login@2x.png"; sourceTree = "<group>"; };
+		5A073EC02013B63F00BBD3F5 /* login@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login@2x.png"; sourceTree = "<group>"; };
+		5A073EC52013B96400BBD3F5 /* Type icon 40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Type icon 40@2x.png"; sourceTree = "<group>"; };
+		5A073EC720148AE000BBD3F5 /* note36@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note36@2x.png"; sourceTree = "<group>"; };
+		5A073EC920149B0000BBD3F5 /* note create@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note create@2x.png"; sourceTree = "<group>"; };
 		5A93B5591FF37829003C94FC /* GenerateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateView.swift; sourceTree = "<group>"; };
 		5A93B55B1FF37838003C94FC /* GenerateView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GenerateView.xib; sourceTree = "<group>"; };
 		5AEF16131FD6F43F00FAD262 /* ItemListTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemListTVC.swift; sourceTree = "<group>"; };
@@ -75,10 +77,11 @@
 		2335AFFE1FDFDA1E00E2A922 /* resource */ = {
 			isa = PBXGroup;
 			children = (
-				2335AFFF1FDFDA1E00E2A922 /* tingdan1@3x.png */,
-				2335B0001FDFDA1E00E2A922 /* wode1@3x.png */,
-				2314169A1FFCE12D00F113FC /* 国内游@3x.png */,
-				2314169E1FFCE2BB00F113FC /* fcyHLwlg_400x400.jpg */,
+				5A073EBF2013B63F00BBD3F5 /* Group login@2x.png */,
+				5A073EC02013B63F00BBD3F5 /* login@2x.png */,
+				5A073EC52013B96400BBD3F5 /* Type icon 40@2x.png */,
+				5A073EC720148AE000BBD3F5 /* note36@2x.png */,
+				5A073EC920149B0000BBD3F5 /* note create@2x.png */,
 			);
 			path = resource;
 			sourceTree = "<group>";
@@ -210,16 +213,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2335B0021FDFDA1E00E2A922 /* wode1@3x.png in Resources */,
 				235D7A5A1FCD04CD004DB418 /* LaunchScreen.storyboard in Resources */,
+				5A073EC820148AE100BBD3F5 /* note36@2x.png in Resources */,
 				235D7A571FCD04CD004DB418 /* Assets.xcassets in Resources */,
 				231416991FFCC28800F113FC /* NoteCell.xib in Resources */,
+				5A073EC22013B63F00BBD3F5 /* login@2x.png in Resources */,
 				235D7A551FCD04CD004DB418 /* Main.storyboard in Resources */,
 				5A93B55C1FF37838003C94FC /* GenerateView.xib in Resources */,
-				2314169F1FFCE2BB00F113FC /* fcyHLwlg_400x400.jpg in Resources */,
-				2335B0011FDFDA1E00E2A922 /* tingdan1@3x.png in Resources */,
+				5A073ECA20149B0000BBD3F5 /* note create@2x.png in Resources */,
 				233BC9AF1FD8E30900C615C5 /* Items.plist in Resources */,
-				2314169B1FFCE12D00F113FC /* 国内游@3x.png in Resources */,
+				5A073EC12013B63F00BBD3F5 /* Group login@2x.png in Resources */,
+				5A073EC62013B96500BBD3F5 /* Type icon 40@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -386,10 +390,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tianyuchen.EasyPassword;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-<<<<<<< HEAD
 				PROVISIONING_PROFILE = "";
-=======
->>>>>>> dcdcc26d845829894567ca9340e9b47ca315f756
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

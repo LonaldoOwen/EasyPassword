@@ -263,6 +263,7 @@ class MainTableViewController: UITableViewController {
             let iphoneFolder = iphoneFolders[indexPath.row]
             cell.textLabel?.text = iphoneFolder.itemType != "All" ? iphoneFolder.itemType : "All Type on IPHONE"
             cell.detailTextLabel?.text = String(iphoneFolder.count)
+            cell.imageView?.image = UIImage.init(named: "login")
         }
         
         return cell

@@ -120,6 +120,7 @@ class ItemListTVC: UITableViewController {
             let item: Login = items[indexPath.row] as! Login
             cell.textLabel?.text = item.itemName
             cell.detailTextLabel?.text = item.userName
+            cell.imageView?.image = UIImage.init(named: "note36")
         }
 
         return cell
