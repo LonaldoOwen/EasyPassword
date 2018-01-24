@@ -142,17 +142,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <searchBar key="tableHeaderView" contentMode="redraw" searchBarStyle="minimal" id="Wbz-0g-QeV">
-                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <textInputTraits key="textInputTraits"/>
-                            <connections>
-                                <outlet property="delegate" destination="Ux8-dN-F51" id="lzH-nm-TVc"/>
-                            </connections>
-                        </searchBar>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ItemCell" textLabel="6yS-vq-QM1" detailTextLabel="K9U-Ql-Wxt" style="IBUITableViewCellStyleSubtitle" id="Xs1-Q0-8W7">
-                                <rect key="frame" x="0.0" y="72" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Xs1-Q0-8W7" id="99q-MJ-IQD">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
@@ -202,7 +194,6 @@
                 <searchDisplayController id="htc-vU-s3u">
                     <connections>
                         <outlet property="delegate" destination="Ux8-dN-F51" id="jsA-wM-ybA"/>
-                        <outlet property="searchBar" destination="Wbz-0g-QeV" id="UXp-9q-u4M"/>
                         <outlet property="searchContentsController" destination="Ux8-dN-F51" id="bdF-Kv-tbF"/>
                         <outlet property="searchResultsDataSource" destination="Ux8-dN-F51" id="bpG-uj-bIz"/>
                         <outlet property="searchResultsDelegate" destination="Ux8-dN-F51" id="xCb-MW-8iT"/>

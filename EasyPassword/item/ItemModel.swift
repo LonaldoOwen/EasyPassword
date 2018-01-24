@@ -16,6 +16,12 @@ import Foundation
 // MARK: - 类型通用协议
 protocol Item { }
 
+enum ItemType: Int {
+    case all = 0
+    case login = 1
+    case note = 2
+}
+
 
 // MARK: - 登录模型
 struct Login: Item {

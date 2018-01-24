@@ -11,9 +11,9 @@
 /// 2、长按显示edit(?)，可以复制用户名、密码
 /// 3、点返回，回到文件列表，需要刷新table view（在viewWillAppear中操作即可）
 /// 4、添加完新的item后，刷新当前table view
-/// 5、search bar使用？？？（）
+/// 5、search bar使用？？？（V1.0.0暂时砍掉，后面再加）
 /// 6、缺少删除cell的功能、多选、移动到其他文件夹（）
-///
+/// 7、从all进入，查询所有table，显示在一起，按Update_time倒序排列（）
 ///
 ///
 

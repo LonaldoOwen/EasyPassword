@@ -25,9 +25,18 @@ import Foundation
 class FolderModel {
     
     // 可以定义一个enum来处理相关操作()
-    enum PersistentType {
-        case iphone, icloud
+    enum PersistentType: Int {
+        case iphone = 1
+        case icloud = 2
+        
     }
+    
+    enum ItemType: Int {
+        case all = 0
+        case login = 1
+        case note = 2
+    }
+    
     
     // plist存储--data model
     /*
@@ -43,11 +52,11 @@ class FolderModel {
     */
     
     // sqlite db存储--data model
-    var persistentType: String
-    var itemType: String
+    var persistentType: PersistentType
+    var itemType: ItemType
     var count: String
     
-    init(persistentType: String, itemType: String, count: String) {
+    init(persistentType: PersistentType, itemType: ItemType, count: String) {
         self.persistentType = persistentType
         self.itemType = itemType
         self.count = count

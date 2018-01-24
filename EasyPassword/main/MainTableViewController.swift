@@ -10,10 +10,12 @@
 /// 2、创建新文件夹:(使用Alert：创建Alert、添加textField、actions；插入数据、插入cell、写入plist)
 /// 3、编辑:
 ///    选中cell删除（多选）
-///    修改文件夹名称（）
-/// 4、默认显示备忘文件夹；当添加新的文件夹后，同时增加一个“所有persistent”文件夹，用于显示当前存储类型中所有的item（）
+///    修改文件夹名称（不做此功能，类型是默认提供的，不支持自定义）
+/// 4、默认显示备忘文件夹；当添加新的文件夹后，同时增加一个“所有persistent”文件夹，用于显示当前存储类型中所有的item（plist）
 /// 5、缺少修改文件夹名称、删除文夹功能（）
 /// 6、添加sqlite db
+/// 7、第一次进入，未创建table时，不显示？？？
+///
 ///
 /// 问题：
 /// 1、Toolbar选择的是translucent，但是显示的时候却是opaque？？？
@@ -201,40 +203,27 @@ class MainTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
+        // using plist
         //return folderPlist.count
         
-        //return iphoneFolders.count > 0 ? iphoneFolders.count : 0
-//        if let iphoneFolders = iphoneFolders {
-//            return iphoneFolders.count
-//        }
-//        return 0
+        
+        // using sqlite db
+        if let folders = folders {
+            return folders.count
+        }
     
-        return 1
+        return 0
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
+        // using plist
         //return folderPlist[section].count
         
-        //return iphoneFolders.count > 0 ? iphoneFolders[section].items.count : 0
-//        if let iphoneFolders = iphoneFolders {
-//            return iphoneFolders.count
-//        }
-//        return 0
         
-        //
-//        if section == 0 {
-//            // section 0 默认留给iCloud使用
-//            return 1
-//        } else if section == 1 {
-//            if let iphones = iphoneFolders {
-//                return iphones.count
-//            }
-//            return 0
-//        }
-        
-        if let iphones = iphoneFolders {
-            return iphones.count
+        // using sqlite db
+        if let folders = folders {
+            return (folders[section] as! [Any]).count
         }
         
         return 0
@@ -547,7 +536,7 @@ class MainTableViewController: UITableViewController {
                 countAll += Int(note.count)!
             }
             // 统计所有类型
-            let all = FolderModel.init(persistentType: "IPHONE", itemType: "All", count: String(countAll))
+            let all = FolderModel.init(persistentType: .iphone, itemType: .all, count: String(countAll))
             tempIphoneFolders.insert(all, at: 0)
             
             self.iphoneFolders = tempIphoneFolders
@@ -564,7 +553,7 @@ class MainTableViewController: UITableViewController {
         // 问题：numberOfRowsInTable()计算的是所有rows，实际需要的是非Is_discard的rows
         // 解决：查询Table中条件是Is_discard='0'的rows
         let loginTableRows = db.numberOfRowsInTable("Login") 
-        let iphoneFolder = FolderModel.init(persistentType: "IPHONE", itemType: "Login", count: String(loginTableRows))
+        let iphoneFolder = FolderModel.init(persistentType: .iphone, itemType: .login, count: String(loginTableRows))
         
         return iphoneFolder
     }
@@ -573,7 +562,7 @@ class MainTableViewController: UITableViewController {
     func buildNoteModel() -> FolderModel {
         // 查询所有Note的数据
         let noteTableRows = db.numberOfRowsInTable("Note")
-        let iphoneFolder = FolderModel.init(persistentType: "IPHONE", itemType: "Note", count: String(noteTableRows))
+        let iphoneFolder = FolderModel.init(persistentType: .iphone, itemType: .note, count: String(noteTableRows))
         
         return iphoneFolder
     }
