@@ -16,11 +16,11 @@ import Foundation
 // MARK: - 类型通用协议
 protocol Item { }
 
-enum ItemType: Int {
-    case all = 0
-    case login = 1
-    case note = 2
-}
+//enum ItemType: Int {
+//    case all = 0
+//    case login = 1
+//    case note = 2
+//}
 
 
 // MARK: - 登录模型
@@ -33,14 +33,18 @@ struct Login: Item {
     var website: String     //
     var note: String        //
     //var updateTime: String
+    var persistentType: FolderModel.PersistentType
+    var itemType: FolderModel.ItemType
     
-    init(itemId: String, itemName: String, userName: String, password: String, website: String, note: String) {
+    init(itemId: String, itemName: String, userName: String, password: String, website: String, note: String, persistentType: FolderModel.PersistentType, itemType: FolderModel.ItemType) {
         self.itemId = itemId
         self.itemName = itemName
         self.userName = userName
         self.password = password
         self.website = website
         self.note = note
+        self.persistentType = persistentType
+        self.itemType = itemType
         
     }
 
@@ -64,6 +68,23 @@ struct Note: Item {
 // 电影卡模型
 
 // 其他模型
+
+// All
+struct List: Item {
+    var itemId: String
+    var itemName: String
+    var userName: String
+    var persistentType: FolderModel.PersistentType
+    var itemType: FolderModel.ItemType
+    
+    init(itemId: String, itemName: String, userName: String, persistentType: FolderModel.PersistentType, itemType: FolderModel.ItemType) {
+        self.itemId = itemId
+        self.itemName = itemName
+        self.userName = userName
+        self.persistentType = persistentType
+        self.itemType = itemType
+    }
+}
 
 struct PasswordHistory {
     var id: String

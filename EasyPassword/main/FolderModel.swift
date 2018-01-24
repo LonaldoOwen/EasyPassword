@@ -29,12 +29,42 @@ class FolderModel {
         case iphone = 1
         case icloud = 2
         
+        var typeString: String {
+            switch self {
+            case .iphone:
+                return "IPHONE"
+            case .icloud:
+                return "ICLOUD"
+            }
+        }
     }
     
     enum ItemType: Int {
         case all = 0
         case login = 1
         case note = 2
+        
+        var typeString: String {
+            switch self {
+            case .all:
+                return "All Item Type on IPHONE"
+            case .login:
+                return "Login"
+            case .note:
+                return "Note"
+            }
+        }
+        
+        var imageName: String {
+            switch self {
+            case .all:
+                return "Item all2"
+            case .login:
+                return "login"
+            case .note:
+                return "note29"
+            }
+        }
     }
     
     

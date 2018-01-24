@@ -318,6 +318,18 @@ extension SQLiteDatabase {
 }
 
 
+// 扩展SQLiteDatabase--封装 Delete Table
+extension SQLiteDatabase {
+    //
+    func deleteTable(sql: String) throws {
+        guard try execSql(sql) == true else {
+            throw SQLiteError.Exec(message: errorMessage)
+        }
+        print("Successfully delete table.")
+    }
+}
+
+
 // 扩展SQLiteDatabase--获取db path
 extension SQLiteDatabase {
     //

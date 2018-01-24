@@ -13,7 +13,7 @@
 /// 4、点击edit button显示编辑页面
 /// 5、显示备注信息时，需要显示完全，因此，需要自定义一个cell
 /// 6、点击编辑，不要显示tableView编辑效果，转场到创建密码页面
-///
+/// 7、使用系统cell-subtitle，cell的图像怎么设置大一点？？？
 ///
 ///
 
@@ -30,7 +30,8 @@ class ItemDetailTVC: UITableViewController {
     
     // Properties
     var item: Item!
-    var itemType: String!
+    //var itemType: String!
+    var itemType: FolderModel.ItemType!
     
     // 定义closure用于更新ItemListVC的cell，反向传值
     var updateCellOfListVC: ((Item) -> ())!
@@ -75,7 +76,7 @@ class ItemDetailTVC: UITableViewController {
         // 发送通知--传递new item model
         //NotificationCenter.default.post(name: NSNotification.Name(rawValue: "PassBackItemFromDetail"), object: self, userInfo: ["item": self.item])
         // closure 传值
-        self.updateCellOfListVC(self.item)
+        //self.updateCellOfListVC(self.item)
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -158,7 +159,8 @@ class ItemDetailTVC: UITableViewController {
         if indexPath.section == 0 {
             cell.textLabel?.text = login.itemName
             cell.detailTextLabel?.attributedText = NSAttributedString(string: "登录信息", attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray]) //attributedText("登录信息")
-            cell.imageView?.image = UIImage(named: "国内游")
+            cell.imageView?.image = UIImage(named: "note create")
+            cell.imageView?.contentMode = .scaleToFill
         } else if indexPath.section == 1{
             if indexPath.row == 0 {
                 cell.textLabel?.attributedText = attributedText("用户名")
@@ -191,7 +193,7 @@ class ItemDetailTVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
-            return 100.0
+            return 80.0
         }
         return UITableViewAutomaticDimension
     }

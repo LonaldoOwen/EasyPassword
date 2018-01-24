@@ -48,7 +48,9 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     // MARK: - Properties
     
     var item: Item!     // 接收传值(Detail)
-    var itemType: String!   // 接收传值
+    //var itemType: String!   // 接收传值
+    var itemType: FolderModel.ItemType!
+    var persistentType: FolderModel.PersistentType!
     var login: Login!
     var textFields: [UITextField]!
     var passwordIsShow: Bool = false
@@ -190,7 +192,7 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
             */
             // 使用sqlite db存储
             // Update item
-            login = Login(itemId: (item as! Login).itemId, itemName: itemName.text!, userName: userName.text!, password: password.text!, website: website.text!, note: note.text!)
+            login = Login(itemId: (item as! Login).itemId, itemName: itemName.text!, userName: userName.text!, password: password.text!, website: website.text!, note: note.text!, persistentType: (item as! Login).persistentType, itemType: itemType)
             if login != (item as! Login) {
                 // 时间格式需要处理？？？
                 
@@ -209,13 +211,13 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
             })
         } else {
             // 非编辑模式，创建新item
-            if itemType == "Login" {
+            if itemType.typeString == "Login" {
                 // 查询Login表中，最后一行的id
                 var id: Int = 0
                 if let queryIds = db.querySql(sql: "SELECT Item_id FROM Login;") {
                     id = Int(queryIds.last!["Item_id"] as! Int32)
                 }
-                login = Login(itemId: String(describing: (id + 1)), itemName: itemName.text!, userName: userName.text!, password: password.text!, website: website.text!, note: note.text!)
+                login = Login(itemId: String(describing: (id + 1)), itemName: itemName.text!, userName: userName.text!, password: password.text!, website: website.text!, note: note.text!, persistentType: persistentType, itemType: itemType)
                 // 插入plist（login model不需要id属性）
                 //PlistHelper.insert(itemModel: login, ofPersistentType: "MyIPHONE", itemType: itemType)
                 // 插入db

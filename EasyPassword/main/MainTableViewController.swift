@@ -50,7 +50,11 @@ extension Note: SQLTable {
         return """
         CREATE TABLE Note(
         Item_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-        Text TEXT,
+        Item_name CHAR(255),
+        User_name CHAR(255),
+        Note TEXT,
+        Item_type INT,
+        Persistent_type INT,
         Create_time DATATIME,
         Update_time DATATIME,
         Is_discard BOOLEAN
@@ -250,9 +254,10 @@ class MainTableViewController: UITableViewController {
         // iphone
         if let iphoneFolders = iphoneFolders {
             let iphoneFolder = iphoneFolders[indexPath.row]
-            cell.textLabel?.text = iphoneFolder.itemType != "All" ? iphoneFolder.itemType : "All Type on IPHONE"
+            //cell.textLabel?.text = iphoneFolder.itemType != "All ? iphoneFolder.itemType : "All Type on IPHONE"
+            cell.textLabel?.text = iphoneFolder.itemType.typeString
             cell.detailTextLabel?.text = String(iphoneFolder.count)
-            cell.imageView?.image = UIImage.init(named: "login")
+            cell.imageView?.image = UIImage.init(named: iphoneFolder.itemType.imageName)
         }
         
         return cell
@@ -266,8 +271,11 @@ class MainTableViewController: UITableViewController {
         }
         //sectionHeader?.textLabel?.text = folderPlist[section].first?["persistentType"] as? String
         //sectionHeader?.textLabel?.text = iphoneFolders[section].persistentType
-
-        sectionHeader?.textLabel?.text = "IPHONE"
+        
+        
+        if let folders = folders {
+            sectionHeader?.textLabel?.text = (folders[section] as! [FolderModel]).first?.persistentType.typeString
+        }
         
         return sectionHeader
     }
@@ -325,6 +333,8 @@ class MainTableViewController: UITableViewController {
             //
             let iphoneFolder: FolderModel = iphoneFolders[indexPath.row]
             // 使用sqlite db存储，传递itemType、persistentType（？）
+//            itemListTVC.itemType = iphoneFolder.itemType
+//            itemListTVC.persistentType = iphoneFolder.persistentType
             itemListTVC.itemType = iphoneFolder.itemType
             itemListTVC.persistentType = iphoneFolder.persistentType
             
@@ -354,6 +364,9 @@ class MainTableViewController: UITableViewController {
             /// 通过它来判断
             if let selectedRows = tableView.indexPathsForSelectedRows {
                 addFolderItem.isEnabled = selectedRows.count > 0
+                if selectedRows.count > 1 {
+                    addFolderItem.title = "删除所有类型"
+                }
             } else {
                 addFolderItem.isEnabled = false
             }
@@ -369,7 +382,7 @@ class MainTableViewController: UITableViewController {
         // 显示可以创建的类型
         let sheet = UIAlertController.init(title: "新建类型", message: "选择要创建的类型", preferredStyle: UIAlertControllerStyle.actionSheet)
         sheet.addAction(UIAlertAction.init(title: "登录信息", style: UIAlertActionStyle.default, handler: { (action) in
-            // 处理登陆操作
+            // 处理Login操作
             // 1、第一次创建，创建一个新Login table
             // 2、非第一次，不创建table，而是跳到list页面，调起CreateVC页面
             let dbTableCount = self.db.numberOfRowsInTable("sqlite_master")
@@ -392,7 +405,7 @@ class MainTableViewController: UITableViewController {
             print("Login action")
         }))
         sheet.addAction(UIAlertAction.init(title: "备注信息", style: UIAlertActionStyle.default, handler: { (action) in
-            // 处理备注操作
+            // 处理Note操作
             // 1、第一次创建，创建一个新Note table
             // 2、非第一次，不创建table，而是跳到list页面，调起CreateVC页面
             let dbTableCount = self.db.numberOfRowsInTable("sqlite_master")
@@ -468,13 +481,17 @@ class MainTableViewController: UITableViewController {
     }
     */
     
+    
     // 删除选择的文件夹及对应数据
     func deleteSelectedFolders() {
         print("Delete selected folders")
         //
+        var deleteRows = [IndexPath]()
+        var indexSet = IndexSet()
         if let indexPathsForSelectedRows = tableView.indexPathsForSelectedRows {
             /// 注意：这种根据IndexPath删除多个数组element的，要从后往前进行，否则会出现越界
             ///
+            deleteRows = indexPathsForSelectedRows
             for (index, _) in indexPathsForSelectedRows.enumerated().reversed() {
                 print("")
                 /// plist存储
@@ -487,12 +504,46 @@ class MainTableViewController: UITableViewController {
                 */
                 
                 /// sqlite db存储
+                
+                let indexPath = indexPathsForSelectedRows[index]
+                /// 问题：as!后，获得的是immutable copy
+                ///
+                //(folders[indexPath.section] as! [FolderModel]).remove(at: indexPath.row)
+                var folder = folders[indexPath.section] as! [FolderModel]
+                let tableType = folder[indexPath.row].itemType
+                
                 // 删除model
-                // Update table，Set Is_discard='1'
+                folder.remove(at: indexPath.row)
+                folders[indexPath.section] = folder
+                // 当Section中，只剩下All这个cell时，将它一起删除
+                if folder.count == 1 {
+                    folder.remove(at: 0)
+                    folders.remove(at: indexPath.section)
+                    deleteRows.insert(IndexPath.init(row: 0, section: indexPath.section), at: 0)
+                    indexSet = IndexSet.init(integer: indexPath.section)
+                }
+                
+                // Delte Table
+                try? db.deleteTable(sql: "DROP TABLE \(tableType.typeString)")
+                if tableType == FolderModel.ItemType(rawValue: 1) {
+                    // 如果删除的是Login table，同时删除PasswordHistory
+                    try? db.deleteTable(sql: "DROP TABLE PasswordHistory")
+                }
             }
+            // 删除cells或sections
             tableView.beginUpdates()
-            tableView.deleteRows(at: indexPathsForSelectedRows, with: UITableViewRowAnimation.automatic)
+            tableView.deleteRows(at: deleteRows, with: UITableViewRowAnimation.automatic)
+            /// 注意：如果想删除所有cell，未加入删除sections时，一直crash
+            ///
+            tableView.deleteSections(indexSet, with: UITableViewRowAnimation.automatic)
             tableView.endUpdates()
+            self.setEditing(false, animated: true)
+            
+        }
+        
+        // 如果folders.count==1时，删除“ALL Item Type on IPHONE”这个cell
+        if folders.count == 1 {
+            
         }
     }
     

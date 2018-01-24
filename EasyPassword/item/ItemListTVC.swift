@@ -24,8 +24,10 @@ import UIKit
 
 class ItemListTVC: UITableViewController {
     
-    var itemType: String = ""       // 用于传值
-    var persistentType: String = "" // 用于传值
+    //var itemType: String = ""       // 用于传值
+    //var persistentType: String = "" // 用于传值
+    var itemType: FolderModel.ItemType!
+    var persistentType: FolderModel.PersistentType!
     var items: [Item]?
     var db: SQLiteDatabase!
 
@@ -58,7 +60,7 @@ class ItemListTVC: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         print("#ItemListTVC--viewWillAppear")
         // 接收传值，显示title
-        self.title = itemType
+        self.title = itemType.typeString
         // 如果使用db，根据itemType查询db，显示tableView
         queryData()
         // 刷新UI
@@ -77,12 +79,17 @@ class ItemListTVC: UITableViewController {
         //
         
         //
-        if itemType == "Login" {
+        if itemType == FolderModel.ItemType(rawValue: 1) {
             // present create login VC
-        } else if itemType == "Note" {
+            
+        } else if itemType == FolderModel.ItemType(rawValue: 2) {
             // present create note VC
-        } else if itemType == "All" {
+            let nav: UINavigationController = storyboard?.instantiateViewController(withIdentifier: "CreateNoteVCNav") as! UINavigationController
+            self.show(nav, sender: nil)
+            
+        } else if itemType == FolderModel.ItemType(rawValue: 0) {
             // present select type action sheet
+            
         }
     }
     
@@ -138,7 +145,7 @@ class ItemListTVC: UITableViewController {
             //PlistHelper.delete(itemModel: item, ofPersistentType: "MyIPHONE", itemType: itemType)
             // sqlite存储--删除Table中相应row
             // 这个考虑一下，是不是不真正删除，只修改Is_discard为1？？？
-            if itemType == "Login" {
+            if itemType.typeString == "Login" {
                 // 处理Type--Login
                 let deleteSQL = "DELETE FROM Login WHERE Item_id = '\((item as! Login).itemId)';"
                 try? db.delete(sql: deleteSQL)
@@ -171,7 +178,8 @@ class ItemListTVC: UITableViewController {
         if segue.identifier == "PresentCreate" {
             // 创建新item
             let createItemVC: CreateItemVC = (segue.destination as! UINavigationController).topViewController as! CreateItemVC
-            createItemVC.itemType = self.title
+            createItemVC.itemType = itemType
+            createItemVC.persistentType = persistentType
             // 调用closure，更新UI
             createItemVC.reloadItemListVC = { item in
 //                self.items?.insert(item, at: 0)
@@ -185,11 +193,14 @@ class ItemListTVC: UITableViewController {
             let itemDetailVC: ItemDetailTVC = segue.destination as! ItemDetailTVC
             itemDetailVC.item = items![(indexPath?.row)!]
             itemDetailVC.itemType = itemType
+            //itemDetailVC.persistentType = persistentType
             // 设置closure，更新cell
-            itemDetailVC.updateCellOfListVC = { item in
-                self.items![(indexPath?.row)!] = item
-                self.tableView.reloadRows(at: [indexPath!], with: UITableViewRowAnimation.automatic)
-            }
+            // 注意：如果此页面使用了查询db，则不需此逻辑
+//            itemDetailVC.updateCellOfListVC = { item in
+//                print("Get item: \(item)")
+//                //self.items![(indexPath?.row)!] = item
+//                self.tableView.reloadRows(at: [indexPath!], with: UITableViewRowAnimation.automatic)
+//            }
         }
         
     }
@@ -202,25 +213,31 @@ class ItemListTVC: UITableViewController {
         /// 处理iCloud存储
         
         /// 处理IPHONE存储
-        if itemType == "Login" {
+        if itemType.typeString == "Login" {
             // Type--Login
             print("#Query Login type!")
             queryLogin()
-        } else {
+        } else if itemType.typeString == "Note"{
             // 其他类型
-            print("#Query other types!")
+            print("#Query Note types!")
+            queryNote()
+        } else if itemType == FolderModel.ItemType(rawValue: 0) {
+            print("#ALL")
+            queryAll()
         }
     }
     
     // 查询Table--Login
     func queryLogin() {
         //let loginSQL = "SELECT Item_id, Item_name, User_name, Password, Website, Note FROM Login WHERE Is_discard = 0;"
-        let loginSQL = "SELECT Item_id, Item_name, User_name, Password, Website, Note FROM Login WHERE Is_discard = 0 ORDER BY Create_time DESC;"   // 增加根据更新时间倒序排序
+        let loginSQL = "SELECT Item_id, Item_name, User_name, Password, Website, Note, Persistent_type, Item_type FROM Login WHERE Is_discard = 0 ORDER BY Update_time DESC;"   // 增加根据更新时间倒序排序
         if let loginResults = db.querySql(sql: loginSQL) {
             var tempItems = [Item]()
             for row in loginResults {
                 let id: String = String(Int(row["Item_id"] as! Int32))
-                let login: Login = Login.init(itemId: id, itemName: row["Item_name"] as! String, userName: row["User_name"] as! String, password: row["Password"] as! String, website: row["Website"] as! String, note: row["Note"] as! String)
+                let persistentType: FolderModel.PersistentType = FolderModel.PersistentType(rawValue: Int(row["Persistent_type"] as! Int32))! 
+                let itemType: FolderModel.ItemType = FolderModel.ItemType(rawValue: Int(row["Item_type"] as! Int32))!
+                let login: Login = Login.init(itemId: id, itemName: row["Item_name"] as! String, userName: row["User_name"] as! String, password: row["Password"] as! String, website: row["Website"] as! String, note: row["Note"] as! String, persistentType: persistentType, itemType: itemType)
                 tempItems.append(login)
             }
             items = tempItems
@@ -228,5 +245,35 @@ class ItemListTVC: UITableViewController {
             print("#Table Login has no items!")
         }
     }
+    
+    // 查询Table--Note
+    func queryNote() {
+        
+    }
 
+    // 查询Table--Login、Note
+    func queryAll() {
+        // Union查询所有table
+        let unionAllSQL = """
+            SELECT Item_id, Item_name, User_name FROM Login
+            UNION
+            SELECT Item_id, Item_name, User_name FROM Note
+            ORDER BY Update_time DESC;
+        """
+        
+        if let allResults = db.querySql(sql: unionAllSQL) {
+            
+        } else {
+            print("#Table all has no items!")
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
