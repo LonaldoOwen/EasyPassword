@@ -59,8 +59,21 @@ extension Login: Equatable {
 
 // Note
 struct Note: Item {
-    var id: String
-    var text: String
+    var itemId: String
+    var itemName: String
+    var userName: String
+    var note: String
+    var persistentType: FolderModel.PersistentType
+    var itemType: FolderModel.ItemType
+    
+    init(itemId: String, itemName: String, userName: String, note: String, persistentType: FolderModel.PersistentType, itemType: FolderModel.ItemType) {
+        self.itemId = itemId
+        self.itemName = itemName
+        self.userName = userName
+        self.note = note
+        self.persistentType = persistentType
+        self.itemType = itemType
+    }
 }
 
 // 信用卡模型

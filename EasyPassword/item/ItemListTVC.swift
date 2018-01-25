@@ -81,6 +81,8 @@ class ItemListTVC: UITableViewController {
         //
         if itemType == FolderModel.ItemType(rawValue: 1) {
             // present create login VC
+            let nav: UINavigationController = storyboard?.instantiateViewController(withIdentifier: "CreateItemVCNav") as! UINavigationController
+            self.show(nav, sender: nil)
             
         } else if itemType == FolderModel.ItemType(rawValue: 2) {
             // present create note VC
@@ -89,7 +91,7 @@ class ItemListTVC: UITableViewController {
             
         } else if itemType == FolderModel.ItemType(rawValue: 0) {
             // present select type action sheet
-            
+            print("#Show action sheet.")
         }
     }
     
