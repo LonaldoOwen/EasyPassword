@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="N2d-HP-FTh">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="N2d-HP-FTh">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -186,6 +186,7 @@
                     </toolbarItems>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="addItem" destination="oIO-7o-zNi" id="LbM-o5-hoo"/>
                         <outlet property="searchDisplayController" destination="htc-vU-s3u" id="p0l-JL-FQJ"/>
                     </connections>
                 </tableViewController>
@@ -268,7 +269,7 @@
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NgP-JZ-M2S" userLabel="Section0 Content View">
                                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
                                                                 <subviews>
-                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="note create.png" translatesAutoresizingMaskIntoConstraints="NO" id="crz-Ro-eD8">
+                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="note create32.png" translatesAutoresizingMaskIntoConstraints="NO" id="crz-Ro-eD8">
                                                                         <rect key="frame" x="16" y="20" width="60" height="60"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="60" id="SmJ-GG-6YJ"/>
@@ -1162,7 +1163,7 @@
                                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hgM-bG-Ixo" userLabel="Section0 Content View">
                                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
                                                                 <subviews>
-                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="note create.png" translatesAutoresizingMaskIntoConstraints="NO" id="nB0-47-FAW">
+                                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="note create32.png" translatesAutoresizingMaskIntoConstraints="NO" id="nB0-47-FAW">
                                                                         <rect key="frame" x="16" y="20" width="60" height="60"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="width" constant="60" id="J6s-S3-TR9"/>
@@ -1366,7 +1367,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="note create.png" width="32" height="32"/>
+        <image name="note create32.png" width="32" height="32"/>
         <image name="tingdan1.png" width="20" height="20"/>
     </resources>
 </document>

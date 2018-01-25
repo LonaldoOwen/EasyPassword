@@ -28,9 +28,12 @@ class CreateNoteVC: UIViewController {
     @IBOutlet weak var noteLabel: UILabel!
     @IBOutlet weak var noteContent: UIView!
     
+    var db: SQLiteDatabase!
+    //var item: Item!
     var itemType: FolderModel.ItemType!
     var persistentType: FolderModel.PersistentType!
     var note: Note!
+    var passBackNewItemDetail: ((Item) -> ())!  // 定义closure用于刷新ItemDetailVC
     
 
     override func viewDidLoad() {
@@ -40,6 +43,28 @@ class CreateNoteVC: UIViewController {
         
         let tapGesture = UITapGestureRecognizer.init(target: self, action: #selector(handleTapGesture))
         noteContent.addGestureRecognizer(tapGesture)
+        
+        /// 使用sqlite存储
+        // 创建db实例
+        let dbUrl = SQLiteDatabase.getDBPath("EasyPassword.sqlite")
+        let dbPath = dbUrl.path
+        do {
+            db = try SQLiteDatabase.open(path: dbPath)
+            print("Successfully opened connection to database.")
+        } catch SQLiteError.OpenDatabase(let message) {
+            print("Unable to open database. :\(message)")
+        } catch {
+            print("Others errors")
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        print("#CreateNoteVC--viewWillAppear")
+        if let note = note {
+            // note不为nil时，是从编辑页面跳转的
+            itemName.text = note.itemName
+            noteLabel.text = note.note
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -65,12 +90,16 @@ class CreateNoteVC: UIViewController {
             // 编辑模式，更新item，先删除旧item，再插入新item
             print(note)
             // 使用sqlite db存储
-            // Update item
+            if noteLabel.text != note.note || itemName.text != note.itemName {
+                // Update item
+                let updateNoteSQL = "UPDATE Note SET Item_name = '\(itemName.text!)', Note = '\(noteLabel.text!)', Update_time = 'dateStr' WHERE Item_id = '\(note.itemId)';"
+                try? db.update(sql: updateNoteSQL)
+            }
             
             // 收起VC
             self.dismiss(animated: true, completion: {
                 // 回传值new item
-                //self.passBackNewItemDetail(self.login)
+                //self.passBackNewItemDetail(self.note)
             })
         } else {
             // 非编辑模式，创建新item
@@ -78,15 +107,13 @@ class CreateNoteVC: UIViewController {
                 // 查询Note表中，最后一行的id
                 // 插入db
                 // 创建新note时，设置Update_time等于Create_time
-                let insertNoteSQL = "INSERT INTO Note (Item_name, User_name, Note, Item_type, Persistent_type, Create_time, Update_time, Is_discard) VALUES ('', '', '', '\(itemType)', '\(persistentType)', 'dateStr', 'dateStr', '0');"
-                                
+                let insertNoteSQL = "INSERT INTO Note (Item_name, User_name, Note, Item_type, Persistent_type, Create_time, Update_time, Is_discard) VALUES ('\(String(describing: itemName.text!))', '', '\(noteLabel.text ?? "")', '\(itemType.rawValue)', '\(persistentType.rawValue)', '\(dateStr)', '\(dateStr)', '0');"
+                try? db.insert(sql: insertNoteSQL)
             } else {
                 print("Handle other item types!")
                 // 其他类型在这里处理
             }
             
-            // 更新item list页面（选择方式？？？）
-            //reloadItemListVC(login)
             // 收起VC
             self.dismiss(animated: true, completion: {
                 // 更新item list页面；（如果使用db，则不需要此步了）

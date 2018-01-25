@@ -34,8 +34,8 @@ extension Login: SQLTable {
             Password CHAR(255),
             Website CHAR(255),
             Note CHAR(255),
-            Item_type INT,
             Persistent_type INT,
+            Item_type INT,
             Create_time DATATIME,
             Update_time DATATIME,
             Is_discard BOOLEAN
@@ -53,8 +53,8 @@ extension Note: SQLTable {
         Item_name CHAR(255),
         User_name CHAR(255),
         Note TEXT,
-        Item_type INT,
         Persistent_type INT,
+        Item_type INT,
         Create_time DATATIME,
         Update_time DATATIME,
         Is_discard BOOLEAN
@@ -333,8 +333,6 @@ class MainTableViewController: UITableViewController {
             //
             let iphoneFolder: FolderModel = iphoneFolders[indexPath.row]
             // 使用sqlite db存储，传递itemType、persistentType（？）
-//            itemListTVC.itemType = iphoneFolder.itemType
-//            itemListTVC.persistentType = iphoneFolder.persistentType
             itemListTVC.itemType = iphoneFolder.itemType
             itemListTVC.persistentType = iphoneFolder.persistentType
             
@@ -581,7 +579,7 @@ class MainTableViewController: UITableViewController {
             }
             if db.masterContainTable("Note")! {
                 // Table--Note
-                print("Table Note")
+                print("Qeury Table Note")
                 let note = buildNoteModel()
                 tempIphoneFolders.append(note)
                 countAll += Int(note.count)!

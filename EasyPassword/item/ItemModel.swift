@@ -14,7 +14,11 @@
 import Foundation
 
 // MARK: - 类型通用协议
-protocol Item { }
+protocol Item {
+    var itemId: String { get set }
+    var persistentType: FolderModel.PersistentType { get set }
+    var itemType: FolderModel.ItemType { get set }
+}
 
 //enum ItemType: Int {
 //    case all = 0

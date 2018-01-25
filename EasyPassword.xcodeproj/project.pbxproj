@@ -13,6 +13,10 @@
 		234C10222007050500CF23B0 /* SQLiteHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234C10212007050500CF23B0 /* SQLiteHelper.swift */; };
 		234C102520076BE300CF23B0 /* libsqlite3.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 234C102420076BE200CF23B0 /* libsqlite3.0.tbd */; };
 		234D53122018AD0B001732AC /* CreateNoteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 234D53112018AD0B001732AC /* CreateNoteVC.swift */; };
+		234D53152019B819001732AC /* Group login29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 234D53132019B819001732AC /* Group login29@2x.png */; };
+		234D53162019B819001732AC /* login29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 234D53142019B819001732AC /* login29@2x.png */; };
+		234D53182019B8A8001732AC /* note create32@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 234D53172019B8A8001732AC /* note create32@2x.png */; };
+		234D531A2019B99E001732AC /* Item all2_29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 234D53192019B99E001732AC /* Item all2_29@2x.png */; };
 		235D7A501FCD04CD004DB418 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D7A4F1FCD04CD004DB418 /* AppDelegate.swift */; };
 		235D7A521FCD04CD004DB418 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D7A511FCD04CD004DB418 /* ViewController.swift */; };
 		235D7A551FCD04CD004DB418 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 235D7A531FCD04CD004DB418 /* Main.storyboard */; };
@@ -23,15 +27,11 @@
 		23B33D981FCE666B005403C1 /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B33D971FCE666A005403C1 /* MainTableViewController.swift */; };
 		23B33D9B1FCE66AD005403C1 /* FolderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B33D9A1FCE66AD005403C1 /* FolderModel.swift */; };
 		23DC7C8E1FE274DC00D6A9BB /* ItemDetailTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DC7C8D1FE274DC00D6A9BB /* ItemDetailTVC.swift */; };
-		5A073EC12013B63F00BBD3F5 /* Group login@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A073EBF2013B63F00BBD3F5 /* Group login@2x.png */; };
-		5A073EC22013B63F00BBD3F5 /* login@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A073EC02013B63F00BBD3F5 /* login@2x.png */; };
 		5A073EC62013B96500BBD3F5 /* Type icon 40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A073EC52013B96400BBD3F5 /* Type icon 40@2x.png */; };
 		5A073EC820148AE100BBD3F5 /* note36@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A073EC720148AE000BBD3F5 /* note36@2x.png */; };
-		5A073ECA20149B0000BBD3F5 /* note create@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A073EC920149B0000BBD3F5 /* note create@2x.png */; };
 		5A93B55A1FF37829003C94FC /* GenerateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A93B5591FF37829003C94FC /* GenerateView.swift */; };
 		5A93B55C1FF37838003C94FC /* GenerateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5A93B55B1FF37838003C94FC /* GenerateView.xib */; };
 		5ABD541C2017891F00918486 /* note29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABD541B2017891F00918486 /* note29@2x.png */; };
-		5ABD541E201789FB00918486 /* Item all2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABD541D201789FB00918486 /* Item all2@2x.png */; };
 		5ABD54202018E19B00918486 /* AddNoteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABD541F2018E19B00918486 /* AddNoteVC.swift */; };
 		5AEF16141FD6F43F00FAD262 /* ItemListTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEF16131FD6F43F00FAD262 /* ItemListTVC.swift */; };
 		5AEF16161FD6F71A00FAD262 /* ItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEF16151FD6F71A00FAD262 /* ItemModel.swift */; };
@@ -44,6 +44,10 @@
 		234C10212007050500CF23B0 /* SQLiteHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteHelper.swift; sourceTree = "<group>"; };
 		234C102420076BE200CF23B0 /* libsqlite3.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.0.tbd; path = usr/lib/libsqlite3.0.tbd; sourceTree = SDKROOT; };
 		234D53112018AD0B001732AC /* CreateNoteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNoteVC.swift; sourceTree = "<group>"; };
+		234D53132019B819001732AC /* Group login29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Group login29@2x.png"; sourceTree = "<group>"; };
+		234D53142019B819001732AC /* login29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login29@2x.png"; sourceTree = "<group>"; };
+		234D53172019B8A8001732AC /* note create32@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note create32@2x.png"; sourceTree = "<group>"; };
+		234D53192019B99E001732AC /* Item all2_29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Item all2_29@2x.png"; sourceTree = "<group>"; };
 		235D7A4C1FCD04CD004DB418 /* EasyPassword.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EasyPassword.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		235D7A4F1FCD04CD004DB418 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		235D7A511FCD04CD004DB418 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -56,15 +60,11 @@
 		23B33D971FCE666A005403C1 /* MainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
 		23B33D9A1FCE66AD005403C1 /* FolderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderModel.swift; sourceTree = "<group>"; };
 		23DC7C8D1FE274DC00D6A9BB /* ItemDetailTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailTVC.swift; sourceTree = "<group>"; };
-		5A073EBF2013B63F00BBD3F5 /* Group login@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Group login@2x.png"; sourceTree = "<group>"; };
-		5A073EC02013B63F00BBD3F5 /* login@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login@2x.png"; sourceTree = "<group>"; };
 		5A073EC52013B96400BBD3F5 /* Type icon 40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Type icon 40@2x.png"; sourceTree = "<group>"; };
 		5A073EC720148AE000BBD3F5 /* note36@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note36@2x.png"; sourceTree = "<group>"; };
-		5A073EC920149B0000BBD3F5 /* note create@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note create@2x.png"; sourceTree = "<group>"; };
 		5A93B5591FF37829003C94FC /* GenerateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateView.swift; sourceTree = "<group>"; };
 		5A93B55B1FF37838003C94FC /* GenerateView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GenerateView.xib; sourceTree = "<group>"; };
 		5ABD541B2017891F00918486 /* note29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note29@2x.png"; sourceTree = "<group>"; };
-		5ABD541D201789FB00918486 /* Item all2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Item all2@2x.png"; sourceTree = "<group>"; };
 		5ABD541F2018E19B00918486 /* AddNoteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoteVC.swift; sourceTree = "<group>"; };
 		5AEF16131FD6F43F00FAD262 /* ItemListTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemListTVC.swift; sourceTree = "<group>"; };
 		5AEF16151FD6F71A00FAD262 /* ItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemModel.swift; sourceTree = "<group>"; };
@@ -85,13 +85,13 @@
 		2335AFFE1FDFDA1E00E2A922 /* resource */ = {
 			isa = PBXGroup;
 			children = (
-				5A073EBF2013B63F00BBD3F5 /* Group login@2x.png */,
-				5A073EC02013B63F00BBD3F5 /* login@2x.png */,
+				234D53132019B819001732AC /* Group login29@2x.png */,
+				234D53142019B819001732AC /* login29@2x.png */,
 				5A073EC52013B96400BBD3F5 /* Type icon 40@2x.png */,
 				5ABD541B2017891F00918486 /* note29@2x.png */,
 				5A073EC720148AE000BBD3F5 /* note36@2x.png */,
-				5A073EC920149B0000BBD3F5 /* note create@2x.png */,
-				5ABD541D201789FB00918486 /* Item all2@2x.png */,
+				234D53172019B8A8001732AC /* note create32@2x.png */,
+				234D53192019B99E001732AC /* Item all2_29@2x.png */,
 			);
 			path = resource;
 			sourceTree = "<group>";
@@ -227,17 +227,17 @@
 			files = (
 				235D7A5A1FCD04CD004DB418 /* LaunchScreen.storyboard in Resources */,
 				5A073EC820148AE100BBD3F5 /* note36@2x.png in Resources */,
+				234D53152019B819001732AC /* Group login29@2x.png in Resources */,
 				235D7A571FCD04CD004DB418 /* Assets.xcassets in Resources */,
-				5ABD541E201789FB00918486 /* Item all2@2x.png in Resources */,
 				231416991FFCC28800F113FC /* NoteCell.xib in Resources */,
-				5A073EC22013B63F00BBD3F5 /* login@2x.png in Resources */,
 				235D7A551FCD04CD004DB418 /* Main.storyboard in Resources */,
 				5A93B55C1FF37838003C94FC /* GenerateView.xib in Resources */,
-				5A073ECA20149B0000BBD3F5 /* note create@2x.png in Resources */,
 				233BC9AF1FD8E30900C615C5 /* Items.plist in Resources */,
-				5A073EC12013B63F00BBD3F5 /* Group login@2x.png in Resources */,
 				5A073EC62013B96500BBD3F5 /* Type icon 40@2x.png in Resources */,
+				234D531A2019B99E001732AC /* Item all2_29@2x.png in Resources */,
 				5ABD541C2017891F00918486 /* note29@2x.png in Resources */,
+				234D53182019B8A8001732AC /* note create32@2x.png in Resources */,
+				234D53162019B819001732AC /* login29@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

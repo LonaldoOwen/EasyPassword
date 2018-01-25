@@ -29,13 +29,15 @@ class ItemDetailTVC: UITableViewController {
     static let createItemVCIdentifier = "CreateItemVC"
     
     // Properties
+    var db: SQLiteDatabase!
     var item: Item!
     //var itemType: String!
+    var itemId: String!
+    var persistentType: FolderModel.PersistentType!
     var itemType: FolderModel.ItemType!
-    
-    // 定义closure用于更新ItemListVC的cell，反向传值
-    var updateCellOfListVC: ((Item) -> ())!
+    var updateCellOfListVC: ((Item) -> ())!     // 定义closure用于更新ItemListVC的cell，反向传值
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -47,18 +49,37 @@ class ItemDetailTVC: UITableViewController {
         /// 如果复写了setEditing(_:)方法，则编辑功能消失，需要自己实现
         ///
         self.navigationItem.rightBarButtonItem = self.editButtonItem
+        self.title = "Detail"
         
         // register NoteCell
         self.tableView.register(UINib.init(nibName: "NoteCell", bundle: nil), forCellReuseIdentifier: ItemDetailTVC.noteCellIdentifier)
         
+        /// 使用sqlite存储
+        // 创建db实例
+        let dbUrl = SQLiteDatabase.getDBPath("EasyPassword.sqlite")
+        let dbPath = dbUrl.path
+        do {
+            db = try SQLiteDatabase.open(path: dbPath)
+            print("Successfully opened connection to database.")
+        } catch SQLiteError.OpenDatabase(let message) {
+            print("Unable to open database. :\(message)")
+        } catch {
+            print("Others errors")
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         print("#ItemDetailTVC--viewWillAppear")
+        print("item: \(item)")
+        print("itemId: \(itemId)")
+        print("persistentType: \(persistentType)")
+        print("itemType: \(itemType)")
+        
         // 进入详情页面，隐藏ToolBar
         self.navigationController?.isToolbarHidden = true
-        // 返回详情页面后，更新页面
-        //self.tableView.reloadData()
+        // query data
+        queryData()
+        self.tableView.reloadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -81,28 +102,45 @@ class ItemDetailTVC: UITableViewController {
     
     override func setEditing(_ editing: Bool, animated: Bool) {
         print("#setEditing")
-        // 调起创建秘密页面、动画为fade in out
-        // 直接present CreateItemVC，不显示导航栏
-//        let createItemVC: CreateItemVC = self.storyboard?.instantiateViewController(withIdentifier: ItemDetailTVC.createItemVCIdentifier) as! CreateItemVC
-//        createItemVC.modalTransitionStyle = .crossDissolve
-//        createItemVC.modalPresentationStyle = .overFullScreen
-//        self.present(createItemVC, animated: true, completion: nil)
         
-        // CreateItemVC嵌入到navigationController，present时，VC是nav，才会带导航栏
-        let createItemVCNav = self.storyboard?.instantiateViewController(withIdentifier: "CreateItemVCNav")
-        // 传值
-        let createItemVC: CreateItemVC = ((createItemVCNav as! UINavigationController).topViewController as? CreateItemVC)!
-        createItemVC.itemType = itemType
-        createItemVC.item = item
-        createItemVC.passBackNewItemDetail = { login in
-            // 获取返回值，更新table
-            self.item = login
-            self.tableView.reloadData()
+        if itemType == FolderModel.ItemType.login {
+            // 跳转到CreateItemVC
+            // 调起创建秘密页面、动画为fade in out
+            // 直接present CreateItemVC，不显示导航栏
+            //        let createItemVC: CreateItemVC = self.storyboard?.instantiateViewController(withIdentifier: ItemDetailTVC.createItemVCIdentifier) as! CreateItemVC
+            //        createItemVC.modalTransitionStyle = .crossDissolve
+            //        createItemVC.modalPresentationStyle = .overFullScreen
+            //        self.present(createItemVC, animated: true, completion: nil)
+            
+            // CreateItemVC嵌入到navigationController，present时，VC是nav，才会带导航栏
+            let createItemVCNav = self.storyboard?.instantiateViewController(withIdentifier: "CreateItemVCNav")
+            // 传值
+            let createItemVC: CreateItemVC = ((createItemVCNav as! UINavigationController).topViewController as? CreateItemVC)!
+            createItemVC.item = item
+            createItemVC.persistentType = persistentType
+            createItemVC.itemType = itemType
+            createItemVC.passBackNewItemDetail = { login in
+                // 获取返回值，更新table
+                self.item = login
+                self.tableView.reloadData()
+            }
+            //
+            createItemVCNav?.modalTransitionStyle = .crossDissolve
+            createItemVCNav?.modalPresentationStyle = .fullScreen
+            self.present(createItemVCNav!, animated: true, completion: nil)
+        } else if itemType == FolderModel.ItemType.note {
+            // 跳转到CreateNoteVC
+            let nav: UINavigationController = storyboard?.instantiateViewController(withIdentifier: "CreateNoteVCNav") as! UINavigationController
+            let createNoteVC: CreateNoteVC = nav.topViewController as! CreateNoteVC
+            createNoteVC.note = item as! Note
+            createNoteVC.persistentType = persistentType
+            createNoteVC.itemType = itemType
+            createNoteVC.passBackNewItemDetail = { note in
+                self.item = note
+                self.tableView.reloadData()
+            }
+            self.show(nav, sender: nil)
         }
-        //
-        createItemVCNav?.modalTransitionStyle = .crossDissolve
-        createItemVCNav?.modalPresentationStyle = .fullScreen
-        self.present(createItemVCNav!, animated: true, completion: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -135,53 +173,88 @@ class ItemDetailTVC: UITableViewController {
     //
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 4
+        //return 4
+        if itemType == FolderModel.ItemType.login {
+            return 4
+        } else if itemType == FolderModel.ItemType.note {
+            return 2
+        }
+        
+        return 0
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        switch section {
-        case 0: return 1
-        case 1: return 2
-        case 2: return 1
-        case 3: return 1
-        default:
-            return 0
+        
+        if itemType == FolderModel.ItemType.login {
+            switch section {
+            case 0: return 1
+            case 1: return 2
+            case 2: return 1
+            case 3: return 1
+            default:
+                return 0
+            }
+        } else if itemType == FolderModel.ItemType.note {
+            return 1
         }
-        //return 0
+        
+        return 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ItemDetailTVC.cellIdentifier, for: indexPath)
         
         /// 处理Type--Login
-        let login = item as! Login
-        if indexPath.section == 0 {
-            cell.textLabel?.text = login.itemName
-            cell.detailTextLabel?.attributedText = NSAttributedString(string: "登录信息", attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray]) //attributedText("登录信息")
-            cell.imageView?.image = UIImage(named: "note create")
-            cell.imageView?.contentMode = .scaleToFill
-        } else if indexPath.section == 1{
-            if indexPath.row == 0 {
-                cell.textLabel?.attributedText = attributedText("用户名")
-                cell.detailTextLabel?.text = login.userName
-            } else if indexPath.row == 1 {
-                cell.textLabel?.attributedText = attributedText("密码")
-                cell.detailTextLabel?.text = login.password
+        if let item = item {
+            if item is Login {
+                // 处理Login
+                let login = item as! Login
+                if indexPath.section == 0 {
+                    cell.textLabel?.text = login.itemName
+                    cell.detailTextLabel?.attributedText = NSAttributedString(string: "登录信息", attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray]) //attributedText("登录信息")
+                    cell.imageView?.image = UIImage(named: "note create32")
+                    cell.imageView?.contentMode = .scaleToFill
+                } else if indexPath.section == 1{
+                    if indexPath.row == 0 {
+                        cell.textLabel?.attributedText = attributedText("用户名")
+                        cell.detailTextLabel?.text = login.userName
+                    } else if indexPath.row == 1 {
+                        cell.textLabel?.attributedText = attributedText("密码")
+                        cell.detailTextLabel?.text = login.password
+                    }
+                } else if indexPath.section == 2 {
+                    cell.textLabel?.attributedText = attributedText("网站")
+                    cell.detailTextLabel?.text = login.website.count > 0 ? login.website : "http://example.com"
+                } else if indexPath.section == 3 {
+                    //            cell.textLabel?.attributedText = attributedText("备注")
+                    //            cell.detailTextLabel?.text = (login.note == "") ? "在这添加备注": login.note
+                    // 使用自定义cell来展示备注信息
+                    let noteCell: NoteCell = tableView.dequeueReusableCell(withIdentifier: ItemDetailTVC.noteCellIdentifier) as! NoteCell
+                    noteCell.customTextLabel.attributedText = attributedText("备注")
+                    noteCell.customDetailTextLabel.text = (login.note == "") ? "在这添加备注": login.note
+                    //noteCell.customDetailTextLabel.tintColor = UIColor.lightGray
+                    return noteCell
+                }
+            } else if item is Note {
+                // 处理Note
+                let note = item as! Note
+                if indexPath.section == 0 {
+                    cell.textLabel?.text = note.itemName
+                    cell.detailTextLabel?.text = note.userName
+                    cell.imageView?.image = UIImage(named: "note create32")
+                } else if indexPath.section == 1 {
+                    // 使用自定义cell来展示备注信息
+                    let noteCell: NoteCell = tableView.dequeueReusableCell(withIdentifier: ItemDetailTVC.noteCellIdentifier) as! NoteCell
+                    noteCell.customTextLabel.attributedText = attributedText("备注")
+                    noteCell.customDetailTextLabel.text = (note.note == "") ? "在这添加备注": note.note
+                    //noteCell.customDetailTextLabel.tintColor = UIColor.lightGray
+                    return noteCell
+                }
             }
-        } else if indexPath.section == 2 {
-            cell.textLabel?.attributedText = attributedText("网站")
-            cell.detailTextLabel?.text = login.website.count > 0 ? login.website : "http://example.com"
-        } else if indexPath.section == 3 {
-//            cell.textLabel?.attributedText = attributedText("备注")
-//            cell.detailTextLabel?.text = (login.note == "") ? "在这添加备注": login.note
-            // 使用自定义cell来展示备注信息
-            let noteCell: NoteCell = tableView.dequeueReusableCell(withIdentifier: ItemDetailTVC.noteCellIdentifier) as! NoteCell
-            noteCell.customTextLabel.attributedText = attributedText("备注")
-            noteCell.customDetailTextLabel.text = (login.note == "") ? "在这添加备注": login.note
-            //noteCell.customDetailTextLabel.tintColor = UIColor.lightGray
-            return noteCell
         }
+        
+        
         return cell
     }
     
@@ -268,6 +341,85 @@ class ItemDetailTVC: UITableViewController {
         return attributedString
     }
 
+    
+    // 将处理cell显示的代码抽象成方法？？？
+    func showCell(_ cell: UITableViewCell, indexPath: IndexPath, item: Item) {
+        if item is Login {
+            //
+            
+        } else if item is Note {
+            //
+            
+        }
+    }
+    
+    
+    // query data
+    func queryData() {
+        if let pT = persistentType {
+            if pT == FolderModel.PersistentType.iphone {
+                // 处理存储类型是--iphone
+                if let iT = itemType {
+                    if iT == FolderModel.ItemType.login {
+                        // Query--Login
+                        self.queryLoginData()
+                    } else if iT == FolderModel.ItemType.note {
+                        // Query--Note
+                        self.queryNoteData()
+                    }
+                }
+            } else {
+                // 处理存储类型是--others
+            }
+        }
+    }
+    
+    // Query--Login
+    func queryLoginData() {
+        
+        /// 注意：变量如果是optional，在SQL里要unwraped，否则SQL执行有问题
+        let loginSQL = "SELECT * FROM Login WHERE Persistent_type = '\(persistentType.rawValue)' AND Item_type = '\(persistentType.rawValue)' AND Item_id = '\(self.itemId!)';"
+        if let loginResults = db.querySql(sql: loginSQL) {
+            if let loginResult = loginResults.first {
+                let id: String = String(Int(loginResult["Item_id"] as! Int32))
+                let iN: String = loginResult["Item_name"] as! String
+                let uN: String = loginResult["User_name"] as! String
+                let pW: String = loginResult["Password"] as! String
+                let wS: String = loginResult["Website"] as! String
+                let note: String = loginResult["Note"] as! String
+                let pT: FolderModel.PersistentType = FolderModel.PersistentType(rawValue: Int(loginResult["Persistent_type"] as! Int32))!
+                let iT: FolderModel.ItemType = FolderModel.ItemType(rawValue: Int(loginResult["Item_type"] as! Int32))!
+                
+                let login: Login = Login(itemId: id, itemName: iN, userName: uN, password: pW, website: wS, note: note, persistentType: pT, itemType: iT)
+                self.item = login
+            }
+        } else {
+            print("#Table Login has no items!")
+        }
+    }
+    
+    // Query--Note
+    func queryNoteData() {
+        
+        let noteSQL = "SELECT * FROM Note WHERE Item_id = '\(self.itemId!)';"
+        if let noteResults = db.querySql(sql: noteSQL) {
+            if let noteResult = noteResults.first {
+                let id: String = String(Int(noteResult["Item_id"] as! Int32))
+                let iN: String = noteResult["Item_name"] as! String
+                let uN: String = noteResult["User_name"] as! String
+                let note: String = noteResult["Note"] as! String
+                let pT: FolderModel.PersistentType = FolderModel.PersistentType(rawValue: Int(noteResult["Persistent_type"] as! Int32))!
+                let iT: FolderModel.ItemType = FolderModel.ItemType(rawValue: Int(noteResult["Item_type"] as! Int32))!
+
+                let noteModel: Note = Note(itemId: id, itemName: iN, userName: uN, note: note, persistentType: pT, itemType: iT)
+                self.item = noteModel
+            }
+        } else {
+            print("#Table Login has no items!")
+        }
+        
+    }
+    
     /*
     // MARK: - Navigation
 

@@ -47,11 +47,17 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     
     // MARK: - Properties
     
-    var item: Item!     // 接收传值(Detail)
-    //var itemType: String!   // 接收传值
+    var db: SQLiteDatabase!
+    var item: Item!             // 接收传值(Detail)
+    //var itemType: String!     // 接收传值
+    //var itemId: String!
     var itemType: FolderModel.ItemType!
     var persistentType: FolderModel.PersistentType!
     var login: Login!
+    var reloadItemListVC: ((Item) -> ())!       // 定义closure用于刷新ItemListVC
+    var passBackNewItemDetail: ((Item) -> ())!  // 定义closure用于刷新ItemDetailVC
+    
+    
     var textFields: [UITextField]!
     var passwordIsShow: Bool = false
     var activeField: UITextField!
@@ -62,11 +68,6 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
         return view
     }()
     
-    // 定义closure用于刷新ItemListVC
-    var reloadItemListVC: ((Item) -> ())!
-    // 定义closure用于刷新ItemDetailVC
-    var passBackNewItemDetail: ((Item) -> ())!
-    var db: SQLiteDatabase!
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var cancelBtn: UIBarButtonItem!
@@ -182,7 +183,7 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
         
         // 存储item
         if let item = item {
-            // 编辑模式，更新item，先删除旧item，再插入新item
+            /// 编辑模式，更新item，先删除旧item，再插入新item
             print(item)
             // 使用plist存储
             /*
@@ -190,6 +191,7 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
             login = Login(itemId: "0", itemName: itemName.text!, userName: userName.text!, password: password.text!, website: website.text!, note: note.text!)
             PlistHelper.insert(itemModel: login, ofPersistentType: "MyIPHONE", itemType: itemType)
             */
+            
             // 使用sqlite db存储
             // Update item
             login = Login(itemId: (item as! Login).itemId, itemName: itemName.text!, userName: userName.text!, password: password.text!, website: website.text!, note: note.text!, persistentType: (item as! Login).persistentType, itemType: itemType)
@@ -210,8 +212,8 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
                 self.passBackNewItemDetail(self.login)
             })
         } else {
-            // 非编辑模式，创建新item
-            if itemType.typeString == "Login" {
+            /// 非编辑模式，创建新item
+            if itemType == FolderModel.ItemType.login {
                 // 查询Login表中，最后一行的id
                 var id: Int = 0
                 if let queryIds = db.querySql(sql: "SELECT Item_id FROM Login;") {
@@ -222,7 +224,7 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
                 //PlistHelper.insert(itemModel: login, ofPersistentType: "MyIPHONE", itemType: itemType)
                 // 插入db
                 /// 问题：
-                /// 时间类型待处理？？？
+                /// 时间类型待处理？？？()
                 // 创建新item时，设置Update_time等于Create_time
                 let insertSQL = "INSERT INTO Login (Item_name, User_name, Password, Website, Note, Item_type, Persistent_type, Create_time, Update_time, Is_discard) VALUES('\(login.itemName)', '\(login.userName)', '\(login.password)', '\(login.website)', '\(login.note)', '1', '1', '\(dateStr)', '\(dateStr)', '0');"
 //                try? db.insert(sql: insertSQL)
@@ -235,13 +237,11 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
                 print("Handle other item types!")
                 // 其他类型在这里处理
             }
-            
-            // 更新item list页面（选择方式？？？）
-            //reloadItemListVC(login)
+        
             // 收起VC
             self.dismiss(animated: true, completion: {
                 // 更新item list页面；（如果使用db，则不需要此步了）
-                self.reloadItemListVC(self.login)
+                //self.reloadItemListVC(self.login)
             })
         }
         

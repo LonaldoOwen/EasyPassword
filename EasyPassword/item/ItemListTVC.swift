@@ -28,8 +28,11 @@ class ItemListTVC: UITableViewController {
     //var persistentType: String = "" // 用于传值
     var itemType: FolderModel.ItemType!
     var persistentType: FolderModel.PersistentType!
-    var items: [Item]?
+    var items: [Item]!
     var db: SQLiteDatabase!
+    
+    @IBOutlet weak var addItem: UIBarButtonItem!
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,10 +62,14 @@ class ItemListTVC: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         print("#ItemListTVC--viewWillAppear")
+        print("persistentType: \(persistentType)")
+        print("itemType: \(itemType)")
         // 接收传值，显示title
         self.title = itemType.typeString
         // 如果使用db，根据itemType查询db，显示tableView
         queryData()
+        //
+        //configureToolBarItems()
         // 刷新UI
         self.tableView.reloadData()
     }
@@ -72,6 +79,12 @@ class ItemListTVC: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        //
+        configureToolBarItems()
+    }
+    
     
     @IBAction func handleAddAction(_ sender: UIBarButtonItem) {
         // 调起创建新itemVC
@@ -79,19 +92,28 @@ class ItemListTVC: UITableViewController {
         //
         
         //
-        if itemType == FolderModel.ItemType(rawValue: 1) {
+        if itemType == FolderModel.ItemType.login {
             // present create login VC
             let nav: UINavigationController = storyboard?.instantiateViewController(withIdentifier: "CreateItemVCNav") as! UINavigationController
+            let createItemVC: CreateItemVC = nav.topViewController as! CreateItemVC
+            createItemVC.persistentType = persistentType
+            createItemVC.itemType = itemType
             self.show(nav, sender: nil)
             
-        } else if itemType == FolderModel.ItemType(rawValue: 2) {
+        } else if itemType == FolderModel.ItemType.note {
             // present create note VC
             let nav: UINavigationController = storyboard?.instantiateViewController(withIdentifier: "CreateNoteVCNav") as! UINavigationController
+            let createNoteVC: CreateNoteVC = nav.topViewController as! CreateNoteVC
+            createNoteVC.persistentType = persistentType
+            createNoteVC.itemType = itemType
             self.show(nav, sender: nil)
             
-        } else if itemType == FolderModel.ItemType(rawValue: 0) {
+        } else if itemType == FolderModel.ItemType.all {
             // present select type action sheet
             print("#Show action sheet.")
+            // 弹出action sheet
+            
+            // 选择完毕后，调到对应VC
         }
     }
     
@@ -126,10 +148,29 @@ class ItemListTVC: UITableViewController {
 
         // Configure the cell...
         if let items = items {
-            let item: Login = items[indexPath.row] as! Login
-            cell.textLabel?.text = item.itemName
-            cell.detailTextLabel?.text = item.userName
-            cell.imageView?.image = UIImage.init(named: "note36")
+            let item = items[indexPath.row]
+            if item is Login {
+                print("")
+                let login: Login = item as! Login
+                cell.textLabel?.text = login.itemName
+                cell.detailTextLabel?.text = login.userName
+                cell.imageView?.image = UIImage.init(named: "note36")
+            } else if item is Note {
+                let note: Note = item as! Note
+                cell.textLabel?.text = note.itemName
+                cell.detailTextLabel?.text = note.userName
+                cell.imageView?.image = UIImage.init(named: "note36")
+            } else if item is List {
+                let list: List = item as! List
+                cell.textLabel?.text = list.itemName
+                cell.detailTextLabel?.text = list.userName
+                cell.imageView?.image = UIImage.init(named: "note36")
+            }
+            
+            
+//            cell.textLabel?.text = item.itemName
+//            cell.detailTextLabel?.text = item.userName
+//            cell.imageView?.image = UIImage.init(named: "note36")
         }
 
         return cell
@@ -146,8 +187,17 @@ class ItemListTVC: UITableViewController {
             // plist存储--删除对应plist中数据
             //PlistHelper.delete(itemModel: item, ofPersistentType: "MyIPHONE", itemType: itemType)
             // sqlite存储--删除Table中相应row
+//            if itemType == FolderModel.ItemType.login {
+//                //
+//                try? db.delete(sql: "DELETE FROM Login WHERE Persistent_type = '\(persistentType.rawValue)' AND Item_type = '\(itemType.rawValue)' AND Item_id = '\((item as! Login).itemId)';")
+//            } else if itemType == FolderModel.ItemType.note {
+//                //
+//                try? db.delete(sql: "DELETE FROM Note WHERE Persistent_type = '\(persistentType.rawValue)' AND Item_type = '\(itemType.rawValue)' AND Item_id = '\((item as! Note).itemId)';")
+//            }
+            /// 考虑如何合并为一句，考虑将Item增加property（itemId, itemType...）
+            try? db.delete(sql: "DELETE FROM \(item.itemType.typeString) WHERE Persistent_type = '\(item.persistentType.rawValue)' AND Item_type = '\(item.itemType.rawValue)' AND Item_id = '\(item.itemId)';")
             // 这个考虑一下，是不是不真正删除，只修改Is_discard为1？？？
-            if itemType.typeString == "Login" {
+            if itemType == FolderModel.ItemType.login {
                 // 处理Type--Login
                 let deleteSQL = "DELETE FROM Login WHERE Item_id = '\((item as! Login).itemId)';"
                 try? db.delete(sql: deleteSQL)
@@ -155,6 +205,8 @@ class ItemListTVC: UITableViewController {
                 self.setEditing(false, animated: true)
             }
             // Other type goes there
+            
+            self.setEditing(false, animated: true)
         }
     }
     
@@ -174,7 +226,8 @@ class ItemListTVC: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-
+        let cell: UITableViewCell = sender as! UITableViewCell
+        let indexPath = tableView.indexPath(for: cell)
         
         // 将item type传到创建页面
         if segue.identifier == "PresentCreate" {
@@ -190,12 +243,28 @@ class ItemListTVC: UITableViewController {
             }
         } else if segue.identifier == "ShowDetail" {
             // 显示详情页
-            //let cell = sender as! UITableViewCell
-            let indexPath = tableView.indexPath(for: sender as! UITableViewCell)
             let itemDetailVC: ItemDetailTVC = segue.destination as! ItemDetailTVC
-            itemDetailVC.item = items![(indexPath?.row)!]
-            itemDetailVC.itemType = itemType
-            //itemDetailVC.persistentType = persistentType
+            let item = items![(indexPath?.row)!]
+            if item is Login {
+                let login: Login = item as! Login
+                //itemDetailVC.item = item
+                itemDetailVC.itemId = login.itemId
+                itemDetailVC.persistentType = login.persistentType
+                itemDetailVC.itemType = login.itemType
+            } else if item is Note {
+                let note: Note = item as! Note
+                //itemDetailVC.item = item
+                itemDetailVC.itemId = note.itemId
+                itemDetailVC.persistentType = note.persistentType
+                itemDetailVC.itemType = note.itemType
+            } else if item is List {
+                let list: List = item as! List
+                //itemDetailVC.item = list
+                itemDetailVC.itemId = list.itemId
+                itemDetailVC.persistentType = list.persistentType
+                itemDetailVC.itemType = list.itemType
+            }
+            
             // 设置closure，更新cell
             // 注意：如果此页面使用了查询db，则不需此逻辑
 //            itemDetailVC.updateCellOfListVC = { item in
@@ -209,6 +278,15 @@ class ItemListTVC: UITableViewController {
     
     
     // MARK: - Helper
+    
+    // 控制ToolBar中btn显示
+    func configureToolBarItems() {
+        if self.isEditing {
+            addItem.isEnabled = false
+        } else {
+            addItem.isEnabled = true
+        }
+    }
     
     func queryData() {
         print("#ItemListTVC--Query db")
@@ -250,21 +328,51 @@ class ItemListTVC: UITableViewController {
     
     // 查询Table--Note
     func queryNote() {
-        
+        let noteSQL = "SELECT Item_id, Item_name, User_name, Note, Persistent_type, Item_type FROM Note WHERE Is_discard = 0 ORDER BY Update_time DESC;"   // 增加根据更新时间倒序排序
+        if let noteResults = db.querySql(sql: noteSQL) {
+            var tempItems = [Item]()
+            for row in noteResults {
+                let id: String = String(Int(row["Item_id"] as! Int32))
+                let itemName: String = row["Item_name"] as! String
+                let userName: String = row["User_name"] as! String
+                let note: String = row["Note"] as! String
+                let persistentType: FolderModel.PersistentType = FolderModel.PersistentType(rawValue: Int(row["Persistent_type"] as! Int32))!
+                let itemType: FolderModel.ItemType = FolderModel.ItemType(rawValue: Int(row["Item_type"] as! Int32))!
+                
+                let noteModel: Note = Note.init(itemId: id, itemName: itemName, userName: userName, note: note, persistentType: persistentType, itemType: itemType)
+                tempItems.append(noteModel)
+            }
+            items = tempItems
+        } else {
+            print("#Table Note has no items!")
+        }
     }
 
+    /// 说明：如果每个页面都自己查询db，则使用此方法即可，不用分三个方法单独查，统一使用List model用于cell显示数据
+    /// 
     // 查询Table--Login、Note
     func queryAll() {
         // Union查询所有table
         let unionAllSQL = """
-            SELECT Item_id, Item_name, User_name FROM Login
+            SELECT Item_id, Item_name, User_name, Persistent_type, Item_type, Update_time FROM Login
             UNION
-            SELECT Item_id, Item_name, User_name FROM Note
+            SELECT Item_id, Item_name, User_name, Persistent_type, Item_type, Update_time FROM Note
             ORDER BY Update_time DESC;
         """
         
         if let allResults = db.querySql(sql: unionAllSQL) {
-            
+            var tempItems = [Item]()
+            for row in allResults {
+                let id: String = String(Int(row["Item_id"] as! Int32))
+                let itemName: String = row["Item_name"] as! String
+                let userName: String = row["User_name"] as! String
+                let persistentType: FolderModel.PersistentType = FolderModel.PersistentType(rawValue: Int(row["Persistent_type"] as! Int32))!
+                let itemType: FolderModel.ItemType = FolderModel.ItemType(rawValue: Int(row["Item_type"] as! Int32))!
+                
+                let listModel: List = List.init(itemId: id, itemName: itemName, userName: userName, persistentType: persistentType, itemType: itemType)
+                tempItems.append(listModel)
+            }
+            items = tempItems
         } else {
             print("#Table all has no items!")
         }

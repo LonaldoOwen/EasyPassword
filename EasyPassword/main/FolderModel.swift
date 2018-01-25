@@ -58,9 +58,9 @@ class FolderModel {
         var imageName: String {
             switch self {
             case .all:
-                return "Item all2"
+                return "Item all2_29"
             case .login:
-                return "login"
+                return "login29"
             case .note:
                 return "note29"
             }
