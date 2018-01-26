@@ -33,6 +33,7 @@
 		5A93B55C1FF37838003C94FC /* GenerateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5A93B55B1FF37838003C94FC /* GenerateView.xib */; };
 		5ABD541C2017891F00918486 /* note29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABD541B2017891F00918486 /* note29@2x.png */; };
 		5ABD54202018E19B00918486 /* AddNoteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABD541F2018E19B00918486 /* AddNoteVC.swift */; };
+		5ABFED6B201AB12B00565509 /* note create40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABFED6A201AB12A00565509 /* note create40@2x.png */; };
 		5AEF16141FD6F43F00FAD262 /* ItemListTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEF16131FD6F43F00FAD262 /* ItemListTVC.swift */; };
 		5AEF16161FD6F71A00FAD262 /* ItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEF16151FD6F71A00FAD262 /* ItemModel.swift */; };
 /* End PBXBuildFile section */
@@ -66,6 +67,7 @@
 		5A93B55B1FF37838003C94FC /* GenerateView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GenerateView.xib; sourceTree = "<group>"; };
 		5ABD541B2017891F00918486 /* note29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note29@2x.png"; sourceTree = "<group>"; };
 		5ABD541F2018E19B00918486 /* AddNoteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoteVC.swift; sourceTree = "<group>"; };
+		5ABFED6A201AB12A00565509 /* note create40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note create40@2x.png"; sourceTree = "<group>"; };
 		5AEF16131FD6F43F00FAD262 /* ItemListTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemListTVC.swift; sourceTree = "<group>"; };
 		5AEF16151FD6F71A00FAD262 /* ItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -91,6 +93,7 @@
 				5ABD541B2017891F00918486 /* note29@2x.png */,
 				5A073EC720148AE000BBD3F5 /* note36@2x.png */,
 				234D53172019B8A8001732AC /* note create32@2x.png */,
+				5ABFED6A201AB12A00565509 /* note create40@2x.png */,
 				234D53192019B99E001732AC /* Item all2_29@2x.png */,
 			);
 			path = resource;
@@ -238,6 +241,7 @@
 				5ABD541C2017891F00918486 /* note29@2x.png in Resources */,
 				234D53182019B8A8001732AC /* note create32@2x.png in Resources */,
 				234D53162019B819001732AC /* login29@2x.png in Resources */,
+				5ABFED6B201AB12B00565509 /* note create40@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
