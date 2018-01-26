@@ -277,13 +277,13 @@
                                                                         </constraints>
                                                                     </imageView>
                                                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Item Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dTz-hQ-o3z">
-                                                                        <rect key="frame" x="94" y="48" width="273" height="17"/>
+                                                                        <rect key="frame" x="94" y="45.5" width="273" height="22"/>
                                                                         <nil key="textColor"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                                         <textInputTraits key="textInputTraits"/>
                                                                     </textField>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fos-Gw-Spj" userLabel="Line View">
-                                                                        <rect key="frame" x="94" y="75" width="263" height="0.5"/>
+                                                                        <rect key="frame" x="94" y="77.5" width="263" height="0.5"/>
                                                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="0.5" id="bQk-cp-VmP"/>
@@ -1171,13 +1171,13 @@
                                                                         </constraints>
                                                                     </imageView>
                                                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Item Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZZr-y5-dFg">
-                                                                        <rect key="frame" x="94" y="48" width="273" height="17"/>
+                                                                        <rect key="frame" x="94" y="45.5" width="273" height="22"/>
                                                                         <nil key="textColor"/>
-                                                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                                        <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                                         <textInputTraits key="textInputTraits"/>
                                                                     </textField>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8Hb-hm-qIc" userLabel="Line View">
-                                                                        <rect key="frame" x="94" y="75" width="263" height="0.5"/>
+                                                                        <rect key="frame" x="94" y="77.5" width="263" height="0.5"/>
                                                                         <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         <constraints>
                                                                             <constraint firstAttribute="height" constant="0.5" id="vSr-ac-oSJ"/>
@@ -1304,7 +1304,7 @@
         <!--Add NoteVC-->
         <scene sceneID="lY5-wc-koO">
             <objects>
-                <viewController storyboardIdentifier="AddNoteVC" id="bmc-Xo-AIK" customClass="AddNoteVC" customModule="EasyPassword" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AddNoteVC" automaticallyAdjustsScrollViewInsets="NO" id="bmc-Xo-AIK" customClass="AddNoteVC" customModule="EasyPassword" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UMd-uc-jlM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

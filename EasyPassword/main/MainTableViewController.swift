@@ -12,9 +12,9 @@
 ///    选中cell删除（多选）
 ///    修改文件夹名称（不做此功能，类型是默认提供的，不支持自定义）
 /// 4、默认显示备忘文件夹；当添加新的文件夹后，同时增加一个“所有persistent”文件夹，用于显示当前存储类型中所有的item（plist）
-/// 5、缺少修改文件夹名称、删除文夹功能（）
+/// 5、缺少修改文件夹名称、删除文夹功能（使用db存储后，不需要此功能）
 /// 6、添加sqlite db
-/// 7、第一次进入，未创建table时，不显示？？？
+/// 7、第一次进入，未创建table时，不显示？？？，显示一张默认图（）
 ///
 ///
 /// 问题：
@@ -150,6 +150,8 @@ class MainTableViewController: UITableViewController {
         queryData()
         // 在此处刷新table view
         self.tableView.reloadData()
+        //
+        configureItemInToobar()
     }
 
     override func didReceiveMemoryWarning() {
@@ -184,6 +186,7 @@ class MainTableViewController: UITableViewController {
             
             showActionSheet()
         }
+        
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -255,9 +258,9 @@ class MainTableViewController: UITableViewController {
         if let iphoneFolders = iphoneFolders {
             let iphoneFolder = iphoneFolders[indexPath.row]
             //cell.textLabel?.text = iphoneFolder.itemType != "All ? iphoneFolder.itemType : "All Type on IPHONE"
-            cell.textLabel?.text = iphoneFolder.itemType.typeString
+            cell.textLabel?.text = iphoneFolder.folderType.typeString
             cell.detailTextLabel?.text = String(iphoneFolder.count)
-            cell.imageView?.image = UIImage.init(named: iphoneFolder.itemType.imageName)
+            cell.imageView?.image = UIImage.init(named: iphoneFolder.folderType.imageName)
         }
         
         return cell
@@ -321,7 +324,7 @@ class MainTableViewController: UITableViewController {
         // 非编辑状态时跳转到新VC
         if !self.tableView.isEditing {
             let itemListTVC: ItemListTVC = storyboard?.instantiateViewController(withIdentifier: "ItemListTVC") as! ItemListTVC
-            let cell = tableView.cellForRow(at: indexPath)
+            //let cell = tableView.cellForRow(at: indexPath)
             
             // 使用plist存储--传递items；
             /*
@@ -333,7 +336,7 @@ class MainTableViewController: UITableViewController {
             //
             let iphoneFolder: FolderModel = iphoneFolders[indexPath.row]
             // 使用sqlite db存储，传递itemType、persistentType（？）
-            itemListTVC.itemType = iphoneFolder.itemType
+            itemListTVC.folderType = iphoneFolder.folderType
             itemListTVC.persistentType = iphoneFolder.persistentType
             
             // 显示itemListTVC
@@ -374,8 +377,16 @@ class MainTableViewController: UITableViewController {
             addFolderItem.title = "新建类型"
             addFolderItem.isEnabled = true
         }
+        
+        // 控制navigatItem状态
+        if folders == nil || folders.count == 0 {
+            self.navigationItem.rightBarButtonItem = nil
+        } else {
+            self.navigationItem.rightBarButtonItem = self.editButtonItem
+        }
     }
     
+    // 显示action sheet
     func showActionSheet() {
         // 显示可以创建的类型
         let sheet = UIAlertController.init(title: "新建类型", message: "选择要创建的类型", preferredStyle: UIAlertControllerStyle.actionSheet)
@@ -383,46 +394,26 @@ class MainTableViewController: UITableViewController {
             // 处理Login操作
             // 1、第一次创建，创建一个新Login table
             // 2、非第一次，不创建table，而是跳到list页面，调起CreateVC页面
-            let dbTableCount = self.db.numberOfRowsInTable("sqlite_master")
-            if dbTableCount > 0 {
-                // db不为空
-                if self.db.masterContainTable("Login")! {
-                    // 执行2
-                    print("跳转到list页面-->CreateVC页面。")
-                } else {
-                    // 执行1
-                    try? self.db.createTable(table: Login.self)
-                }
-            } else {
-                // db为空，直接创建Login table
-                try? self.db.createTable(table: Login.self)
-            }
+
+            // 跳转到CreateItemVC
+            self.showCreateItemVC(withItemType: FolderModel.ItemType.login, persistentType: FolderModel.PersistentType.iphone)
             
             self.queryData()
             self.tableView.reloadData()
+            self.configureItemInToobar()
             print("Login action")
         }))
         sheet.addAction(UIAlertAction.init(title: "备注信息", style: UIAlertActionStyle.default, handler: { (action) in
             // 处理Note操作
             // 1、第一次创建，创建一个新Note table
             // 2、非第一次，不创建table，而是跳到list页面，调起CreateVC页面
-            let dbTableCount = self.db.numberOfRowsInTable("sqlite_master")
-            if dbTableCount > 0 {
-                // db不为空
-                if self.db.masterContainTable("Note")! {
-                    // 执行2
-                    print("跳转到list页面-->CreateVC页面。")
-                } else {
-                    // 执行1
-                    try? self.db.createTable(table: Note.self)
-                }
-            } else {
-                // db为空，直接创建Note table
-                try? self.db.createTable(table: Note.self)
-            }
+
+            // 跳转到CreateNoteVC
+            self.showCreateNoteVC(withItemType: FolderModel.ItemType.note, persistentType: FolderModel.PersistentType.iphone)
             
             self.queryData()
             self.tableView.reloadData()
+            self.configureItemInToobar()
             print("Note action")
         }))
         sheet.addAction(UIAlertAction.init(title: "取消", style: UIAlertActionStyle.cancel, handler: nil))
@@ -479,6 +470,26 @@ class MainTableViewController: UITableViewController {
     }
     */
     
+    // show CreateItemVC
+    func showCreateItemVC(withItemType itemType: FolderModel.ItemType, persistentType: FolderModel.PersistentType) {
+        // present create login VC
+        let nav: UINavigationController = storyboard?.instantiateViewController(withIdentifier: "CreateItemVCNav") as! UINavigationController
+        let createItemVC: CreateItemVC = nav.topViewController as! CreateItemVC
+        createItemVC.persistentType = persistentType
+        createItemVC.itemType = itemType//FolderModel.ItemType(rawValue: folderType.rawValue) // 通过folderType转换为itemType
+        self.show(nav, sender: nil)
+    }
+    
+    // show CreateNoteVC
+    func showCreateNoteVC(withItemType itemType: FolderModel.ItemType, persistentType: FolderModel.PersistentType) {
+        // present create note VC
+        let nav: UINavigationController = storyboard?.instantiateViewController(withIdentifier: "CreateNoteVCNav") as! UINavigationController
+        let createNoteVC: CreateNoteVC = nav.topViewController as! CreateNoteVC
+        createNoteVC.persistentType = persistentType
+        createNoteVC.itemType = itemType//FolderModel.ItemType(rawValue: folderType.rawValue)
+        self.show(nav, sender: nil)
+    }
+    
     
     // 删除选择的文件夹及对应数据
     func deleteSelectedFolders() {
@@ -502,13 +513,12 @@ class MainTableViewController: UITableViewController {
                 */
                 
                 /// sqlite db存储
-                
                 let indexPath = indexPathsForSelectedRows[index]
                 /// 问题：as!后，获得的是immutable copy
                 ///
                 //(folders[indexPath.section] as! [FolderModel]).remove(at: indexPath.row)
                 var folder = folders[indexPath.section] as! [FolderModel]
-                let tableType = folder[indexPath.row].itemType
+                let tableType = folder[indexPath.row].folderType
                 
                 // 删除model
                 folder.remove(at: indexPath.row)
@@ -523,7 +533,7 @@ class MainTableViewController: UITableViewController {
                 
                 // Delte Table
                 try? db.deleteTable(sql: "DROP TABLE \(tableType.typeString)")
-                if tableType == FolderModel.ItemType(rawValue: 1) {
+                if tableType == FolderModel.FolderType.login {
                     // 如果删除的是Login table，同时删除PasswordHistory
                     try? db.deleteTable(sql: "DROP TABLE PasswordHistory")
                 }
@@ -585,7 +595,7 @@ class MainTableViewController: UITableViewController {
                 countAll += Int(note.count)!
             }
             // 统计所有类型
-            let all = FolderModel.init(persistentType: .iphone, itemType: .all, count: String(countAll))
+            let all = FolderModel.init(persistentType: .iphone, folderType: .all, count: String(countAll))
             tempIphoneFolders.insert(all, at: 0)
             
             self.iphoneFolders = tempIphoneFolders
@@ -602,7 +612,7 @@ class MainTableViewController: UITableViewController {
         // 问题：numberOfRowsInTable()计算的是所有rows，实际需要的是非Is_discard的rows
         // 解决：查询Table中条件是Is_discard='0'的rows
         let loginTableRows = db.numberOfRowsInTable("Login") 
-        let iphoneFolder = FolderModel.init(persistentType: .iphone, itemType: .login, count: String(loginTableRows))
+        let iphoneFolder = FolderModel.init(persistentType: .iphone, folderType: .login, count: String(loginTableRows))
         
         return iphoneFolder
     }
@@ -611,7 +621,7 @@ class MainTableViewController: UITableViewController {
     func buildNoteModel() -> FolderModel {
         // 查询所有Note的数据
         let noteTableRows = db.numberOfRowsInTable("Note")
-        let iphoneFolder = FolderModel.init(persistentType: .iphone, itemType: .note, count: String(noteTableRows))
+        let iphoneFolder = FolderModel.init(persistentType: .iphone, folderType: .note, count: String(noteTableRows))
         
         return iphoneFolder
     }

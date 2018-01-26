@@ -176,7 +176,7 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
         // 创建PasswordHistory Table
         if let passwordHistoryTable = db.masterContainTable("PasswordHistory") {
             if !passwordHistoryTable {
-                // 创建
+                // PasswordHistory不存在时，创建一个
                 try? db.createTable(table: PasswordHistory.self)
             }
         }
@@ -194,10 +194,11 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
             
             // 使用sqlite db存储
             // Update item
-            login = Login(itemId: (item as! Login).itemId, itemName: itemName.text!, userName: userName.text!, password: password.text!, website: website.text!, note: note.text!, persistentType: (item as! Login).persistentType, itemType: itemType)
+            /// 问题: 有必要写入folderType吗？？？
+            ///
+            login = Login(itemId: item.itemId, itemName: itemName.text!, userName: userName.text!, password: password.text!, website: website.text!, note: note.text!, persistentType: persistentType, itemType: itemType, folderType: FolderModel.FolderType.login)
             if login != (item as! Login) {
-                // 时间格式需要处理？？？
-                
+                // 时间格式需要处理？？？(已处理)
                 let updateSQL = "UPDATE Login SET Item_name = '\(login.itemName)', User_name = '\(login.userName)', Password = '\(login.password)', Website = '\(login.website)', Note = '\(login.note)', Update_time = '\(dateStr)' WHERE Item_id = '\(login.itemId)';"
                 try? db.update(sql: updateSQL)
                 // 更新完login item，判断password是否更改，是：将password写入历史表，否：不写？？？
@@ -214,24 +215,34 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
         } else {
             /// 非编辑模式，创建新item
             if itemType == FolderModel.ItemType.login {
-                // 查询Login表中，最后一行的id
-                var id: Int = 0
-                if let queryIds = db.querySql(sql: "SELECT Item_id FROM Login;") {
-                    id = Int(queryIds.last!["Item_id"] as! Int32)
-                }
-                login = Login(itemId: String(describing: (id + 1)), itemName: itemName.text!, userName: userName.text!, password: password.text!, website: website.text!, note: note.text!, persistentType: persistentType, itemType: itemType)
                 // 插入plist（login model不需要id属性）
                 //PlistHelper.insert(itemModel: login, ofPersistentType: "MyIPHONE", itemType: itemType)
+                
+                // 如果尚未创建Login table，先创建
+                let dbTableCount = self.db.numberOfRowsInTable("sqlite_master")
+                if dbTableCount > 0 {
+                    // db不为空
+                    if self.db.masterContainTable("Login")! {
+                        // 执行2
+                        print("跳转到list页面-->CreateVC页面。")
+                    } else {
+                        // 执行1
+                        try? self.db.createTable(table: Login.self)
+                    }
+                } else {
+                    // db为空，直接创建Login table
+                    try? self.db.createTable(table: Login.self)
+                }
+                
                 // 插入db
                 /// 问题：
-                /// 时间类型待处理？？？()
+                /// 时间类型待处理？？？(已处理)
                 // 创建新item时，设置Update_time等于Create_time
-                let insertSQL = "INSERT INTO Login (Item_name, User_name, Password, Website, Note, Item_type, Persistent_type, Create_time, Update_time, Is_discard) VALUES('\(login.itemName)', '\(login.userName)', '\(login.password)', '\(login.website)', '\(login.note)', '1', '1', '\(dateStr)', '\(dateStr)', '0');"
-//                try? db.insert(sql: insertSQL)
+                let insertSQL = "INSERT INTO Login (Item_name, User_name, Password, Website, Note, Item_type, Persistent_type, Create_time, Update_time, Is_discard) VALUES('\(itemName.text!)', '\(userName.text!)', '\(password.text!)', '\(website.text!)', '\(note.text!)', '\(persistentType.rawValue)', '\(itemType.rawValue)', '\(dateStr)', '\(dateStr)', '0');"
                 // 新建item时，同时将password写入password history表
                 if let itemId = try? db.insertIntoTable("Login", sql: insertSQL) {
                     let idString = String(itemId!)
-                    try? db.insert(sql: "INSERT INTO PasswordHistory (Item_id, Password, Create_time) VALUES('\(idString)', '\(login.password)', '\(dateStr)');")
+                    try? db.insert(sql: "INSERT INTO PasswordHistory (Item_id, Password, Create_time) VALUES('\(idString)', '\(password.text!)', '\(dateStr)');")
                 }
             } else {
                 print("Handle other item types!")

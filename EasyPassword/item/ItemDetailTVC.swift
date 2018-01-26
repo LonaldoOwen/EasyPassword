@@ -139,7 +139,10 @@ class ItemDetailTVC: UITableViewController {
                 self.item = note
                 self.tableView.reloadData()
             }
-            self.show(nav, sender: nil)
+            //self.show(nav, sender: nil)
+            nav.modalTransitionStyle = .crossDissolve
+            nav.modalPresentationStyle = .fullScreen
+            self.present(nav, animated: true, completion: nil)
         }
     }
 
@@ -213,7 +216,7 @@ class ItemDetailTVC: UITableViewController {
                 if indexPath.section == 0 {
                     cell.textLabel?.text = login.itemName
                     cell.detailTextLabel?.attributedText = NSAttributedString(string: "登录信息", attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray]) //attributedText("登录信息")
-                    cell.imageView?.image = UIImage(named: "note create32")
+                    cell.imageView?.image = UIImage(named: "note create40")
                     cell.imageView?.contentMode = .scaleToFill
                 } else if indexPath.section == 1{
                     if indexPath.row == 0 {
@@ -242,7 +245,7 @@ class ItemDetailTVC: UITableViewController {
                 if indexPath.section == 0 {
                     cell.textLabel?.text = note.itemName
                     cell.detailTextLabel?.text = note.userName
-                    cell.imageView?.image = UIImage(named: "note create32")
+                    cell.imageView?.image = UIImage(named: "note create40")
                 } else if indexPath.section == 1 {
                     // 使用自定义cell来展示备注信息
                     let noteCell: NoteCell = tableView.dequeueReusableCell(withIdentifier: ItemDetailTVC.noteCellIdentifier) as! NoteCell
@@ -390,7 +393,7 @@ class ItemDetailTVC: UITableViewController {
                 let pT: FolderModel.PersistentType = FolderModel.PersistentType(rawValue: Int(loginResult["Persistent_type"] as! Int32))!
                 let iT: FolderModel.ItemType = FolderModel.ItemType(rawValue: Int(loginResult["Item_type"] as! Int32))!
                 
-                let login: Login = Login(itemId: id, itemName: iN, userName: uN, password: pW, website: wS, note: note, persistentType: pT, itemType: iT)
+                let login: Login = Login(itemId: id, itemName: iN, userName: uN, password: pW, website: wS, note: note, persistentType: pT, itemType: iT, folderType: FolderModel.FolderType.login)
                 self.item = login
             }
         } else {
@@ -411,7 +414,7 @@ class ItemDetailTVC: UITableViewController {
                 let pT: FolderModel.PersistentType = FolderModel.PersistentType(rawValue: Int(noteResult["Persistent_type"] as! Int32))!
                 let iT: FolderModel.ItemType = FolderModel.ItemType(rawValue: Int(noteResult["Item_type"] as! Int32))!
 
-                let noteModel: Note = Note(itemId: id, itemName: iN, userName: uN, note: note, persistentType: pT, itemType: iT)
+                let noteModel: Note = Note(itemId: id, itemName: iN, userName: uN, note: note, persistentType: pT, itemType: iT, folderType: FolderModel.FolderType.note)
                 self.item = noteModel
             }
         } else {

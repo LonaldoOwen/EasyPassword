@@ -18,13 +18,10 @@ protocol Item {
     var itemId: String { get set }
     var persistentType: FolderModel.PersistentType { get set }
     var itemType: FolderModel.ItemType { get set }
+    var folderType: FolderModel.FolderType { get set }          // 增加folderType用来判断是来自于哪个folder
+    //var image: String { get set }
 }
 
-//enum ItemType: Int {
-//    case all = 0
-//    case login = 1
-//    case note = 2
-//}
 
 
 // MARK: - 登录模型
@@ -39,8 +36,11 @@ struct Login: Item {
     //var updateTime: String
     var persistentType: FolderModel.PersistentType
     var itemType: FolderModel.ItemType
+    var folderType: FolderModel.FolderType
     
-    init(itemId: String, itemName: String, userName: String, password: String, website: String, note: String, persistentType: FolderModel.PersistentType, itemType: FolderModel.ItemType) {
+    //var image: String = "login29"
+    
+    init(itemId: String, itemName: String, userName: String, password: String, website: String, note: String, persistentType: FolderModel.PersistentType, itemType: FolderModel.ItemType, folderType: FolderModel.FolderType) {
         self.itemId = itemId
         self.itemName = itemName
         self.userName = userName
@@ -49,7 +49,7 @@ struct Login: Item {
         self.note = note
         self.persistentType = persistentType
         self.itemType = itemType
-        
+        self.folderType = folderType
     }
 
 }
@@ -69,14 +69,18 @@ struct Note: Item {
     var note: String
     var persistentType: FolderModel.PersistentType
     var itemType: FolderModel.ItemType
+    var folderType: FolderModel.FolderType
     
-    init(itemId: String, itemName: String, userName: String, note: String, persistentType: FolderModel.PersistentType, itemType: FolderModel.ItemType) {
+    //var image: String = "note29"
+    
+    init(itemId: String, itemName: String, userName: String, note: String, persistentType: FolderModel.PersistentType, itemType: FolderModel.ItemType, folderType: FolderModel.FolderType) {
         self.itemId = itemId
         self.itemName = itemName
         self.userName = userName
         self.note = note
         self.persistentType = persistentType
         self.itemType = itemType
+        self.folderType = folderType
     }
 }
 
@@ -88,18 +92,25 @@ struct Note: Item {
 
 // All
 struct List: Item {
+    //var image: String
+    
     var itemId: String
     var itemName: String
     var userName: String
+    var note: String        // 新增兼容Note类型在cell上detailText展示
     var persistentType: FolderModel.PersistentType
     var itemType: FolderModel.ItemType
+    var folderType: FolderModel.FolderType
     
-    init(itemId: String, itemName: String, userName: String, persistentType: FolderModel.PersistentType, itemType: FolderModel.ItemType) {
+    init(itemId: String, itemName: String, userName: String, note: String, persistentType: FolderModel.PersistentType, itemType: FolderModel.ItemType, folderType: FolderModel.FolderType) {
         self.itemId = itemId
         self.itemName = itemName
         self.userName = userName
+        self.note = note
         self.persistentType = persistentType
         self.itemType = itemType
+        self.folderType = folderType
+
     }
 }
 

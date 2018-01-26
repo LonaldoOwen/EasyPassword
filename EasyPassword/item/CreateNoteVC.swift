@@ -7,8 +7,8 @@
 //
 /// CreateNoteVC.swift
 /// 功能：
-/// 1、
-/// 2、
+/// 1、创建Note
+/// 2、当文本过长时，达到键盘位置，向上滚动scrollview（）
 ///
 ///
 ///
@@ -44,6 +44,11 @@ class CreateNoteVC: UIViewController {
         let tapGesture = UITapGestureRecognizer.init(target: self, action: #selector(handleTapGesture))
         noteContent.addGestureRecognizer(tapGesture)
         
+        // 注册keyboard通知
+        registerForKeyboardNotifications()
+        // 监听所有textField
+        itemName.addTarget(self, action: #selector(handleTextFieldTextChanged), for: .editingChanged)
+        
         /// 使用sqlite存储
         // 创建db实例
         let dbUrl = SQLiteDatabase.getDBPath("EasyPassword.sqlite")
@@ -65,6 +70,8 @@ class CreateNoteVC: UIViewController {
             itemName.text = note.itemName
             noteLabel.text = note.note
         }
+        //
+        configureNavigationItemsStatus()
     }
 
     override func didReceiveMemoryWarning() {
@@ -87,7 +94,7 @@ class CreateNoteVC: UIViewController {
         
         // 存储item
         if let note = note {
-            // 编辑模式，更新item，先删除旧item，再插入新item
+            /// 编辑模式 -- 更新item，先删除旧item，再插入新item
             print(note)
             // 使用sqlite db存储
             if noteLabel.text != note.note || itemName.text != note.itemName {
@@ -102,12 +109,29 @@ class CreateNoteVC: UIViewController {
                 //self.passBackNewItemDetail(self.note)
             })
         } else {
-            // 非编辑模式，创建新item
-            if itemType.typeString == "Note" {
-                // 查询Note表中，最后一行的id
+            /// 非编辑模式 -- 创建新item
+            if itemType == FolderModel.ItemType.note {
+                // 查询sqlite_master表中是否包含Note表，没有先创建
+                print("#如果尚未创建Note table，先创建")
+                // 如果尚未创建Note table，先创建
+                let dbTableCount = self.db.numberOfRowsInTable("sqlite_master")
+                if dbTableCount > 0 {
+                    // db不为空
+                    if self.db.masterContainTable("Note")! {
+                        // 执行2
+                        print("跳转到list页面-->CreateVC页面。")
+                    } else {
+                        // 执行1
+                        try? self.db.createTable(table: Note.self)
+                    }
+                } else {
+                    // db为空，直接创建Note table
+                    try? self.db.createTable(table: Note.self)
+                }
+                
                 // 插入db
                 // 创建新note时，设置Update_time等于Create_time
-                let insertNoteSQL = "INSERT INTO Note (Item_name, User_name, Note, Item_type, Persistent_type, Create_time, Update_time, Is_discard) VALUES ('\(String(describing: itemName.text!))', '', '\(noteLabel.text ?? "")', '\(itemType.rawValue)', '\(persistentType.rawValue)', '\(dateStr)', '\(dateStr)', '0');"
+                let insertNoteSQL = "INSERT INTO Note (Item_name, User_name, Note, Item_type, Persistent_type, Create_time, Update_time, Is_discard) VALUES ('\(itemName.text!)', '', '\(noteLabel.text ?? "")', '\(itemType.rawValue)', '\(persistentType.rawValue)', '\(dateStr)', '\(dateStr)', '0');"
                 try? db.insert(sql: insertNoteSQL)
             } else {
                 print("Handle other item types!")
@@ -137,7 +161,49 @@ class CreateNoteVC: UIViewController {
     }
     
     
+    // MARK: -- Helper
     
+    // Call this method somewhere in your view controller setup code.
+    fileprivate func registerForKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown), name: .UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CreateItemVC.keyboardWillBeHidden(_:)), name: .UIKeyboardWillHide, object: nil)
+    }
+    
+    // 处理textField输入变化
+    @objc func handleTextFieldTextChanged(_ textField: UITextField) {
+        print("#handleTextFieldTextChanged")
+        // 当前textField的text不为空，enable saveButton
+        if (textField.text?.isEmpty)! {
+            saveBtn.isEnabled = false
+        } else {
+            saveBtn.isEnabled = true
+        }
+    }
+    
+    // Called when the UIKeyboardDidShowNotification is sent.
+    @objc
+    func keyboardWasShown(_ aNotification: Notification) {
+        //        let info = aNotification.userInfo
+        //        let keyboardBounds = (info![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+        //        let keyboardSize = keyboardBounds.size
+        print("#keyboardWasShown")
+    }
+    
+    // Called when the UIKeyboardWillHideNotification is sent
+    @objc
+    func keyboardWillBeHidden(_ aNotification: Notification) {
+        print("#keyboardWillBeHidden")
+    }
+    
+    // 配置navigationItem 状态
+    func configureNavigationItemsStatus() {
+        if (itemName.text?.isEmpty)! {
+            saveBtn.isEnabled = false
+        } else {
+            saveBtn.isEnabled = true
+        }
+    }
+
     
 
     /*

@@ -5,6 +5,12 @@
 //  Created by owen on 24/01/2018.
 //  Copyright © 2018 libowen. All rights reserved.
 //
+/// AddNoteVC
+/// 功能：
+/// 1、编辑note文本
+/// 2、当文本过长时，达到键盘位置，向上滚动scrollview（）
+///
+///
 
 import UIKit
 

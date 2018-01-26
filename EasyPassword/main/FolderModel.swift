@@ -24,7 +24,7 @@ import Foundation
 // MARK: - 适用plist存储的model
 class FolderModel {
     
-    // 可以定义一个enum来处理相关操作()
+    // enum -- 存储类型
     enum PersistentType: Int {
         case iphone = 1
         case icloud = 2
@@ -39,7 +39,8 @@ class FolderModel {
         }
     }
     
-    enum ItemType: Int {
+    // enum -- folder 类型
+    enum FolderType: Int {
         case all = 0
         case login = 1
         case note = 2
@@ -67,6 +68,35 @@ class FolderModel {
         }
     }
     
+    // enum -- item 类型
+    enum ItemType: Int {
+        //case all = 0
+        case login = 1
+        case note = 2
+        
+        var typeString: String {
+            switch self {
+//            case .all:
+//                return "All Item Type on IPHONE"
+            case .login:
+                return "Login"
+            case .note:
+                return "Note"
+            }
+        }
+        
+        var imageName: String {
+            switch self {
+//            case .all:
+//                return "Item all2_29"
+            case .login:
+                return "login29"
+            case .note:
+                return "note29"
+            }
+        }
+    }
+    
     
     // plist存储--data model
     /*
@@ -83,13 +113,15 @@ class FolderModel {
     
     // sqlite db存储--data model
     var persistentType: PersistentType
-    var itemType: ItemType
+    //var itemType: ItemType
+    var folderType: FolderType
     var count: String
     
-    init(persistentType: PersistentType, itemType: ItemType, count: String) {
+    init(persistentType: PersistentType, folderType: FolderType, count: String) {
         self.persistentType = persistentType
-        self.itemType = itemType
+        //self.itemType = itemType
         self.count = count
+        self.folderType = folderType
     }
 }
 
