@@ -154,7 +154,7 @@ class ItemListTVC: UITableViewController {
             }
             // 根据item的itemType实际类型，统一设置图像
             if item.itemType == FolderModel.ItemType.login {
-                cell.imageView?.image = UIImage(named: "login29")
+                cell.imageView?.image = UIImage(named: "login36")
             } else if item.itemType == FolderModel.ItemType.note {
                 cell.imageView?.image = UIImage(named: "note36")
             }
@@ -290,7 +290,9 @@ class ItemListTVC: UITableViewController {
         sheet.addAction(UIAlertAction.init(title: "取消", style: UIAlertActionStyle.cancel, handler: nil))
         
         // present modelly
-        self.present(sheet, animated: true, completion: nil)
+        self.present(sheet, animated: true, completion: {
+            print("")
+        })
     }
     
     // 控制ToolBar中btn显示

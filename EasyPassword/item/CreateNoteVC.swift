@@ -65,6 +65,10 @@ class CreateNoteVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         print("#CreateNoteVC--viewWillAppear")
+        // 注册UIApplicationDidBecomeActive通知
+        //NotificationCenter.default.addObserver(self, selector: #selector(handleObserverUIApplicationDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: UIApplication.shared)
+        
+        //
         if let note = note {
             // note不为nil时，是从编辑页面跳转的
             itemName.text = note.itemName
@@ -72,6 +76,7 @@ class CreateNoteVC: UIViewController {
         }
         //
         configureNavigationItemsStatus()
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -160,6 +165,13 @@ class CreateNoteVC: UIViewController {
         // 点击显示edit menu
     }
     
+    @objc func handleObserverUIApplicationDidBecomeActive(_ notification: Notification) {
+        //
+        print("#handleObserverUIApplicationDidBecomeActive: \(notification)")
+        //let app: UIApplication = notification.object as! UIApplication
+        self.showMasterPasswordVC()
+    }
+    
     
     // MARK: -- Helper
     
@@ -204,6 +216,14 @@ class CreateNoteVC: UIViewController {
         }
     }
 
+    //
+//    func showMasterPasswordVC() {
+//        //let storyBoard: UIStoryboard = UIStoryboard.init(name: "Main", bundle: nil)
+//        let mpVC: MasterPasswordVC = storyboard!.instantiateViewController(withIdentifier: "MasterPasswordVC") as! MasterPasswordVC
+//        mpVC.modalTransitionStyle = .crossDissolve
+//        mpVC.modalPresentationStyle = .fullScreen
+//        self.present(mpVC, animated: true, completion: nil)
+//    }
     
 
     /*

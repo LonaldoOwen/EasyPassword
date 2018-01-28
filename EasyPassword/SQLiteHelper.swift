@@ -32,6 +32,7 @@ enum SQLiteError: Error {
 // 创建一个SQLiteDatabase
 /// 封装SQLite3对象
 class SQLiteDatabase {
+    
     // 定义私有属性
     fileprivate var dbPointer: OpaquePointer?   // stored property
     fileprivate var errorMessage: String {
@@ -81,6 +82,31 @@ class SQLiteDatabase {
         }
     }
 }
+
+
+
+// 扩展SQLiteDatabase--class method
+extension SQLiteDatabase {
+    
+    // 创建db实例
+    static func createDB() throws -> SQLiteDatabase {
+        let dbUrl = SQLiteDatabase.getDBPath("EasyPassword.sqlite")
+        let dbPath = dbUrl.path
+        do {
+            db = try SQLiteDatabase.open(path: dbPath)
+            print("Successfully opened connection to database.")
+        } catch SQLiteError.OpenDatabase(let message) {
+            print("Unable to open database. :\(message)")
+        } catch {
+            print("Others errors")
+        }
+    }
+
+    
+    // other class method
+}
+
+
 
 // 扩展SQLiteDatabase--封装 sqlite3基础方法
 extension SQLiteDatabase {

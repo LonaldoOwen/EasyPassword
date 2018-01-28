@@ -121,6 +121,10 @@ class MainTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         print("#MainTableViewController--viewWillAppear")
+        // 注册UIApplicationDidBecomeActive通知
+        //NotificationCenter.default.addObserver(self, selector: #selector(handleObserverUIApplicationDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: UIApplication.shared)
+        
+        
         // plist存储
         /*
         // 页面每次显示时，读取最新数据
@@ -188,6 +192,14 @@ class MainTableViewController: UITableViewController {
         }
         
     }
+    
+    @objc func handleObserverUIApplicationDidBecomeActive(_ notification: Notification) {
+        //
+        print("#handleObserverUIApplicationDidBecomeActive: \(notification)")
+        //let app: UIApplication = notification.object as! UIApplication
+        self.showMasterPasswordVC()
+    }
+    
     
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: true)
@@ -417,12 +429,11 @@ class MainTableViewController: UITableViewController {
             print("Note action")
         }))
         sheet.addAction(UIAlertAction.init(title: "取消", style: UIAlertActionStyle.cancel, handler: nil))
-//        sheet.addAction(UIAlertAction.init(title: "存储", style: UIAlertActionStyle.destructive) { (saveAction) in
-//            // 处理存储操作
-//        })
         
         // present modelly
-        self.present(sheet, animated: true, completion: nil)
+        self.present(sheet, animated: true, completion: {
+            print("")
+        })
     }
     
     /*

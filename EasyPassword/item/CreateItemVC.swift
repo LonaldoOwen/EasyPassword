@@ -34,6 +34,8 @@ extension PasswordHistory: SQLTable {
             Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
             Item_id CHAR(255),
             Password CHAR(255),
+            Persistent_type CHAR(255),
+            Item_type CHAR(255),
             Create_time DATETIME
         );
         """
@@ -197,10 +199,12 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
             /// 问题: 有必要写入folderType吗？？？
             ///
             login = Login(itemId: item.itemId, itemName: itemName.text!, userName: userName.text!, password: password.text!, website: website.text!, note: note.text!, persistentType: persistentType, itemType: itemType, folderType: FolderModel.FolderType.login)
+            
             if login != (item as! Login) {
                 // 时间格式需要处理？？？(已处理)
                 let updateSQL = "UPDATE Login SET Item_name = '\(login.itemName)', User_name = '\(login.userName)', Password = '\(login.password)', Website = '\(login.website)', Note = '\(login.note)', Update_time = '\(dateStr)' WHERE Item_id = '\(login.itemId)';"
                 try? db.update(sql: updateSQL)
+                
                 // 更新完login item，判断password是否更改，是：将password写入历史表，否：不写？？？
                 if login.password != (item as! Login).password {
                     try? db.insert(sql: "INSERT INTO PasswordHistory (Item_id, Password, Create_time) VALUES('\(login.itemId)', '\(login.password)', '\(dateStr)');")
@@ -239,6 +243,7 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
                 /// 时间类型待处理？？？(已处理)
                 // 创建新item时，设置Update_time等于Create_time
                 let insertSQL = "INSERT INTO Login (Item_name, User_name, Password, Website, Note, Item_type, Persistent_type, Create_time, Update_time, Is_discard) VALUES('\(itemName.text!)', '\(userName.text!)', '\(password.text!)', '\(website.text!)', '\(note.text!)', '\(persistentType.rawValue)', '\(itemType.rawValue)', '\(dateStr)', '\(dateStr)', '0');"
+                
                 // 新建item时，同时将password写入password history表
                 if let itemId = try? db.insertIntoTable("Login", sql: insertSQL) {
                     let idString = String(itemId!)

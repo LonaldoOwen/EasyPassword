@@ -16,7 +16,6 @@
 		234D53152019B819001732AC /* Group login29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 234D53132019B819001732AC /* Group login29@2x.png */; };
 		234D53162019B819001732AC /* login29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 234D53142019B819001732AC /* login29@2x.png */; };
 		234D53182019B8A8001732AC /* note create32@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 234D53172019B8A8001732AC /* note create32@2x.png */; };
-		234D531A2019B99E001732AC /* Item all2_29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 234D53192019B99E001732AC /* Item all2_29@2x.png */; };
 		235D7A501FCD04CD004DB418 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D7A4F1FCD04CD004DB418 /* AppDelegate.swift */; };
 		235D7A521FCD04CD004DB418 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235D7A511FCD04CD004DB418 /* ViewController.swift */; };
 		235D7A551FCD04CD004DB418 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 235D7A531FCD04CD004DB418 /* Main.storyboard */; };
@@ -34,6 +33,14 @@
 		5ABD541C2017891F00918486 /* note29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABD541B2017891F00918486 /* note29@2x.png */; };
 		5ABD54202018E19B00918486 /* AddNoteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABD541F2018E19B00918486 /* AddNoteVC.swift */; };
 		5ABFED6B201AB12B00565509 /* note create40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABFED6A201AB12A00565509 /* note create40@2x.png */; };
+		5ABFED6D201B7E7600565509 /* login36@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABFED6C201B7E7500565509 /* login36@2x.png */; };
+		5ABFED71201B83FE00565509 /* Item all29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABFED70201B83FE00565509 /* Item all29@2x.png */; };
+		5ABFED73201B88F600565509 /* launch image750x1334@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABFED72201B88F500565509 /* launch image750x1334@2x.png */; };
+		5ABFED75201B893F00565509 /* MasterPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABFED74201B893F00565509 /* MasterPasswordVC.swift */; };
+		5ABFED80201B986F00565509 /* arrow_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABFED7E201B986E00565509 /* arrow_white@2x.png */; };
+		5ABFED81201B986F00565509 /* arrow_gray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABFED7F201B986E00565509 /* arrow_gray@2x.png */; };
+		5ABFED85201B9A0000565509 /* logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABFED84201B99FF00565509 /* logo@2x.png */; };
+		5AC802A0201D7E630063B2C9 /* ORHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC8029F201D7E630063B2C9 /* ORHelper.swift */; };
 		5AEF16141FD6F43F00FAD262 /* ItemListTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEF16131FD6F43F00FAD262 /* ItemListTVC.swift */; };
 		5AEF16161FD6F71A00FAD262 /* ItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEF16151FD6F71A00FAD262 /* ItemModel.swift */; };
 /* End PBXBuildFile section */
@@ -48,7 +55,6 @@
 		234D53132019B819001732AC /* Group login29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Group login29@2x.png"; sourceTree = "<group>"; };
 		234D53142019B819001732AC /* login29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login29@2x.png"; sourceTree = "<group>"; };
 		234D53172019B8A8001732AC /* note create32@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note create32@2x.png"; sourceTree = "<group>"; };
-		234D53192019B99E001732AC /* Item all2_29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Item all2_29@2x.png"; sourceTree = "<group>"; };
 		235D7A4C1FCD04CD004DB418 /* EasyPassword.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EasyPassword.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		235D7A4F1FCD04CD004DB418 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		235D7A511FCD04CD004DB418 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -68,6 +74,14 @@
 		5ABD541B2017891F00918486 /* note29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note29@2x.png"; sourceTree = "<group>"; };
 		5ABD541F2018E19B00918486 /* AddNoteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoteVC.swift; sourceTree = "<group>"; };
 		5ABFED6A201AB12A00565509 /* note create40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note create40@2x.png"; sourceTree = "<group>"; };
+		5ABFED6C201B7E7500565509 /* login36@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login36@2x.png"; sourceTree = "<group>"; };
+		5ABFED70201B83FE00565509 /* Item all29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Item all29@2x.png"; sourceTree = "<group>"; };
+		5ABFED72201B88F500565509 /* launch image750x1334@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "launch image750x1334@2x.png"; sourceTree = "<group>"; };
+		5ABFED74201B893F00565509 /* MasterPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterPasswordVC.swift; sourceTree = "<group>"; };
+		5ABFED7E201B986E00565509 /* arrow_white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_white@2x.png"; sourceTree = "<group>"; };
+		5ABFED7F201B986E00565509 /* arrow_gray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_gray@2x.png"; sourceTree = "<group>"; };
+		5ABFED84201B99FF00565509 /* logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo@2x.png"; sourceTree = "<group>"; };
+		5AC8029F201D7E630063B2C9 /* ORHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ORHelper.swift; sourceTree = "<group>"; };
 		5AEF16131FD6F43F00FAD262 /* ItemListTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemListTVC.swift; sourceTree = "<group>"; };
 		5AEF16151FD6F71A00FAD262 /* ItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -87,14 +101,19 @@
 		2335AFFE1FDFDA1E00E2A922 /* resource */ = {
 			isa = PBXGroup;
 			children = (
+				5ABFED72201B88F500565509 /* launch image750x1334@2x.png */,
 				234D53132019B819001732AC /* Group login29@2x.png */,
 				234D53142019B819001732AC /* login29@2x.png */,
+				5ABFED6C201B7E7500565509 /* login36@2x.png */,
 				5A073EC52013B96400BBD3F5 /* Type icon 40@2x.png */,
 				5ABD541B2017891F00918486 /* note29@2x.png */,
 				5A073EC720148AE000BBD3F5 /* note36@2x.png */,
 				234D53172019B8A8001732AC /* note create32@2x.png */,
 				5ABFED6A201AB12A00565509 /* note create40@2x.png */,
-				234D53192019B99E001732AC /* Item all2_29@2x.png */,
+				5ABFED70201B83FE00565509 /* Item all29@2x.png */,
+				5ABFED7F201B986E00565509 /* arrow_gray@2x.png */,
+				5ABFED7E201B986E00565509 /* arrow_white@2x.png */,
+				5ABFED84201B99FF00565509 /* logo@2x.png */,
 			);
 			path = resource;
 			sourceTree = "<group>";
@@ -131,6 +150,7 @@
 				235D7A511FCD04CD004DB418 /* ViewController.swift */,
 				23B33D941FCD8069005403C1 /* PlistHelper.swift */,
 				234C10212007050500CF23B0 /* SQLiteHelper.swift */,
+				5AC8029F201D7E630063B2C9 /* ORHelper.swift */,
 				23B33D961FCE666A005403C1 /* main */,
 				5AEF16121FD6F0BD00FAD262 /* item */,
 				2335AFFE1FDFDA1E00E2A922 /* resource */,
@@ -148,6 +168,7 @@
 				23B33D9A1FCE66AD005403C1 /* FolderModel.swift */,
 				23B33D971FCE666A005403C1 /* MainTableViewController.swift */,
 				233BC9AE1FD8E30900C615C5 /* Items.plist */,
+				5ABFED74201B893F00565509 /* MasterPasswordVC.swift */,
 			);
 			path = main;
 			sourceTree = "<group>";
@@ -229,17 +250,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				235D7A5A1FCD04CD004DB418 /* LaunchScreen.storyboard in Resources */,
+				5ABFED71201B83FE00565509 /* Item all29@2x.png in Resources */,
 				5A073EC820148AE100BBD3F5 /* note36@2x.png in Resources */,
 				234D53152019B819001732AC /* Group login29@2x.png in Resources */,
 				235D7A571FCD04CD004DB418 /* Assets.xcassets in Resources */,
+				5ABFED73201B88F600565509 /* launch image750x1334@2x.png in Resources */,
 				231416991FFCC28800F113FC /* NoteCell.xib in Resources */,
 				235D7A551FCD04CD004DB418 /* Main.storyboard in Resources */,
+				5ABFED81201B986F00565509 /* arrow_gray@2x.png in Resources */,
 				5A93B55C1FF37838003C94FC /* GenerateView.xib in Resources */,
 				233BC9AF1FD8E30900C615C5 /* Items.plist in Resources */,
+				5ABFED80201B986F00565509 /* arrow_white@2x.png in Resources */,
 				5A073EC62013B96500BBD3F5 /* Type icon 40@2x.png in Resources */,
-				234D531A2019B99E001732AC /* Item all2_29@2x.png in Resources */,
 				5ABD541C2017891F00918486 /* note29@2x.png in Resources */,
+				5ABFED6D201B7E7600565509 /* login36@2x.png in Resources */,
 				234D53182019B8A8001732AC /* note create32@2x.png in Resources */,
+				5ABFED85201B9A0000565509 /* logo@2x.png in Resources */,
 				234D53162019B819001732AC /* login29@2x.png in Resources */,
 				5ABFED6B201AB12B00565509 /* note create40@2x.png in Resources */,
 			);
@@ -256,11 +282,13 @@
 				23DC7C8E1FE274DC00D6A9BB /* ItemDetailTVC.swift in Sources */,
 				231416981FFCC28800F113FC /* NoteCell.swift in Sources */,
 				238FD9691FDA99F70015B855 /* CreateItemVC.swift in Sources */,
+				5ABFED75201B893F00565509 /* MasterPasswordVC.swift in Sources */,
 				234D53122018AD0B001732AC /* CreateNoteVC.swift in Sources */,
 				5A93B55A1FF37829003C94FC /* GenerateView.swift in Sources */,
 				5ABD54202018E19B00918486 /* AddNoteVC.swift in Sources */,
 				23B33D981FCE666B005403C1 /* MainTableViewController.swift in Sources */,
 				23B33D951FCD8069005403C1 /* PlistHelper.swift in Sources */,
+				5AC802A0201D7E630063B2C9 /* ORHelper.swift in Sources */,
 				235D7A521FCD04CD004DB418 /* ViewController.swift in Sources */,
 				23B33D9B1FCE66AD005403C1 /* FolderModel.swift in Sources */,
 				5AEF16161FD6F71A00FAD262 /* ItemModel.swift in Sources */,
