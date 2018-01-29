@@ -90,6 +90,7 @@ extension SQLiteDatabase {
     
     // 创建db实例
     static func createDB() throws -> SQLiteDatabase {
+        var db: SQLiteDatabase!
         let dbUrl = SQLiteDatabase.getDBPath("EasyPassword.sqlite")
         let dbPath = dbUrl.path
         do {
@@ -100,6 +101,8 @@ extension SQLiteDatabase {
         } catch {
             print("Others errors")
         }
+        
+        return db
     }
 
     
