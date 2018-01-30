@@ -95,10 +95,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             passwordWindow?.windowLevel = UIWindowLevelAlert
             passwordWindow?.makeKeyAndVisible()
             
-//            let storyBoard: UIStoryboard = UIStoryboard.init(name: "Main", bundle: nil)
-//            let mpVC: MasterPasswordVC = storyBoard.instantiateViewController(withIdentifier: "MasterPasswordVC") as! MasterPasswordVC
-//            passwordWindow?.rootViewController = mpVC
-            
             // 如果是第一次进入，显示创建主密码页面，有主密码了，则显示主密码输入页面
             let numberOfTablesInMaster = db.numberOfRowsInTable("sqlite_master")
             if numberOfTablesInMaster > 0 {
@@ -114,11 +110,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             
         } else {
-            // 显示主密码页面
-            let mpVC: MasterPasswordVC = storyBoard.instantiateViewController(withIdentifier: "MasterPasswordVC") as! MasterPasswordVC
-            passwordWindow?.rootViewController = mpVC
             passwordWindow?.makeKeyAndVisible()
-            
+            let numberOfTablesInMaster = db.numberOfRowsInTable("sqlite_master")
+            if numberOfTablesInMaster > 0 {
+                print("#非第一次什么鬼")
+                // 显示主密码页面
+                let mpVC: MasterPasswordVC = storyBoard.instantiateViewController(withIdentifier: "MasterPasswordVC") as! MasterPasswordVC
+                passwordWindow?.rootViewController = mpVC
+            }
         }
         
     }
