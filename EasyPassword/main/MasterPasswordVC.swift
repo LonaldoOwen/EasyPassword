@@ -11,8 +11,13 @@
 /// 2、设置、修改主密码
 ///
 ///
+/// 问题：
+/// 1、4寸屏，输入框被键盘遮挡，需要将整体上移30pt，注意其他尺寸效果
 ///
 ///
+///
+///
+
 
 
 
@@ -38,7 +43,9 @@ class MasterPasswordVC: UIViewController {
         // Do any additional setup after loading the view.
         
         //
-        enterBtn.setImage(UIImage(named:"arrow_white"), for: .highlighted)
+        passwordField.delegate = self
+        // 监听textField
+        passwordField.addTarget(self, action: #selector(handleTextFieldTextChanged), for: .editingChanged)
         
         // 创建UI--创建、修改主密码
         createPasswordUI()
@@ -95,6 +102,18 @@ class MasterPasswordVC: UIViewController {
     // 响应UIApplicationDidBecomeActive通知事件
     //@objc func handleObserverUIApplicationDidBecomeActive(_ notification: Notification) { }
     
+    // 处理textField输入变化
+    @objc func handleTextFieldTextChanged(_ textField: UITextField) {
+        print("#handleTextFieldTextChanged")
+        // 当前textField的text不为空，enable saveButton
+        if (passwordField.text?.isEmpty)! {
+            enterBtn.setImage(UIImage(named:"arrow_gray"), for: .normal)
+        } else {
+            enterBtn.setImage(UIImage(named:"arrow_white"), for: .normal)
+        }
+    }
+    
+    
     
     // MARK: - Helper
     
@@ -107,7 +126,7 @@ class MasterPasswordVC: UIViewController {
     // 验证密码正确与否
     func identifyPassword() -> Bool {
         // 从db取出password
-        let mpSQL = "SELECT Password FROM PasswordHistory WHERE Item_id = '-10000';"
+        let mpSQL = "SELECT * FROM PasswordHistory WHERE Item_id = '9999' AND Item_type = 0;"
         let queryResults = db.querySql(sql: mpSQL)
         if let password = queryResults?.first!["Password"] as? String {
             if passwordField.text == password {
@@ -180,3 +199,15 @@ class MasterPasswordVC: UIViewController {
     */
 
 }
+
+
+extension MasterPasswordVC: UITextFieldDelegate {
+    //
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        print("#MasterPasswordVC--textFieldDidBeginEditing")
+    }
+}
+
+
+
+

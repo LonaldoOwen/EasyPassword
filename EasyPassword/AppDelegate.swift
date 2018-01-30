@@ -17,10 +17,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var passwordWindow: UIWindow?
+    var db:SQLiteDatabase!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         print("#1 didFinishLaunchingWithOptions")
+        // 打开db
+        db = try? SQLiteDatabase.createDB()
         
         return true
     }
@@ -81,6 +84,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // show new window
     func showNewWindow() {
         print("showNewWindow")
+        let storyBoard: UIStoryboard = UIStoryboard.init(name: "Main", bundle: nil)
+        
         /// 注意：
         /// 1、此处实例化一次passwordWindow就好，因为没找到销毁window的方法
         /// 2、如何销毁window？？？，iOS是怎么管理window的？？？
@@ -89,11 +94,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             passwordWindow?.backgroundColor = UIColor.orange
             passwordWindow?.windowLevel = UIWindowLevelAlert
             passwordWindow?.makeKeyAndVisible()
-            let storyBoard: UIStoryboard = UIStoryboard.init(name: "Main", bundle: nil)
+            
+//            let storyBoard: UIStoryboard = UIStoryboard.init(name: "Main", bundle: nil)
+//            let mpVC: MasterPasswordVC = storyBoard.instantiateViewController(withIdentifier: "MasterPasswordVC") as! MasterPasswordVC
+//            passwordWindow?.rootViewController = mpVC
+            
+            // 如果是第一次进入，显示创建主密码页面，有主密码了，则显示主密码输入页面
+            let numberOfTablesInMaster = db.numberOfRowsInTable("sqlite_master")
+            if numberOfTablesInMaster > 0 {
+                print("#什么鬼")
+                // 显示主密码页面
+                let mpVC: MasterPasswordVC = storyBoard.instantiateViewController(withIdentifier: "MasterPasswordVC") as! MasterPasswordVC
+                passwordWindow?.rootViewController = mpVC
+            } else {
+                print("显示创建密码页面")
+                // 显示创建密码页面
+                let cmpVC: CreateMasterPasswordVC = storyBoard.instantiateViewController(withIdentifier: "CreateMasterPasswordVC") as! CreateMasterPasswordVC
+                passwordWindow?.rootViewController = cmpVC
+            }
+            
+        } else {
+            // 显示主密码页面
             let mpVC: MasterPasswordVC = storyBoard.instantiateViewController(withIdentifier: "MasterPasswordVC") as! MasterPasswordVC
             passwordWindow?.rootViewController = mpVC
-        } else {
             passwordWindow?.makeKeyAndVisible()
+            
         }
         
     }

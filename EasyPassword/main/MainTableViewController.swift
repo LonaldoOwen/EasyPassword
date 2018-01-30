@@ -606,8 +606,10 @@ class MainTableViewController: UITableViewController {
                 countAll += Int(note.count)!
             }
             // 统计所有类型
-            let all = FolderModel.init(persistentType: .iphone, folderType: .all, count: String(countAll))
-            tempIphoneFolders.insert(all, at: 0)
+            if db.masterContainTable("Login")! || db.masterContainTable("Note")! {
+                let all = FolderModel.init(persistentType: .iphone, folderType: .all, count: String(countAll))
+                tempIphoneFolders.insert(all, at: 0)
+            }
             
             self.iphoneFolders = tempIphoneFolders
             tempFolders.append(tempIphoneFolders)

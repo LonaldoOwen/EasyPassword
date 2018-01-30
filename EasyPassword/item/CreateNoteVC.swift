@@ -46,7 +46,7 @@ class CreateNoteVC: UIViewController {
         
         // 注册keyboard通知
         registerForKeyboardNotifications()
-        // 监听所有textField
+        // 监听textField
         itemName.addTarget(self, action: #selector(handleTextFieldTextChanged), for: .editingChanged)
         
         /// 使用sqlite存储

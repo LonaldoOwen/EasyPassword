@@ -27,22 +27,22 @@
 
 import UIKit
 
-extension PasswordHistory: SQLTable {
-    static var createStatement: String {
-        return """
-        CREATE TABLE PasswordHistory(
-            Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-            Item_id CHAR(255),
-            Password CHAR(255),
-            Persistent_type CHAR(255),
-            Item_type CHAR(255),
-            Create_time DATETIME
-        );
-        """
-    }
-    
-    
-}
+//extension PasswordHistory: SQLTable {
+//    static var createStatement: String {
+//        return """
+//        CREATE TABLE PasswordHistory(
+//            Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+//            Item_id CHAR(255),
+//            Password CHAR(255),
+//            Persistent_type CHAR(255),
+//            Item_type CHAR(255),
+//            Create_time DATETIME
+//        );
+//        """
+//    }
+//    
+//    
+//}
 
 class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     
@@ -91,7 +91,7 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
 
         // Do any additional setup after loading the view.
         
-        // 注册keyboard通知
+        // 注册keyboard通知(处理键盘遮挡)
         registerForKeyboardNotifications()
         
         // 配置所有UITextField
@@ -175,13 +175,13 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
         let now = Date()
         let dateStr = formatter.string(from: now)
         
-        // 创建PasswordHistory Table
-        if let passwordHistoryTable = db.masterContainTable("PasswordHistory") {
-            if !passwordHistoryTable {
-                // PasswordHistory不存在时，创建一个
-                try? db.createTable(table: PasswordHistory.self)
-            }
-        }
+        // 创建PasswordHistory Table（改为在创建主密码页面创建）
+//        if let passwordHistoryTable = db.masterContainTable("PasswordHistory") {
+//            if !passwordHistoryTable {
+//                // PasswordHistory不存在时，创建一个
+//                try? db.createTable(table: PasswordHistory.self)
+//            }
+//        }
         
         // 存储item
         if let item = item {
@@ -207,7 +207,7 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
                 
                 // 更新完login item，判断password是否更改，是：将password写入历史表，否：不写？？？
                 if login.password != (item as! Login).password {
-                    try? db.insert(sql: "INSERT INTO PasswordHistory (Item_id, Password, Create_time) VALUES('\(login.itemId)', '\(login.password)', '\(dateStr)');")
+                    try? db.insert(sql: "INSERT INTO PasswordHistory (Item_id, Password, Persistent_type, Item_type, Create_time, Note) VALUES('\(login.itemId)', '\(login.password)', '\(login.persistentType.rawValue)', '\(login.itemType.rawValue)', '\(dateStr)', '');")
                 }
             }
            
@@ -247,7 +247,7 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
                 // 新建item时，同时将password写入password history表
                 if let itemId = try? db.insertIntoTable("Login", sql: insertSQL) {
                     let idString = String(itemId!)
-                    try? db.insert(sql: "INSERT INTO PasswordHistory (Item_id, Password, Create_time) VALUES('\(idString)', '\(password.text!)', '\(dateStr)');")
+                    try? db.insert(sql: "INSERT INTO PasswordHistory (Item_id, Password, Persistent_type, Item_type, Create_time, Note) VALUES('\(idString)', '\(password.text!)', '\(persistentType.rawValue)', '\(itemType.rawValue)', '\(dateStr)', '');")
                 }
             } else {
                 print("Handle other item types!")
@@ -277,12 +277,6 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
         generateView.delegate = self
     }
     
-    
-    // Call this method somewhere in your view controller setup code.
-    fileprivate func registerForKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown), name: .UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(CreateItemVC.keyboardWillBeHidden(_:)), name: .UIKeyboardWillHide, object: nil)
-    }
     
     // Called when the UIKeyboardDidShowNotification is sent.
     @objc
@@ -404,6 +398,11 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     
     // MARK: - Helper
     
+    // Call this method somewhere in your view controller setup code.
+    fileprivate func registerForKeyboardNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown), name: .UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(CreateItemVC.keyboardWillBeHidden(_:)), name: .UIKeyboardWillHide, object: nil)
+    }
     
     
     /*
@@ -440,25 +439,13 @@ extension CreateItemVC: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         print("#CreateItemVC--textFieldDidBeginEditing")
         activeField = textField
-        // 每次输入完毕时判断是否所有textField都不为空，此时save button可用
-//        if textFieldsContainEmpty() {
-//            saveBtn.isEnabled = false
-//        } else {
-//            saveBtn.isEnabled = true
-//        }
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         print("#CreateItemVC--textFieldDidEndEditing")
         activeField = nil
-        // 每次输入完毕时判断是否所有textField都不为空，此时save button可用
-//        if textFieldsContainEmpty() {
-//            saveBtn.isEnabled = false
-//        } else {
-//            saveBtn.isEnabled = true
-//        }
-        
     }
+    
     
     // 用这个方法判断合适enable saveButton不好
 //    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
