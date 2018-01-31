@@ -154,8 +154,9 @@ class MainTableViewController: UITableViewController {
         queryData()
         // 在此处刷新table view
         self.tableView.reloadData()
-        //
-        configureItemInToobar()
+        // 配置item状态
+        configureItemOfNavigationBar()
+        configureItemInToolbar()
     }
 
     override func didReceiveMemoryWarning() {
@@ -206,13 +207,9 @@ class MainTableViewController: UITableViewController {
         //
         //self.tableView.setEditing(editing, animated: true)
         print("#setEditing: \(editing)")
-        if self.tableView.isEditing {
-            self.editButtonItem.title = "完成"
-        } else {
-            self.editButtonItem.title = "编辑"
-        }
         //
-        configureItemInToobar()
+        configureItemOfNavigationBar()
+        configureItemInToolbar()
     }
     
     
@@ -332,7 +329,7 @@ class MainTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("#didSelectRowAt")
         //
-        configureItemInToobar()
+        configureItemInToolbar()
         // 非编辑状态时跳转到新VC
         if !self.tableView.isEditing {
             let itemListTVC: ItemListTVC = storyboard?.instantiateViewController(withIdentifier: "ItemListTVC") as! ItemListTVC
@@ -361,15 +358,31 @@ class MainTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         print("#didDeselectRowAt")
-        configureItemInToobar()
+        configureItemInToolbar()
     }
     
     
     
     // MARK: - Helper
     
-    // 判断toolbar中item的名称和状态
-    func configureItemInToobar() {
+    // 配置导航栏中item名称及状态
+    func configureItemOfNavigationBar() {
+        //
+        if self.tableView.isEditing {
+            self.editButtonItem.title = "完成"
+        } else {
+            self.editButtonItem.title = "编辑"
+        }
+        // 控制navigatItem状态
+        if folders == nil || folders.count == 0 {
+            self.navigationItem.rightBarButtonItem = nil
+        } else {
+            self.navigationItem.rightBarButtonItem = self.editButtonItem
+        }
+    }
+    
+    // 配置toolbar中item的名称和状态
+    func configureItemInToolbar() {
         if isEditing {
             // 删除
             addFolderItem.title = "删除"
@@ -390,12 +403,6 @@ class MainTableViewController: UITableViewController {
             addFolderItem.isEnabled = true
         }
         
-        // 控制navigatItem状态
-        if folders == nil || folders.count == 0 {
-            self.navigationItem.rightBarButtonItem = nil
-        } else {
-            self.navigationItem.rightBarButtonItem = self.editButtonItem
-        }
     }
     
     // 显示action sheet
@@ -410,9 +417,9 @@ class MainTableViewController: UITableViewController {
             // 跳转到CreateItemVC
             self.showCreateItemVC(withItemType: FolderModel.ItemType.login, persistentType: FolderModel.PersistentType.iphone)
             
-            self.queryData()
-            self.tableView.reloadData()
-            self.configureItemInToobar()
+//            self.queryData()
+//            self.tableView.reloadData()
+//            self.configureItemInToolbar()
             print("Login action")
         }))
         sheet.addAction(UIAlertAction.init(title: "备注信息", style: UIAlertActionStyle.default, handler: { (action) in
@@ -423,9 +430,9 @@ class MainTableViewController: UITableViewController {
             // 跳转到CreateNoteVC
             self.showCreateNoteVC(withItemType: FolderModel.ItemType.note, persistentType: FolderModel.PersistentType.iphone)
             
-            self.queryData()
-            self.tableView.reloadData()
-            self.configureItemInToobar()
+//            self.queryData()
+//            self.tableView.reloadData()
+//            self.configureItemInToolbar()
             print("Note action")
         }))
         sheet.addAction(UIAlertAction.init(title: "取消", style: UIAlertActionStyle.cancel, handler: nil))
@@ -610,9 +617,12 @@ class MainTableViewController: UITableViewController {
                 let all = FolderModel.init(persistentType: .iphone, folderType: .all, count: String(countAll))
                 tempIphoneFolders.insert(all, at: 0)
             }
-            
-            self.iphoneFolders = tempIphoneFolders
-            tempFolders.append(tempIphoneFolders)
+            if tempIphoneFolders.count > 0 {
+                self.iphoneFolders = tempIphoneFolders
+                tempFolders.append(tempIphoneFolders)
+            }
+//            self.iphoneFolders = tempIphoneFolders
+//            tempFolders.append(tempIphoneFolders)
         } else {
             print("# There is no tables in db.")
         }

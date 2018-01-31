@@ -90,31 +90,46 @@ class CreateMasterPasswordVC: UIViewController {
     // 处理确认button点击事件
     @IBAction func handleConfirmPasswordBtn(_ sender: Any) {
         print("#CreateMasterPasswordVC--handleConfirmPasswordBtn")
+        
         // 时间、日期格式
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let now = Date()
         let dateStr = formatter.string(from: now)
         
-        let numberOfTablesInMaster = db.numberOfRowsInTable("sqlite_master")
-        if numberOfTablesInMaster > 0 {
-            // 如果db没包含PasswordHistory table，创建一个
-            if let passwordHistoryTable = db.masterContainTable("PasswordHistory") {
-                if passwordHistoryTable {
-                    // 两次密码判断通过，Update 主密码
-                    print("")
-                    
+        if twoPasswordAreEqual() {
+            print("密码确认成功")
+            
+            // 密码确认成功
+            // 1、如果是第一次，创建PasswordHistory table，写入；
+            // 2、非第一次，更新主密码
+            let numberOfTablesInMaster = db.numberOfRowsInTable("sqlite_master")
+            if numberOfTablesInMaster > 0 {
+                /// 2、非第一次，更新主密码
+                // 修改密码
+                print("修改密码")
+                if let passwordHistoryTable = db.masterContainTable("PasswordHistory") {
+                    if passwordHistoryTable {
+                        // 两次密码判断通过，Update 主密码
+                        let updateMPSQL = "UPDATE PasswordHistory SET Password = '\(masterPasswordField.text!)' WHERE Item_id = '9999' AND Item_type = '0';"
+                        if try! db.update(sql: updateMPSQL) {
+                            print("更新主密码成功!")
+                        } else {
+                            print("更新主密码出错!")
+                        }
+                    }
                 }
-            }
-        } else {
-            // 创建PasswordHistory table
-            try? db.createTable(table: PasswordHistory.self)
-            if twoPasswordAreEqual() {
+            } else {
+                /// 1、如果是第一次，创建PasswordHistory table，写入；
+                // 创建db--PasswordHistory
+                try? db.createTable(table: PasswordHistory.self)    // 创建PasswordHistory table
+                
                 /// 说明：
                 /// Item_id = 9999, Item_type = 0, 表示主密码
                 // 两次密码判断通过，写入PasswordHistory
                 let insertMPSQL = "INSERT INTO PasswordHistory (Item_id, Password, Persistent_type, Item_type, Create_time, Note) VALUES ('9999', '\(masterPasswordField.text!)', '\(FolderModel.PersistentType.iphone.rawValue)', '0', '\(dateStr)', '\(indicatorField.text!)');"
                 try? db.insert(sql: insertMPSQL)
+                
                 // 如果插入成功，隐藏passwordWindow
                 if passwordHistoryTableContainMaster() {
                     // 如果验证密码成功，则收起passwordWindow，显示主window
@@ -127,14 +142,14 @@ class CreateMasterPasswordVC: UIViewController {
                     // 插入失败，
                     print("主密码写入失败！")
                 }
-            } else {
-                // show alert，并清空输入框
-                print("两次密码输入不一致，请重新输入！")
-                
             }
             
-            
+        } else {
+            print("两次密码输入不一致，请重新输入！")
+            // show alert，并清空输入框
         }
+        
+        
     }
     
     

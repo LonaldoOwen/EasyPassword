@@ -105,7 +105,12 @@ class CreateNoteVC: UIViewController {
             if noteLabel.text != note.note || itemName.text != note.itemName {
                 // Update item
                 let updateNoteSQL = "UPDATE Note SET Item_name = '\(itemName.text!)', Note = '\(noteLabel.text!)', Update_time = 'dateStr' WHERE Item_id = '\(note.itemId)';"
-                try? db.update(sql: updateNoteSQL)
+                //try? db.update(sql: updateNoteSQL)
+                if try! db.update(sql: updateNoteSQL) {
+                    print("更新Note item成功！")
+                } else {
+                    print("更新Note item出错！")
+                }
             }
             
             // 收起VC

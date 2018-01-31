@@ -203,7 +203,12 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
             if login != (item as! Login) {
                 // 时间格式需要处理？？？(已处理)
                 let updateSQL = "UPDATE Login SET Item_name = '\(login.itemName)', User_name = '\(login.userName)', Password = '\(login.password)', Website = '\(login.website)', Note = '\(login.note)', Update_time = '\(dateStr)' WHERE Item_id = '\(login.itemId)';"
-                try? db.update(sql: updateSQL)
+                //try? db.update(sql: updateSQL)
+                if try! db.update(sql: updateSQL) {
+                    print("更新Login item成功！")
+                } else {
+                    print("更新Login item失败！")
+                }
                 
                 // 更新完login item，判断password是否更改，是：将password写入历史表，否：不写？？？
                 if login.password != (item as! Login).password {
