@@ -128,7 +128,7 @@ protocol SQLTable {
 extension Contact: SQLTable {
     static var createStatement: String {
         return """
-        CREATE TABLE Contact(
+        CREATE Contact(
         Id INT PRIMARY KEY NOT NULL,
         Name CHAR(255)
         );
@@ -157,6 +157,11 @@ do {
 } catch {
     print(db.errorMessage)
 }
+// Print "near "Contact": syntax error"
+//try? db.createTable(table: Contact.self)
+// Print "nil"
+//try! db.createTable(table: Contact.self)
+// Print "Fatal error: 'try!' expression unexpectedly raised an error: "
 
 //: ## Insert
 extension SQLiteDatabase {

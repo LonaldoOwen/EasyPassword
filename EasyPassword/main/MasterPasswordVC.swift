@@ -35,6 +35,8 @@ class MasterPasswordVC: UIViewController {
     
 
     var db: SQLiteDatabase!
+    var enterCount: Int = 0
+    var note: String!
     
     
     override func viewDidLoad() {
@@ -89,12 +91,22 @@ class MasterPasswordVC: UIViewController {
         } else {
             // 验证密码失败，播放动画(shake)
             print("Verity Failed!")
+    
             // 未达到效果
             //shakeWithPosition()
             // shake
             shakeWithTransformTranslationX()
             passwordField.text = ""
             passwordField.placeholder = "请再试一次"
+            
+            if enterCount > 3 {
+                let alertVC = UIAlertController.init(title: "密码提示", message: "\(note!)", preferredStyle: UIAlertControllerStyle.alert)
+                alertVC.addAction(UIAlertAction.init(title: "知道了", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alertVC, animated: true, completion: nil)
+                enterCount = 0
+            }
+            
+            enterCount += 1
         }
         
     }
@@ -135,6 +147,9 @@ class MasterPasswordVC: UIViewController {
             } else {
                 print("Master Password Failed!")
             }
+        }
+        if let note = queryResults?.first!["Note"] as? String {
+            self.note = note
         }
         
         // 和当前passwordField值比较，相同返回true，不同返回false

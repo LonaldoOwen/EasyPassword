@@ -7,7 +7,7 @@
 //
 /// ItemDetailTVC
 /// 功能：显示item详情
-/// 1、将item信息已列表形式显示；分4个section（登录目的地；用户名、密码；网站；备注）
+/// 1、将item信息以列表形式显示；（Login分4个section，登录目的地；用户名、密码；网站；备注）（Note：）
 /// 2、点击cell显示edit menu（copy、）--UIMenuController
 /// 3、点击copy怎么将cell的内容复制到Pasteboard上？？？（获取cell，将内容设置给Pasteboard实例）
 /// 4、点击edit button显示编辑页面
@@ -28,6 +28,26 @@ class ItemDetailTVC: UITableViewController {
     static let noteCellIdentifier = "NoteCell"
     static let createItemVCIdentifier = "CreateItemVC"
     
+    let createTimeLabel: UILabel = {
+        let label: UILabel = UILabel()
+        label.textColor = UIColor.lightGray
+        label.font = UIFont.systemFont(ofSize: 14.0)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    let updateTimeLabel: UILabel = {
+        let label: UILabel = UILabel()
+        label.textColor = UIColor.lightGray
+        label.font = UIFont.systemFont(ofSize: 14.0)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let tableFooter: UIView = {
+        let tableFooter = UIView.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 100.0))
+        return tableFooter
+    }()
+    
     // Properties
     var db: SQLiteDatabase!
     var item: Item!
@@ -35,7 +55,7 @@ class ItemDetailTVC: UITableViewController {
     var itemId: String!
     var persistentType: FolderModel.PersistentType!
     var itemType: FolderModel.ItemType!
-    var updateCellOfListVC: ((Item) -> ())!     // 定义closure用于更新ItemListVC的cell，反向传值
+    //var updateCellOfListVC: ((Item) -> ())!     // 定义closure用于更新ItemListVC的cell，反向传值
 
     
     override func viewDidLoad() {
@@ -50,6 +70,14 @@ class ItemDetailTVC: UITableViewController {
         ///
         self.navigationItem.rightBarButtonItem = self.editButtonItem
         self.title = "Detail"
+        // 配置tableFooterView，用于显示时间
+        tableFooter.addSubview(createTimeLabel)
+        tableFooter.addSubview(updateTimeLabel)
+        createTimeLabel.topAnchor.constraint(equalTo: (tableFooter.topAnchor), constant: 20.0).isActive = true
+        createTimeLabel.centerXAnchor.constraint(equalTo: (tableFooter.centerXAnchor)).isActive = true
+        updateTimeLabel.topAnchor.constraint(equalTo: createTimeLabel.bottomAnchor, constant: 10.0).isActive = true
+        updateTimeLabel.centerXAnchor.constraint(equalTo: (tableFooter.centerXAnchor)).isActive = true
+        tableView.tableFooterView = tableFooter
         
         // register NoteCell
         self.tableView.register(UINib.init(nibName: "NoteCell", bundle: nil), forCellReuseIdentifier: ItemDetailTVC.noteCellIdentifier)
@@ -80,6 +108,16 @@ class ItemDetailTVC: UITableViewController {
         // query data
         queryData()
         self.tableView.reloadData()
+        // tableFooterView显示时间
+        if let item = item {
+            if item is Login {
+                createTimeLabel.text = "创建时间：" + (item as! Login).createTime
+                updateTimeLabel.text = "更新时间：" + (item as! Login).updateTime
+            } else if item is Note {
+                createTimeLabel.text = "创建时间：" + (item as! Note).createTime
+                updateTimeLabel.text = "更新时间：" + (item as! Note).updateTime
+            }
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -107,10 +145,10 @@ class ItemDetailTVC: UITableViewController {
             // 跳转到CreateItemVC
             // 调起创建秘密页面、动画为fade in out
             // 直接present CreateItemVC，不显示导航栏
-            //        let createItemVC: CreateItemVC = self.storyboard?.instantiateViewController(withIdentifier: ItemDetailTVC.createItemVCIdentifier) as! CreateItemVC
-            //        createItemVC.modalTransitionStyle = .crossDissolve
-            //        createItemVC.modalPresentationStyle = .overFullScreen
-            //        self.present(createItemVC, animated: true, completion: nil)
+//        let createItemVC: CreateItemVC = self.storyboard?.instantiateViewController(withIdentifier: ItemDetailTVC.createItemVCIdentifier) as! CreateItemVC
+//        createItemVC.modalTransitionStyle = .crossDissolve
+//        createItemVC.modalPresentationStyle = .overFullScreen
+//        self.present(createItemVC, animated: true, completion: nil)
             
             // CreateItemVC嵌入到navigationController，present时，VC是nav，才会带导航栏
             let createItemVCNav = self.storyboard?.instantiateViewController(withIdentifier: "CreateItemVCNav")
@@ -261,6 +299,34 @@ class ItemDetailTVC: UITableViewController {
         return cell
     }
     
+//    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+//        //
+//        let createTimeLabel: UILabel = UILabel()
+//        let updateTimeLabel: UILabel = UILabel()
+//        var footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: "FooterViewIdentifier")
+//        if footer == nil {
+//            footer = UITableViewHeaderFooterView()
+//            footer?.addSubview(createTimeLabel)
+//            footer?.addSubview(updateTimeLabel)
+//            createTimeLabel.topAnchor.constraint(equalTo: (footer?.topAnchor)!, constant: 20.0).isActive = true
+//            createTimeLabel.centerXAnchor.constraint(equalTo: (footer?.centerXAnchor)!).isActive = true
+//            updateTimeLabel.topAnchor.constraint(equalTo: createTimeLabel.bottomAnchor, constant: 20.0).isActive = true
+//            updateTimeLabel.centerXAnchor.constraint(equalTo: (footer?.centerXAnchor)!).isActive = true
+//        }
+//        if let item = item {
+//            if item is Login {
+//                createTimeLabel.text = (item as! Login).createTime
+//                updateTimeLabel.text = (item as! Login).updateTime
+//            } else if item is Note {
+//                createTimeLabel.text = (item as! Note).createTime
+//                updateTimeLabel.text = (item as! Note).updateTime
+//            }
+//        }
+//
+//
+//        return footer
+//    }
+    
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         // 问题：设置为0，不起作用？？？
         //return 0.0
@@ -392,8 +458,10 @@ class ItemDetailTVC: UITableViewController {
                 let note: String = loginResult["Note"] as! String
                 let pT: FolderModel.PersistentType = FolderModel.PersistentType(rawValue: Int(loginResult["Persistent_type"] as! Int32))!
                 let iT: FolderModel.ItemType = FolderModel.ItemType(rawValue: Int(loginResult["Item_type"] as! Int32))!
+                let createTime: String = loginResult["Create_time"] as! String
+                let updateTime: String = loginResult["Update_time"] as! String
                 
-                let login: Login = Login(itemId: id, itemName: iN, userName: uN, password: pW, website: wS, note: note, persistentType: pT, itemType: iT, folderType: FolderModel.FolderType.login)
+                let login: Login = Login(itemId: id, itemName: iN, userName: uN, password: pW, website: wS, note: note, persistentType: pT, itemType: iT, folderType: FolderModel.FolderType.login, createTime: createTime, updateTime: updateTime)
                 self.item = login
             }
         } else {
@@ -413,8 +481,10 @@ class ItemDetailTVC: UITableViewController {
                 let note: String = noteResult["Note"] as! String
                 let pT: FolderModel.PersistentType = FolderModel.PersistentType(rawValue: Int(noteResult["Persistent_type"] as! Int32))!
                 let iT: FolderModel.ItemType = FolderModel.ItemType(rawValue: Int(noteResult["Item_type"] as! Int32))!
+                let createTime: String = noteResult["Create_time"] as! String
+                let updateTime: String = noteResult["Update_time"] as! String
 
-                let noteModel: Note = Note(itemId: id, itemName: iN, userName: uN, note: note, persistentType: pT, itemType: iT, folderType: FolderModel.FolderType.note)
+                let noteModel: Note = Note(itemId: id, itemName: iN, userName: uN, note: note, persistentType: pT, itemType: iT, folderType: FolderModel.FolderType.note, createTime: createTime, updateTime: updateTime)
                 self.item = noteModel
             }
         } else {

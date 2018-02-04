@@ -352,7 +352,10 @@ class ItemListTVC: UITableViewController {
                 let id: String = String(Int(row["Item_id"] as! Int32))
                 let persistentType: FolderModel.PersistentType = FolderModel.PersistentType(rawValue: Int(row["Persistent_type"] as! Int32))! 
                 let itemType: FolderModel.ItemType = FolderModel.ItemType(rawValue: Int(row["Item_type"] as! Int32))!
-                let login: Login = Login.init(itemId: id, itemName: row["Item_name"] as! String, userName: row["User_name"] as! String, password: row["Password"] as! String, website: row["Website"] as! String, note: row["Note"] as! String, persistentType: persistentType, itemType: itemType, folderType: FolderModel.FolderType.login)
+                let createTime: String = row["Create_time"] as! String
+                let updateTime: String = row["Update_time"] as! String
+                
+                let login: Login = Login.init(itemId: id, itemName: row["Item_name"] as! String, userName: row["User_name"] as! String, password: row["Password"] as! String, website: row["Website"] as! String, note: row["Note"] as! String, persistentType: persistentType, itemType: itemType, folderType: FolderModel.FolderType.login, createTime: createTime, updateTime: updateTime)
                 tempItems.append(login)
             }
             items = tempItems
@@ -363,7 +366,7 @@ class ItemListTVC: UITableViewController {
     
     // 查询Table--Note
     func queryNote() {
-        let noteSQL = "SELECT Item_id, Item_name, User_name, Note, Persistent_type, Item_type FROM Note WHERE Is_discard = 0 ORDER BY Update_time DESC;"   // 增加根据更新时间倒序排序
+        let noteSQL = "SELECT Item_id, Item_name, User_name, Note, Persistent_type, Item_type, Create_time, Update_time FROM Note WHERE Is_discard = 0 ORDER BY Update_time DESC;"   // 增加根据更新时间倒序排序
         if let noteResults = db.querySql(sql: noteSQL) {
             var tempItems = [Item]()
             for row in noteResults {
@@ -373,8 +376,10 @@ class ItemListTVC: UITableViewController {
                 let note: String = row["Note"] as! String
                 let persistentType: FolderModel.PersistentType = FolderModel.PersistentType(rawValue: Int(row["Persistent_type"] as! Int32))!
                 let itemType: FolderModel.ItemType = FolderModel.ItemType(rawValue: Int(row["Item_type"] as! Int32))!
+                let createTime: String = row["Create_time"] as! String
+                let updateTime: String = row["Update_time"] as! String
                 
-                let noteModel: Note = Note.init(itemId: id, itemName: itemName, userName: userName, note: note, persistentType: persistentType, itemType: itemType, folderType: FolderModel.FolderType.note)
+                let noteModel: Note = Note.init(itemId: id, itemName: itemName, userName: userName, note: note, persistentType: persistentType, itemType: itemType, folderType: FolderModel.FolderType.note, createTime: createTime, updateTime: updateTime)
                 tempItems.append(noteModel)
             }
             items = tempItems

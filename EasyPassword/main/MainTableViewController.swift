@@ -36,8 +36,8 @@ extension Login: SQLTable {
             Note CHAR(255),
             Persistent_type INT,
             Item_type INT,
-            Create_time DATATIME,
-            Update_time DATATIME,
+            Create_time DATETIME,
+            Update_time DATETIME,
             Is_discard BOOLEAN
         );
         """
@@ -55,8 +55,8 @@ extension Note: SQLTable {
         Note TEXT,
         Persistent_type INT,
         Item_type INT,
-        Create_time DATATIME,
-        Update_time DATATIME,
+        Create_time DATETIME,
+        Update_time DATETIME,
         Is_discard BOOLEAN
         );
         """

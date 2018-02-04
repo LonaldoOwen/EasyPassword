@@ -37,10 +37,12 @@ struct Login: Item {
     var persistentType: FolderModel.PersistentType
     var itemType: FolderModel.ItemType
     var folderType: FolderModel.FolderType
+    var createTime: String
+    var updateTime: String
     
     //var image: String = "login29"
     
-    init(itemId: String, itemName: String, userName: String, password: String, website: String, note: String, persistentType: FolderModel.PersistentType, itemType: FolderModel.ItemType, folderType: FolderModel.FolderType) {
+    init(itemId: String, itemName: String, userName: String, password: String, website: String, note: String, persistentType: FolderModel.PersistentType, itemType: FolderModel.ItemType, folderType: FolderModel.FolderType, createTime: String, updateTime: String) {
         self.itemId = itemId
         self.itemName = itemName
         self.userName = userName
@@ -50,6 +52,8 @@ struct Login: Item {
         self.persistentType = persistentType
         self.itemType = itemType
         self.folderType = folderType
+        self.createTime = createTime
+        self.updateTime = updateTime
     }
 
 }
@@ -70,10 +74,12 @@ struct Note: Item {
     var persistentType: FolderModel.PersistentType
     var itemType: FolderModel.ItemType
     var folderType: FolderModel.FolderType
+    var createTime: String
+    var updateTime: String
     
     //var image: String = "note29"
     
-    init(itemId: String, itemName: String, userName: String, note: String, persistentType: FolderModel.PersistentType, itemType: FolderModel.ItemType, folderType: FolderModel.FolderType) {
+    init(itemId: String, itemName: String, userName: String, note: String, persistentType: FolderModel.PersistentType, itemType: FolderModel.ItemType, folderType: FolderModel.FolderType, createTime: String, updateTime: String) {
         self.itemId = itemId
         self.itemName = itemName
         self.userName = userName
@@ -81,6 +87,8 @@ struct Note: Item {
         self.persistentType = persistentType
         self.itemType = itemType
         self.folderType = folderType
+        self.createTime = createTime
+        self.updateTime = updateTime
     }
 }
 

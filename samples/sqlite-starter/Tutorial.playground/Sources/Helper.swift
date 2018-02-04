@@ -54,9 +54,9 @@ private func destroyDatabase(db: Database) {
 }
 
 public func destroyPart1Database() {
-  destroyDatabase(db: .Part1)
+    destroyDatabase(db: .Part1)
 }
 
 public func destroyPart2Database() {
-  destroyDatabase(db: .Part2)
+    destroyDatabase(db: .Part2)
 }

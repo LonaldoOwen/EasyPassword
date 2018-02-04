@@ -10,8 +10,8 @@
 /// 1、创建主密码，写入db--PasswordHistory table
 /// 2、修改主密码，更新db--PasswordHistory table，主密码
 /// 3、增加调整键盘逻辑，如果遮住输入框，scrollview滚动
-/// 4、确认button需要主密码和确认密码都不为空时，再显示为可用（）
-///
+/// 4、确认button需要主密码和确认密码都不为空时，再显示为可用
+/// 5、密码位数少于6位，或过于简单，给出alert提示（第二版做）
 ///
 ///
 
@@ -77,6 +77,11 @@ class CreateMasterPasswordVC: UIViewController {
         }
         
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        //
+        configureConfirmBtnStatus()
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -99,6 +104,9 @@ class CreateMasterPasswordVC: UIViewController {
         
         if twoPasswordAreEqual() {
             print("密码确认成功")
+            // 1、密码位数少于6位，或过于简单，给出alert提示；
+            // 2、密码符合规范，写入db
+            
             
             // 密码确认成功
             // 1、如果是第一次，创建PasswordHistory table，写入；
@@ -107,46 +115,18 @@ class CreateMasterPasswordVC: UIViewController {
             if numberOfTablesInMaster > 0 {
                 /// 2、非第一次，更新主密码
                 // 修改密码
-                print("修改密码")
-                if let passwordHistoryTable = db.masterContainTable("PasswordHistory") {
-                    if passwordHistoryTable {
-                        // 两次密码判断通过，Update 主密码
-                        let updateMPSQL = "UPDATE PasswordHistory SET Password = '\(masterPasswordField.text!)' WHERE Item_id = '9999' AND Item_type = '0';"
-                        if try! db.update(sql: updateMPSQL) {
-                            print("更新主密码成功!")
-                        } else {
-                            print("更新主密码出错!")
-                        }
-                    }
-                }
+                modifyMasterPassword(atTime: dateStr)
             } else {
                 /// 1、如果是第一次，创建PasswordHistory table，写入；
-                // 创建db--PasswordHistory
-                try? db.createTable(table: PasswordHistory.self)    // 创建PasswordHistory table
-                
-                /// 说明：
-                /// Item_id = 9999, Item_type = 0, 表示主密码
-                // 两次密码判断通过，写入PasswordHistory
-                let insertMPSQL = "INSERT INTO PasswordHistory (Item_id, Password, Persistent_type, Item_type, Create_time, Note) VALUES ('9999', '\(masterPasswordField.text!)', '\(FolderModel.PersistentType.iphone.rawValue)', '0', '\(dateStr)', '\(indicatorField.text!)');"
-                try? db.insert(sql: insertMPSQL)
-                
-                // 如果插入成功，隐藏passwordWindow
-                if passwordHistoryTableContainMaster() {
-                    // 如果验证密码成功，则收起passwordWindow，显示主window
-                    if let window = UIApplication.shared.keyWindow, window.windowLevel > 0 {
-                        print("window: \(window)")
-                        // 隐藏window
-                        window.isHidden = true
-                    }
-                } else {
-                    // 插入失败，
-                    print("主密码写入失败！")
-                }
+                createMasterPassword(atTime: dateStr)
             }
             
         } else {
             print("两次密码输入不一致，请重新输入！")
             // show alert，并清空输入框
+            let alertVC = UIAlertController.init(title: "确认失败", message: "两次密码输入不一致，请重新输入！", preferredStyle: UIAlertControllerStyle.alert)
+            alertVC.addAction(UIAlertAction.init(title: "取消", style: UIAlertActionStyle.cancel, handler: nil))
+            self.present(alertVC, animated: true, completion: nil)
         }
         
         
@@ -203,14 +183,78 @@ class CreateMasterPasswordVC: UIViewController {
     // 处理textField输入变化
     @objc func handleTextFieldTextChanged(_ textField: UITextField) {
         print("#handleTextFieldTextChanged")
+        configureConfirmBtnStatus()
         
-        // textFields中text无空，且当前textField的text不为空，enable saveButton
-//        if !textFieldsContainEmpty() && !(textField.text?.isEmpty)! {
-//            saveBtn.isEnabled = true
-//        } else {
-//            saveBtn.isEnabled = false
-//        }
+    }
+    
+    // 配置confirmBtn状态
+    func configureConfirmBtnStatus() {
+        if !textFieldsContainEmpty() {
+            confirmBtn.isEnabled = true
+            confirmBtn.backgroundColor = UIColor(red: 255.0/255, green: 206.0/255, blue: 0.0, alpha: 1.0)
+        } else {
+            confirmBtn.backgroundColor = UIColor.lightGray
+            confirmBtn.isEnabled = false
+        }
+    }
+    
+    // 判断textFields中是否包含未输入的textField（true有，false没有）
+    fileprivate func textFieldsContainEmpty() -> Bool {
+        for textField in textFields {
+            if textField == indicatorField {
+                break
+            }
+            if (textField.text?.isEmpty)! {
+                return true
+            }
+        }
+        return false
+    }
+    
+    // 创建主密码
+    func createMasterPassword(atTime dateStr: String) {
+        /// 1、如果是第一次，创建PasswordHistory table，写入；
+        // 创建db--PasswordHistory
+        try? db.createTable(table: PasswordHistory.self)    // 创建PasswordHistory table
         
+        /// 说明：
+        /// Item_id = 9999, Item_type = 0, 表示主密码
+        // 两次密码判断通过，写入PasswordHistory
+        let insertMPSQL = "INSERT INTO PasswordHistory (Item_id, Password, Persistent_type, Item_type, Create_time, Note) VALUES ('9999', '\(masterPasswordField.text!)', '\(FolderModel.PersistentType.iphone.rawValue)', '0', '\(dateStr)', '\(indicatorField.text!)');"
+        try? db.insert(sql: insertMPSQL)
+        
+        // 如果插入成功，隐藏passwordWindow
+        if passwordHistoryTableContainMaster() {
+            // 如果验证密码成功，则收起passwordWindow，显示主window
+            if let window = UIApplication.shared.keyWindow, window.windowLevel > 0 {
+                print("window: \(window)")
+                // 隐藏window
+                window.isHidden = true
+            }
+        } else {
+            // 插入失败，
+            print("主密码写入失败！")
+        }
+    }
+    
+    // 修改主密码
+    func modifyMasterPassword(atTime dateStr: String) {
+        if let passwordHistoryTable = db.masterContainTable("PasswordHistory") {
+            if passwordHistoryTable {
+                // 两次密码判断通过，Update 主密码
+                let updateMPSQL = "UPDATE PasswordHistory SET Password = '\(masterPasswordField.text!)' WHERE Item_id = '9999' AND Item_type = '0';"
+//                        do {
+//                            try db.update(sql: updateMPSQL)
+//                        } catch {
+//                            print("")
+//                        }
+                if try! db.update(sql: updateMPSQL) {
+                    print("更新主密码成功!")
+                } else {
+                    print("更新主密码出错!")
+                }
+            }
+        }
     }
     
     // 比较俩个密码是否相等
@@ -235,6 +279,8 @@ class CreateMasterPasswordVC: UIViewController {
         
         return false
     }
+    
+    // 判断输入的主密码安全性
     
 
     /*

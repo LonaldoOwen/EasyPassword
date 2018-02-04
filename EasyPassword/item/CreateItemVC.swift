@@ -198,7 +198,7 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
             // Update item
             /// 问题: 有必要写入folderType吗？？？
             ///
-            login = Login(itemId: item.itemId, itemName: itemName.text!, userName: userName.text!, password: password.text!, website: website.text!, note: note.text!, persistentType: persistentType, itemType: itemType, folderType: FolderModel.FolderType.login)
+            login = Login(itemId: item.itemId, itemName: itemName.text!, userName: userName.text!, password: password.text!, website: website.text!, note: note.text!, persistentType: persistentType, itemType: itemType, folderType: FolderModel.FolderType.login, createTime: dateStr, updateTime: dateStr)
             
             if login != (item as! Login) {
                 // 时间格式需要处理？？？(已处理)

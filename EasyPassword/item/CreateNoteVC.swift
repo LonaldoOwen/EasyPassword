@@ -99,12 +99,12 @@ class CreateNoteVC: UIViewController {
         
         // 存储item
         if let note = note {
-            /// 编辑模式 -- 更新item，先删除旧item，再插入新item
+            /// 编辑模式 -- 更新item
             print(note)
             // 使用sqlite db存储
             if noteLabel.text != note.note || itemName.text != note.itemName {
                 // Update item
-                let updateNoteSQL = "UPDATE Note SET Item_name = '\(itemName.text!)', Note = '\(noteLabel.text!)', Update_time = 'dateStr' WHERE Item_id = '\(note.itemId)';"
+                let updateNoteSQL = "UPDATE Note SET Item_name = '\(itemName.text!)', Note = '\(noteLabel.text!)', Update_time = '\(dateStr)' WHERE Item_id = '\(note.itemId)';"
                 //try? db.update(sql: updateNoteSQL)
                 if try! db.update(sql: updateNoteSQL) {
                     print("更新Note item成功！")

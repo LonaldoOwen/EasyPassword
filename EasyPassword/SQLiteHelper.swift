@@ -327,12 +327,15 @@ extension SQLiteDatabase {
 extension SQLiteDatabase {
     // execute Update
     func update(sql: String) throws -> Bool {
+        var result: Bool!
         guard try execSql(sql) == true else {
+            result = false
             throw SQLiteError.Exec(message: errorMessage)
-            return false
         }
+        result = true
         print("Successfully update row.")
-        return true
+        
+        return result
     }
     
 }
