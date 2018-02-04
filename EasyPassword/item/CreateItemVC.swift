@@ -27,22 +27,7 @@
 
 import UIKit
 
-//extension PasswordHistory: SQLTable {
-//    static var createStatement: String {
-//        return """
-//        CREATE TABLE PasswordHistory(
-//            Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-//            Item_id CHAR(255),
-//            Password CHAR(255),
-//            Persistent_type CHAR(255),
-//            Item_type CHAR(255),
-//            Create_time DATETIME
-//        );
-//        """
-//    }
-//    
-//    
-//}
+
 
 class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     
@@ -51,20 +36,17 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     
     var db: SQLiteDatabase!
     var item: Item!             // 接收传值(Detail)
-    //var itemType: String!     // 接收传值
-    //var itemId: String!
     var itemType: FolderModel.ItemType!
     var persistentType: FolderModel.PersistentType!
     var login: Login!
     var reloadItemListVC: ((Item) -> ())!       // 定义closure用于刷新ItemListVC
-    var passBackNewItemDetail: ((Item) -> ())!  // 定义closure用于刷新ItemDetailVC
+    //var passBackNewItemDetail: ((Item) -> ())!  // 定义closure用于刷新ItemDetailVC
     
     
     var textFields: [UITextField]!
     var passwordIsShow: Bool = false
     var activeField: UITextField!
     var activeTextView: UITextView!
-    //var realPassword: String!
     var generateView: GenerateView = {
         let view = Bundle.main.loadNibNamed("GenerateView", owner: self, options: nil)?.first as! GenerateView
         return view
@@ -108,7 +90,7 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
             self.showPassword.attributedText = NSAttributedString.init(string: "显示密码", attributes: [NSAttributedStringKey.foregroundColor: UIColor.init(named: "DodgerBlue")!])
         } else {
             // Fallback on earlier versions
-            self.showPassword.attributedText = NSAttributedString.init(string: "显示密码", attributes: [NSAttributedStringKey.foregroundColor: UIColor.blue])
+            self.showPassword.attributedText = NSAttributedString.init(string: "显示密码", attributes: [NSAttributedStringKey.foregroundColor: UIColor.dodgerBlue])
         }
         self.showPassword.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapOnShowPassword)))
         
@@ -175,25 +157,10 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
         let now = Date()
         let dateStr = formatter.string(from: now)
         
-        // 创建PasswordHistory Table（改为在创建主密码页面创建）
-//        if let passwordHistoryTable = db.masterContainTable("PasswordHistory") {
-//            if !passwordHistoryTable {
-//                // PasswordHistory不存在时，创建一个
-//                try? db.createTable(table: PasswordHistory.self)
-//            }
-//        }
-        
         // 存储item
         if let item = item {
             /// 编辑模式，更新item，先删除旧item，再插入新item
             print(item)
-            // 使用plist存储
-            /*
-            PlistHelper.delete(itemModel: item, ofPersistentType: "MyIPHONE", itemType: itemType)
-            login = Login(itemId: "0", itemName: itemName.text!, userName: userName.text!, password: password.text!, website: website.text!, note: note.text!)
-            PlistHelper.insert(itemModel: login, ofPersistentType: "MyIPHONE", itemType: itemType)
-            */
-            
             // 使用sqlite db存储
             // Update item
             /// 问题: 有必要写入folderType吗？？？
@@ -219,14 +186,11 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
             // 收起VC
             self.dismiss(animated: true, completion: {
                 // 回传值new item
-                self.passBackNewItemDetail(self.login)
+                //self.passBackNewItemDetail(self.login)
             })
         } else {
             /// 非编辑模式，创建新item
             if itemType == FolderModel.ItemType.login {
-                // 插入plist（login model不需要id属性）
-                //PlistHelper.insert(itemModel: login, ofPersistentType: "MyIPHONE", itemType: itemType)
-                
                 // 如果尚未创建Login table，先创建
                 let dbTableCount = self.db.numberOfRowsInTable("sqlite_master")
                 if dbTableCount > 0 {
@@ -286,7 +250,9 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     // Called when the UIKeyboardDidShowNotification is sent.
     @objc
     func keyboardWasShown(_ aNotification: Notification) {
-//        let info = aNotification.userInfo
+        /// 处理键盘遮挡输入框，滚动scrollView
+
+        //        let info = aNotification.userInfo
 //        let keyboardBounds = (info![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
 //        let keyboardSize = keyboardBounds.size
         if let keyboardBounds = (aNotification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
@@ -338,6 +304,7 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     
     // Called when the UIKeyboardWillHideNotification is sent
     @objc func keyboardWillBeHidden(_ aNotification: Notification) {
+        /// 键盘收起，还原scrollView
         if let keyboardBounds = (aNotification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             print("Hidden keyboard: \(keyboardBounds)")
         }
@@ -386,7 +353,7 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
                 self.showPassword.attributedText = NSAttributedString.init(string: "显示密码", attributes: [NSAttributedStringKey.foregroundColor: UIColor.init(named: "DodgerBlue")!])
             } else {
                 // Fallback on earlier versions
-                self.showPassword.attributedText = NSAttributedString.init(string: "显示密码", attributes: [NSAttributedStringKey.foregroundColor: UIColor.blue])
+                self.showPassword.attributedText = NSAttributedString.init(string: "显示密码", attributes: [NSAttributedStringKey.foregroundColor: UIColor.dodgerBlue])
             }
         }
         passwordIsShow = !passwordIsShow
@@ -394,6 +361,7 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     
     
     // MARK: - GeneratePasswordDelegate
+    
     func passwordDidGenerated(password: String) {
         print(password)
         self.password.text = password

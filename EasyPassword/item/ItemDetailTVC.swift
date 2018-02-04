@@ -51,7 +51,6 @@ class ItemDetailTVC: UITableViewController {
     // Properties
     var db: SQLiteDatabase!
     var item: Item!
-    //var itemType: String!
     var itemId: String!
     var persistentType: FolderModel.PersistentType!
     var itemType: FolderModel.ItemType!
@@ -64,10 +63,9 @@ class ItemDetailTVC: UITableViewController {
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         /// 对于UITableViewController来说，注释掉这一句，显示Edit button，同时自带编辑功能；
         /// 如果复写了setEditing(_:)方法，则编辑功能消失，需要自己实现
-        ///
+        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.rightBarButtonItem = self.editButtonItem
         self.title = "Detail"
         // 配置tableFooterView，用于显示时间
@@ -157,11 +155,6 @@ class ItemDetailTVC: UITableViewController {
             createItemVC.item = item
             createItemVC.persistentType = persistentType
             createItemVC.itemType = itemType
-            createItemVC.passBackNewItemDetail = { login in
-                // 获取返回值，更新table
-                self.item = login
-                self.tableView.reloadData()
-            }
             //
             createItemVCNav?.modalTransitionStyle = .crossDissolve
             createItemVCNav?.modalPresentationStyle = .fullScreen
@@ -173,10 +166,6 @@ class ItemDetailTVC: UITableViewController {
             createNoteVC.note = item as! Note
             createNoteVC.persistentType = persistentType
             createNoteVC.itemType = itemType
-            createNoteVC.passBackNewItemDetail = { note in
-                self.item = note
-                self.tableView.reloadData()
-            }
             //self.show(nav, sender: nil)
             nav.modalTransitionStyle = .crossDissolve
             nav.modalPresentationStyle = .fullScreen
@@ -268,8 +257,6 @@ class ItemDetailTVC: UITableViewController {
                     cell.textLabel?.attributedText = attributedText("网站")
                     cell.detailTextLabel?.text = login.website.count > 0 ? login.website : "http://example.com"
                 } else if indexPath.section == 3 {
-                    //            cell.textLabel?.attributedText = attributedText("备注")
-                    //            cell.detailTextLabel?.text = (login.note == "") ? "在这添加备注": login.note
                     // 使用自定义cell来展示备注信息
                     let noteCell: NoteCell = tableView.dequeueReusableCell(withIdentifier: ItemDetailTVC.noteCellIdentifier) as! NoteCell
                     noteCell.customTextLabel.attributedText = attributedText("备注")
@@ -299,36 +286,8 @@ class ItemDetailTVC: UITableViewController {
         return cell
     }
     
-//    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-//        //
-//        let createTimeLabel: UILabel = UILabel()
-//        let updateTimeLabel: UILabel = UILabel()
-//        var footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: "FooterViewIdentifier")
-//        if footer == nil {
-//            footer = UITableViewHeaderFooterView()
-//            footer?.addSubview(createTimeLabel)
-//            footer?.addSubview(updateTimeLabel)
-//            createTimeLabel.topAnchor.constraint(equalTo: (footer?.topAnchor)!, constant: 20.0).isActive = true
-//            createTimeLabel.centerXAnchor.constraint(equalTo: (footer?.centerXAnchor)!).isActive = true
-//            updateTimeLabel.topAnchor.constraint(equalTo: createTimeLabel.bottomAnchor, constant: 20.0).isActive = true
-//            updateTimeLabel.centerXAnchor.constraint(equalTo: (footer?.centerXAnchor)!).isActive = true
-//        }
-//        if let item = item {
-//            if item is Login {
-//                createTimeLabel.text = (item as! Login).createTime
-//                updateTimeLabel.text = (item as! Login).updateTime
-//            } else if item is Note {
-//                createTimeLabel.text = (item as! Note).createTime
-//                updateTimeLabel.text = (item as! Note).updateTime
-//            }
-//        }
-//
-//
-//        return footer
-//    }
-    
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        // 问题：设置为0，不起作用？？？
+        // 问题：设置为0，不起作用？？？，未什么设置？？？
         //return 0.0
         return 0.01
     }
@@ -404,7 +363,7 @@ class ItemDetailTVC: UITableViewController {
             attributes = [NSAttributedStringKey.foregroundColor: UIColor.init(named: "DodgerBlue")!]
         } else {
             // Fallback on earlier versions
-            attributes = [NSAttributedStringKey.foregroundColor: UIColor.blue]
+            attributes = [NSAttributedStringKey.foregroundColor: UIColor.dodgerBlue]
         }
         let attributedString = NSAttributedString(string: string, attributes: attributes)
         return attributedString
@@ -415,16 +374,15 @@ class ItemDetailTVC: UITableViewController {
     func showCell(_ cell: UITableViewCell, indexPath: IndexPath, item: Item) {
         if item is Login {
             //
-            
         } else if item is Note {
             //
-            
         }
     }
     
     
     // query data
     func queryData() {
+        print("#ItemDetailTVC--queryData")
         if let pT = persistentType {
             if pT == FolderModel.PersistentType.iphone {
                 // 处理存储类型是--iphone
@@ -445,7 +403,6 @@ class ItemDetailTVC: UITableViewController {
     
     // Query--Login
     func queryLoginData() {
-        
         /// 注意：变量如果是optional，在SQL里要unwraped，否则SQL执行有问题
         let loginSQL = "SELECT * FROM Login WHERE Persistent_type = '\(persistentType.rawValue)' AND Item_type = '\(persistentType.rawValue)' AND Item_id = '\(self.itemId!)';"
         if let loginResults = db.querySql(sql: loginSQL) {
@@ -471,7 +428,6 @@ class ItemDetailTVC: UITableViewController {
     
     // Query--Note
     func queryNoteData() {
-        
         let noteSQL = "SELECT * FROM Note WHERE Item_id = '\(self.itemId!)';"
         if let noteResults = db.querySql(sql: noteSQL) {
             if let noteResult = noteResults.first {

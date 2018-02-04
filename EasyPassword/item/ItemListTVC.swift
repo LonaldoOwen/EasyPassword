@@ -12,8 +12,8 @@
 /// 3、点返回，回到文件列表，需要刷新table view（在viewWillAppear中操作即可）
 /// 4、添加完新的item后，刷新当前table view
 /// 5、search bar使用？？？（V1.0.0暂时砍掉，后面再加）
-/// 6、缺少删除cell的功能、多选、移动到其他文件夹（）
-/// 7、从all进入，查询所有table，显示在一起，按Update_time倒序排列（）
+/// 6、缺少删除cell的功能、多选、移动到其他文件夹（多选、移动第二版做）
+/// 7、从all进入，查询所有table，显示在一起，按Update_time倒序排列
 /// 8、
 ///
 
@@ -24,8 +24,6 @@ import UIKit
 
 class ItemListTVC: UITableViewController {
     
-    //var itemType: String = ""       // 用于传值
-    //var persistentType: String = "" // 用于传值
     //var itemType: FolderModel.ItemType!
     var persistentType: FolderModel.PersistentType!
     var folderType: FolderModel.FolderType!
@@ -69,7 +67,7 @@ class ItemListTVC: UITableViewController {
         self.title = folderType.typeString
         // 如果使用db，根据itemType查询db，显示tableView
         queryData()
-        //
+        // 配置工具栏item状态
         configureToolBarItems()
         // 刷新UI
         self.tableView.reloadData()
@@ -82,15 +80,12 @@ class ItemListTVC: UITableViewController {
     
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
-        //
+        // 配置工具栏item状态
         configureToolBarItems()
     }
     
     
     @IBAction func handleAddAction(_ sender: UIBarButtonItem) {
-        // 调起创建新itemVC
-        //PlistHelper.insert(["username": "name", "password": "pass", "website": ".com", "note": "note..."], ofPersistentType: "MyIPHONE", itemType: titleName)
-        
         // 根据folderType类型选择合适的VC跳转
         if folderType == FolderModel.FolderType.login {
             // present create login VC
@@ -116,6 +111,7 @@ class ItemListTVC: UITableViewController {
 //
 //    }
 
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -171,24 +167,19 @@ class ItemListTVC: UITableViewController {
             self.items?.remove(at: indexPath.row)
             // 删除cell
             tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
-            // plist存储--删除对应plist中数据
-            //PlistHelper.delete(itemModel: item, ofPersistentType: "MyIPHONE", itemType: itemType)
-            
             // sqlite存储--删除Table中相应row
             /// 考虑如何合并为一句，考虑将Item增加property（itemId, itemType...）
             try? db.delete(sql: "DELETE FROM \(item.itemType.typeString) WHERE Persistent_type = '\(item.persistentType.rawValue)' AND Item_type = '\(item.itemType.rawValue)' AND Item_id = '\(item.itemId)';")
             self.setEditing(false, animated: true)
         }
         
-        //
+        // 配置工具栏item状态
         configureToolBarItems()
     }
     
     
     // MARK: - Table view delegate
-//    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-//        tableView.deselectRow(at: indexPath, animated: false)
-//    }
+
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
     }
@@ -200,22 +191,12 @@ class ItemListTVC: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        
         let cell: UITableViewCell = sender as! UITableViewCell
         let indexPath = tableView.indexPath(for: cell)
         
         // 将item type传到创建页面
-        if segue.identifier == "PresentCreate" {
-            // 创建新item
-            let createItemVC: CreateItemVC = (segue.destination as! UINavigationController).topViewController as! CreateItemVC
-            createItemVC.itemType = FolderModel.ItemType(rawValue: folderType.rawValue)
-            createItemVC.persistentType = persistentType
-            // 调用closure，更新UI
-            createItemVC.reloadItemListVC = { item in
-//                self.items?.insert(item, at: 0)
-//                self.tableView.reloadData()
-                print("#Update list")
-            }
-        } else if segue.identifier == "ShowDetail" {
+        if segue.identifier == "ShowDetail" {
             // 显示详情页
             let itemDetailVC: ItemDetailTVC = segue.destination as! ItemDetailTVC
             let item = items![(indexPath?.row)!]
@@ -239,13 +220,6 @@ class ItemListTVC: UITableViewController {
                 itemDetailVC.itemType = list.itemType
             }
             
-            // 设置closure，更新cell
-            // 注意：如果此页面使用了查询db，则不需此逻辑
-//            itemDetailVC.updateCellOfListVC = { item in
-//                print("Get item: \(item)")
-//                //self.items![(indexPath?.row)!] = item
-//                self.tableView.reloadRows(at: [indexPath!], with: UITableViewRowAnimation.automatic)
-//            }
         }
         
     }
@@ -326,8 +300,6 @@ class ItemListTVC: UITableViewController {
             queryNote()
         } else if folderType == FolderModel.FolderType.all {
             print("#ALL")
-            //queryAll()
-            
             if db.masterContainTable(FolderModel.FolderType.login.typeString)! && db.masterContainTable(FolderModel.FolderType.note.typeString)! {
                 // Union查询所有table（前提：Login、Note table同时存在，如果有一个不存在，会查不到数据）
                 queryAll()
@@ -344,8 +316,9 @@ class ItemListTVC: UITableViewController {
     
     // 查询Table--Login
     func queryLogin() {
-        //let loginSQL = "SELECT Item_id, Item_name, User_name, Password, Website, Note FROM Login WHERE Is_discard = 0;"
-        let loginSQL = "SELECT Item_id, Item_name, User_name, Password, Website, Note, Persistent_type, Item_type FROM Login WHERE Is_discard = 0 ORDER BY Update_time DESC;"   // 增加根据更新时间倒序排序
+        print("#ItemListTVC--queryLogin")
+        
+        let loginSQL = "SELECT Item_id, Item_name, User_name, Password, Website, Note, Persistent_type, Item_type, Create_time, Update_time FROM Login WHERE Is_discard = 0 ORDER BY Update_time DESC;"   // 增加根据更新时间倒序排序
         if let loginResults = db.querySql(sql: loginSQL) {
             var tempItems = [Item]()
             for row in loginResults {
@@ -366,6 +339,8 @@ class ItemListTVC: UITableViewController {
     
     // 查询Table--Note
     func queryNote() {
+        print("#ItemListTVC--queryNote")
+        
         let noteSQL = "SELECT Item_id, Item_name, User_name, Note, Persistent_type, Item_type, Create_time, Update_time FROM Note WHERE Is_discard = 0 ORDER BY Update_time DESC;"   // 增加根据更新时间倒序排序
         if let noteResults = db.querySql(sql: noteSQL) {
             var tempItems = [Item]()
@@ -392,6 +367,8 @@ class ItemListTVC: UITableViewController {
     /// 
     // 查询Table--Login、Note
     func queryAll() {
+        print("#ItemListTVC--queryAll")
+        
         // Union查询所有table（前提：Login、Note table同时存在，如果有一个不存在，会查不到数据）
         let unionAllSQL = """
             SELECT Item_id, Item_name, User_name, Note, Persistent_type, Item_type, Update_time FROM Login
@@ -419,41 +396,6 @@ class ItemListTVC: UITableViewController {
         }
         
         
-        
-//        if db.masterContainTable(FolderModel.FolderType.login.typeString)! && db.masterContainTable(FolderModel.FolderType.note.typeString)! {
-//            // Union查询所有table（前提：Login、Note table同时存在，如果有一个不存在，会查不到数据）
-//            let unionAllSQL = """
-//            SELECT Item_id, Item_name, User_name, Note, Persistent_type, Item_type, Update_time FROM Login
-//            UNION
-//            SELECT Item_id, Item_name, User_name, Note, Persistent_type, Item_type, Update_time FROM Note
-//            ORDER BY Update_time DESC;
-//        """
-//
-//            if let allResults = db.querySql(sql: unionAllSQL) {
-//                var tempItems = [Item]()
-//                for row in allResults {
-//                    let id: String = String(Int(row["Item_id"] as! Int32))
-//                    let itemName: String = row["Item_name"] as! String
-//                    let userName: String = row["User_name"] as! String
-//                    let note: String = row["Note"] as! String
-//                    let persistentType: FolderModel.PersistentType = FolderModel.PersistentType(rawValue: Int(row["Persistent_type"] as! Int32))!
-//                    let itemType: FolderModel.ItemType = FolderModel.ItemType(rawValue: Int(row["Item_type"] as! Int32))!
-//
-//                    let listModel: List = List.init(itemId: id, itemName: itemName, userName: userName, note: note, persistentType: persistentType, itemType: itemType, folderType: FolderModel.FolderType.all)
-//                    tempItems.append(listModel)
-//                }
-//                items = tempItems
-//            } else {
-//                print("#Table all has no items!")
-//            }
-//        } else {
-//            if db.masterContainTable(FolderModel.FolderType.login.typeString)! {
-//                queryLogin()
-//            }
-//            if db.masterContainTable(FolderModel.FolderType.note.typeString)! {
-//                queryNote()
-//            }
-//        }
     
     }
 }

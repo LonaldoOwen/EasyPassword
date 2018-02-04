@@ -36,5 +36,12 @@ extension UIViewController {
 }
 
 
+extension UIColor {
+    // DodgerBlue(系统button的蓝色)
+    class var dodgerBlue: UIColor {
+        return UIColor.init(red: 30.0/255, green: 144.0/255, blue: 255.0/255, alpha: 1.0)
+    }
+}
+
 
 

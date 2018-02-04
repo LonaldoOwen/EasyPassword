@@ -69,11 +69,7 @@ class MainTableViewController: UITableViewController {
     
     @IBOutlet weak var addFolderItem: UIBarButtonItem!
     
-    // plist存储
-    //var iphoneArray = [[String: Any]]()
-    //var iphoneFolders = [FolderModel]()
-    //var folderPlist = [[[String: Any]]]()
-    
+
     // sqlite db存储
     var icloudFolders: [FolderModel]!   // iCloud
     var iphoneFolders: [FolderModel]!   // 本地
@@ -92,18 +88,8 @@ class MainTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.rightBarButtonItem = self.editButtonItem
-        //self.editButtonItem.title = "编辑"
         self.tableView.allowsMultipleSelectionDuringEditing = true
         
-        /// 使用property list 存储
-        /*
-        // 创建或读取plist数据（默认创建一个Folder.plist用于存储Main页面的数据）
-        let fileManager = FileManager.default
-        // 不存在，创建一个新的Folder.plist
-        if !fileManager.fileExists(atPath: PlistHelper.getPlistPath(ofName: "Folder.plist")) {
-            PlistHelper.makeDefaulFolderPlis()
-        }
-        */
         /// 使用sqlite存储
         // 创建db实例
         let dbUrl = SQLiteDatabase.getDBPath("EasyPassword.sqlite")
@@ -123,31 +109,6 @@ class MainTableViewController: UITableViewController {
         print("#MainTableViewController--viewWillAppear")
         // 注册UIApplicationDidBecomeActive通知
         //NotificationCenter.default.addObserver(self, selector: #selector(handleObserverUIApplicationDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: UIApplication.shared)
-        
-        
-        // plist存储
-        /*
-        // 页面每次显示时，读取最新数据
-        // 如果Folder.plist在沙盒中存在，则读取它的数据
-        let plist = PlistHelper.readPlist(ofName: "Folder.plist") as! [[[String: Any]]]
-        folderPlist = plist // copy plist
-        // plist装换为model
-        iphoneFolders = folderPlist[1].map {
-            FolderModel(
-                persistentType: $0["persistentType"] as! String,
-                itemType: $0["itemType"] as! String,
-                items: ($0["items"] as! [[String: Any]]).map {
-                    Login(
-                        itemname: $0["itemname"] as! String,
-                        username: $0["username"] as! String,
-                        password: $0["password"] as! String,
-                        website: $0["website"] as! String,
-                        note: $0["note"] as! String
-                    )
-                }
-            )
-        }
-        */
         
         // sqlite db存储
         // 页面每次显示时，query db，只查询需要的字段即可，区别plist
@@ -174,40 +135,28 @@ class MainTableViewController: UITableViewController {
             // 删除文件夹及对应数据
             deleteSelectedFolders()
         } else {
-            /// plist存储
-            // 创建新文件夹
-            /// 根据sender的类型决定哪种操作
-            // 创建新文件夹
-            // show action sheet(可选不同类型)
-            // show Alert
-            // 同时创建对应plist
-            //showAlertToCreateNewFolder()
-            
             // sqlite db 存储
-            // 临时：点击新建文件夹，创建Login Table
-//            try? db.createTable(table: Login.self)
-//            queryData()
-//            self.tableView.reloadData()
-            
+            // 显示action sheet
             showActionSheet()
         }
         
     }
     
-    @objc func handleObserverUIApplicationDidBecomeActive(_ notification: Notification) {
-        //
-        print("#handleObserverUIApplicationDidBecomeActive: \(notification)")
-        //let app: UIApplication = notification.object as! UIApplication
-        self.showMasterPasswordVC()
-    }
+    // 处理UIApplicationDidBecomeActive事件
+//    @objc func handleObserverUIApplicationDidBecomeActive(_ notification: Notification) {
+//        //
+//        print("#handleObserverUIApplicationDidBecomeActive: \(notification)")
+//        //let app: UIApplication = notification.object as! UIApplication
+//        self.showMasterPasswordVC()
+//    }
     
     
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: true)
-        //
-        //self.tableView.setEditing(editing, animated: true)
+        
         print("#setEditing: \(editing)")
-        //
+        //self.tableView.setEditing(editing, animated: true)
+        // 配置items状态
         configureItemOfNavigationBar()
         configureItemInToolbar()
     }
@@ -219,54 +168,30 @@ class MainTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        // using plist
-        //return folderPlist.count
-        
-        
         // using sqlite db
         if let folders = folders {
             return folders.count
         }
-    
         return 0
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        // using plist
-        //return folderPlist[section].count
-        
-        
         // using sqlite db
         if let folders = folders {
             return (folders[section] as! [Any]).count
         }
-        
         return 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print("#cellForRowAt")
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "FolderCell", for: indexPath)
-        
-        /// 使用property list
-        /*
-        if indexPath.section == 1 {
-            let folder = iphoneFolders[indexPath.row]
-            cell.textLabel?.text = folder.itemType
-            cell.detailTextLabel?.text = String(folder.items.count)
-        } else {
-            cell.textLabel?.text = folderPlist[0][0]["itemType"] as? String
-            cell.detailTextLabel?.text = String((folderPlist[0][0]["items"] as! [[String: Any]]).count)
-        }
-        */
-        
         /// 使用sqlite db
-        
         // iphone
         if let iphoneFolders = iphoneFolders {
             let iphoneFolder = iphoneFolders[indexPath.row]
-            //cell.textLabel?.text = iphoneFolder.itemType != "All ? iphoneFolder.itemType : "All Type on IPHONE"
             cell.textLabel?.text = iphoneFolder.folderType.typeString
             cell.detailTextLabel?.text = String(iphoneFolder.count)
             cell.imageView?.image = UIImage.init(named: iphoneFolder.folderType.imageName)
@@ -278,13 +203,10 @@ class MainTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         var sectionHeader = tableView.dequeueReusableHeaderFooterView(withIdentifier: "DefaulSectionHeader")
+        
         if sectionHeader == nil {
             sectionHeader = UITableViewHeaderFooterView(reuseIdentifier: "DefaulSectionHeader")
         }
-        //sectionHeader?.textLabel?.text = folderPlist[section].first?["persistentType"] as? String
-        //sectionHeader?.textLabel?.text = iphoneFolders[section].persistentType
-        
-        
         if let folders = folders {
             sectionHeader?.textLabel?.text = (folders[section] as! [FolderModel]).first?.persistentType.typeString
         }
@@ -300,6 +222,7 @@ class MainTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         print("#canEditRowAt")
+        
         if indexPath.row == 0 {
             return false
         }
@@ -316,6 +239,7 @@ class MainTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         print("#editingStyleForRowAt")
+        
         return UITableViewCellEditingStyle.none
     }
     
@@ -323,26 +247,19 @@ class MainTableViewController: UITableViewController {
     // true: 缩进
     override func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         print("#shouldIndentWhileEditingRowAt")
+        
         return true
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("#didSelectRowAt")
-        //
+
         configureItemInToolbar()
         // 非编辑状态时跳转到新VC
         if !self.tableView.isEditing {
             let itemListTVC: ItemListTVC = storyboard?.instantiateViewController(withIdentifier: "ItemListTVC") as! ItemListTVC
             //let cell = tableView.cellForRow(at: indexPath)
             
-            // 使用plist存储--传递items；
-            /*
-            // 传值
-            itemListTVC.itemType = (cell?.textLabel?.text)!
-            itemListTVC.items = iphoneFolders[indexPath.row].items
-            */
-            
-            //
             let iphoneFolder: FolderModel = iphoneFolders[indexPath.row]
             // 使用sqlite db存储，传递itemType、persistentType（？）
             itemListTVC.folderType = iphoneFolder.folderType
@@ -358,6 +275,7 @@ class MainTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         print("#didDeselectRowAt")
+        
         configureItemInToolbar()
     }
     
@@ -367,13 +285,13 @@ class MainTableViewController: UITableViewController {
     
     // 配置导航栏中item名称及状态
     func configureItemOfNavigationBar() {
-        //
+        // 配置edite button文案
         if self.tableView.isEditing {
             self.editButtonItem.title = "完成"
         } else {
             self.editButtonItem.title = "编辑"
         }
-        // 控制navigatItem状态
+        // 控制navigatItem是否显示
         if folders == nil || folders.count == 0 {
             self.navigationItem.rightBarButtonItem = nil
         } else {
@@ -410,30 +328,22 @@ class MainTableViewController: UITableViewController {
         // 显示可以创建的类型
         let sheet = UIAlertController.init(title: "新建类型", message: "选择要创建的类型", preferredStyle: UIAlertControllerStyle.actionSheet)
         sheet.addAction(UIAlertAction.init(title: "登录信息", style: UIAlertActionStyle.default, handler: { (action) in
+            print("Login action")
             // 处理Login操作
             // 1、第一次创建，创建一个新Login table
             // 2、非第一次，不创建table，而是跳到list页面，调起CreateVC页面
 
             // 跳转到CreateItemVC
             self.showCreateItemVC(withItemType: FolderModel.ItemType.login, persistentType: FolderModel.PersistentType.iphone)
-            
-//            self.queryData()
-//            self.tableView.reloadData()
-//            self.configureItemInToolbar()
-            print("Login action")
         }))
         sheet.addAction(UIAlertAction.init(title: "备注信息", style: UIAlertActionStyle.default, handler: { (action) in
+            print("Note action")
             // 处理Note操作
             // 1、第一次创建，创建一个新Note table
             // 2、非第一次，不创建table，而是跳到list页面，调起CreateVC页面
 
             // 跳转到CreateNoteVC
             self.showCreateNoteVC(withItemType: FolderModel.ItemType.note, persistentType: FolderModel.PersistentType.iphone)
-            
-//            self.queryData()
-//            self.tableView.reloadData()
-//            self.configureItemInToolbar()
-            print("Note action")
         }))
         sheet.addAction(UIAlertAction.init(title: "取消", style: UIAlertActionStyle.cancel, handler: nil))
         
@@ -442,51 +352,6 @@ class MainTableViewController: UITableViewController {
             print("")
         })
     }
-    
-    /*
-    // 显示Alert 用于创建新文件夹
-    func showAlertToCreateNewFolder() {
-        let alert = UIAlertController.init(title: "新建文件夹", message: "请为此文件夹输入名称", preferredStyle: .alert)
-        // 添加textField
-        alert.addTextField { (textField) in
-            textField.placeholder = "名称"
-        }
-        // 添加action
-        alert.addAction(UIAlertAction.init(title: "取消", style: UIAlertActionStyle.cancel, handler: nil))
-        alert.addAction(UIAlertAction.init(title: "存储", style: UIAlertActionStyle.destructive) { (saveAction) in
-            
-            // 保存新建的文件夹；添加到My IPHONE中
-            print("save folder name: \(String(describing: alert.textFields?.first?.text))")
-            
-            // 获取textField的输入内容
-            let folderName = alert.textFields?.first?.text
-            // 插入到iphoneFolders
-            //let item = FolderModel.item(name: folderName!, count: "0")
-            let folder = FolderModel(persistentType: "My IPHONE", itemType: folderName!, items: [])
-            self.iphoneFolders.append(folder)
-            // 插入到iphoneArray
-            /// 为什么此时未插入到self.folderPlist？？？？
-            /// 原因：
-            /// 解决：
-            let tempDict = ["persistentType": "My IPHONE", "itemType": folderName!, "items": []] as [String : Any]
-            var iphoneArray = self.folderPlist[1]
-            iphoneArray.append(tempDict)
-            // 插入到plist
-            self.folderPlist[1] = iphoneArray
-            // 插入cell
-            self.tableView.insertRows(at: [IndexPath.init(row: (self.iphoneFolders.count) - 1, section: 1)], with: .automatic)
-            // 写入Folder.plist
-            let filePath = PlistHelper.getPlistPath(ofName: "Folder.plist")
-            PlistHelper.write(plist: self.folderPlist, toPath: filePath)
-            // 验证是否成功写入沙盒
-            let plist = PlistHelper.readPlist(ofName: "Folder.plist") as! [[[String : Any]]]
-            print("验证Folder.plist in sandbox: \(plist)")
-        })
-        
-        // present modelly
-        self.present(alert, animated: true, completion: nil)
-    }
-    */
     
     // show CreateItemVC
     func showCreateItemVC(withItemType itemType: FolderModel.ItemType, persistentType: FolderModel.PersistentType) {
@@ -512,24 +377,13 @@ class MainTableViewController: UITableViewController {
     // 删除选择的文件夹及对应数据
     func deleteSelectedFolders() {
         print("Delete selected folders")
-        //
+        
         var deleteRows = [IndexPath]()
         var indexSet = IndexSet()
         if let indexPathsForSelectedRows = tableView.indexPathsForSelectedRows {
             /// 注意：这种根据IndexPath删除多个数组element的，要从后往前进行，否则会出现越界
-            ///
             deleteRows = indexPathsForSelectedRows
             for (index, _) in indexPathsForSelectedRows.enumerated().reversed() {
-                print("")
-                /// plist存储
-                /*
-                // 删除model
-                iphoneFolders.remove(at: index)
-                // 删除plist
-                folderPlist[1].remove(at: index)
-                PlistHelper.deleteFolder(at: index)
-                */
-                
                 /// sqlite db存储
                 let indexPath = indexPathsForSelectedRows[index]
                 /// 问题：as!后，获得的是immutable copy
@@ -549,11 +403,13 @@ class MainTableViewController: UITableViewController {
                     indexSet = IndexSet.init(integer: indexPath.section)
                 }
                 
-                // Delte Table
+                // Delete Table
                 try? db.deleteTable(sql: "DROP TABLE \(tableType.typeString)")
                 if tableType == FolderModel.FolderType.login {
-                    // 如果删除的是Login table，同时删除PasswordHistory
-                    try? db.deleteTable(sql: "DROP TABLE PasswordHistory")
+                    // 如果删除的是Login table，同时删除PasswordHistory（不能删，删了主密码也删了，就无法进入了）
+                    //try? db.deleteTable(sql: "DROP TABLE PasswordHistory")
+                    // 如果删除的是Login table，将Login类型的密码历史删除
+                    try? db.delete(sql: "DELETE FROM PasswordHistory WHERE Item_type = '1';")
                 }
             }
             // 删除cells或sections
@@ -566,11 +422,7 @@ class MainTableViewController: UITableViewController {
             self.setEditing(false, animated: true)
             
         }
-        
-        // 如果folders.count==1时，删除“ALL Item Type on IPHONE”这个cell
-        if folders.count == 1 {
-            
-        }
+    
     }
     
     // queryData

@@ -33,7 +33,7 @@ class CreateNoteVC: UIViewController {
     var itemType: FolderModel.ItemType!
     var persistentType: FolderModel.PersistentType!
     var note: Note!
-    var passBackNewItemDetail: ((Item) -> ())!  // 定义closure用于刷新ItemDetailVC
+    //var passBackNewItemDetail: ((Item) -> ())!  // 定义closure用于刷新ItemDetailVC
     
 
     override func viewDidLoad() {
@@ -68,7 +68,7 @@ class CreateNoteVC: UIViewController {
         // 注册UIApplicationDidBecomeActive通知
         //NotificationCenter.default.addObserver(self, selector: #selector(handleObserverUIApplicationDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: UIApplication.shared)
         
-        //
+        // 编辑模式显示note内容
         if let note = note {
             // note不为nil时，是从编辑页面跳转的
             itemName.text = note.itemName
@@ -200,15 +200,15 @@ class CreateNoteVC: UIViewController {
     // Called when the UIKeyboardDidShowNotification is sent.
     @objc
     func keyboardWasShown(_ aNotification: Notification) {
-        //        let info = aNotification.userInfo
-        //        let keyboardBounds = (info![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-        //        let keyboardSize = keyboardBounds.size
+        /// 处理键盘遮挡输入框，滚动scrollView
         print("#keyboardWasShown")
+        
     }
     
     // Called when the UIKeyboardWillHideNotification is sent
     @objc
     func keyboardWillBeHidden(_ aNotification: Notification) {
+        /// 键盘收起，还原scrollView
         print("#keyboardWillBeHidden")
     }
     
@@ -221,14 +221,7 @@ class CreateNoteVC: UIViewController {
         }
     }
 
-    //
-//    func showMasterPasswordVC() {
-//        //let storyBoard: UIStoryboard = UIStoryboard.init(name: "Main", bundle: nil)
-//        let mpVC: MasterPasswordVC = storyboard!.instantiateViewController(withIdentifier: "MasterPasswordVC") as! MasterPasswordVC
-//        mpVC.modalTransitionStyle = .crossDissolve
-//        mpVC.modalPresentationStyle = .fullScreen
-//        self.present(mpVC, animated: true, completion: nil)
-//    }
+
     
 
     /*
