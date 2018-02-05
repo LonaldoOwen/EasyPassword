@@ -128,6 +128,11 @@ class MainTableViewController: UITableViewController {
     
     // MARK: - Action
     
+    // 收起创建item VC
+    @IBAction func closeModifyVC(_ segue: UIStoryboardSegue) {
+        // 使用Storyboard的Exit时，用到
+    }
+    
     // 处理创建/删除文件夹action
     @IBAction func handleCreateNewFolderAction(_ sender: Any) {
         

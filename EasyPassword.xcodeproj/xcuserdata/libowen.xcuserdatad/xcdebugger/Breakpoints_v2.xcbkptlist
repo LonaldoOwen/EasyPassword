@@ -20,13 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "EasyPassword/main/MainTableViewController.swift"
-            timestampString = "539080638.2628289"
+            timestampString = "539528736.019749"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "588"
-            endingLineNumber = "588"
-            landmarkName = "queryData()"
-            landmarkType = "7">
+            startingLineNumber = "521"
+            endingLineNumber = "521">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
