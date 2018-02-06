@@ -321,6 +321,18 @@ extension SQLiteDatabase {
     }
     
     
+    /// 查询主密码
+    func getMasterPassword() -> String? {
+        // 从db取出password
+        let mpSQL = "SELECT * FROM PasswordHistory WHERE Item_id = '9999' AND Item_type = 0;"
+        let queryResults = self.querySql(sql: mpSQL)
+        if let password = queryResults?.first!["Password"] as? String {
+            return password
+        }
+        
+        return nil
+    }
+    
 }
 
 // 扩展SQLiteDatabase--封装 UPDATE

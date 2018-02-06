@@ -30,6 +30,9 @@
 		23DC7C8E1FE274DC00D6A9BB /* ItemDetailTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DC7C8D1FE274DC00D6A9BB /* ItemDetailTVC.swift */; };
 		5A073EC62013B96500BBD3F5 /* Type icon 40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A073EC52013B96400BBD3F5 /* Type icon 40@2x.png */; };
 		5A073EC820148AE100BBD3F5 /* note36@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A073EC720148AE000BBD3F5 /* note36@2x.png */; };
+		5A8495E82029F91B006840C2 /* 设置.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A8495E72029F91A006840C2 /* 设置.png */; };
+		5A8495EA2029FAFF006840C2 /* 设置32.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A8495E92029FAFE006840C2 /* 设置32.png */; };
+		5A8495EC2029FB37006840C2 /* 设置20.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A8495EB2029FB36006840C2 /* 设置20.png */; };
 		5A93B55A1FF37829003C94FC /* GenerateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A93B5591FF37829003C94FC /* GenerateView.swift */; };
 		5A93B55C1FF37838003C94FC /* GenerateView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5A93B55B1FF37838003C94FC /* GenerateView.xib */; };
 		5ABD541C2017891F00918486 /* note29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABD541B2017891F00918486 /* note29@2x.png */; };
@@ -73,6 +76,9 @@
 		23DC7C8D1FE274DC00D6A9BB /* ItemDetailTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailTVC.swift; sourceTree = "<group>"; };
 		5A073EC52013B96400BBD3F5 /* Type icon 40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Type icon 40@2x.png"; sourceTree = "<group>"; };
 		5A073EC720148AE000BBD3F5 /* note36@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note36@2x.png"; sourceTree = "<group>"; };
+		5A8495E72029F91A006840C2 /* 设置.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "设置.png"; sourceTree = "<group>"; };
+		5A8495E92029FAFE006840C2 /* 设置32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "设置32.png"; sourceTree = "<group>"; };
+		5A8495EB2029FB36006840C2 /* 设置20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "设置20.png"; sourceTree = "<group>"; };
 		5A93B5591FF37829003C94FC /* GenerateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateView.swift; sourceTree = "<group>"; };
 		5A93B55B1FF37838003C94FC /* GenerateView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GenerateView.xib; sourceTree = "<group>"; };
 		5ABD541B2017891F00918486 /* note29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note29@2x.png"; sourceTree = "<group>"; };
@@ -118,6 +124,9 @@
 				5ABFED7F201B986E00565509 /* arrow_gray@2x.png */,
 				5ABFED7E201B986E00565509 /* arrow_white@2x.png */,
 				5ABFED84201B99FF00565509 /* logo@2x.png */,
+				5A8495E72029F91A006840C2 /* 设置.png */,
+				5A8495E92029FAFE006840C2 /* 设置32.png */,
+				5A8495EB2029FB36006840C2 /* 设置20.png */,
 			);
 			path = resource;
 			sourceTree = "<group>";
@@ -260,6 +269,7 @@
 				5A073EC820148AE100BBD3F5 /* note36@2x.png in Resources */,
 				234D53152019B819001732AC /* Group login29@2x.png in Resources */,
 				235D7A571FCD04CD004DB418 /* Assets.xcassets in Resources */,
+				5A8495E82029F91B006840C2 /* 设置.png in Resources */,
 				5ABFED73201B88F600565509 /* launch image750x1334@2x.png in Resources */,
 				231416991FFCC28800F113FC /* NoteCell.xib in Resources */,
 				235D7A551FCD04CD004DB418 /* Main.storyboard in Resources */,
@@ -269,9 +279,11 @@
 				5ABFED80201B986F00565509 /* arrow_white@2x.png in Resources */,
 				5A073EC62013B96500BBD3F5 /* Type icon 40@2x.png in Resources */,
 				5ABD541C2017891F00918486 /* note29@2x.png in Resources */,
+				5A8495EC2029FB37006840C2 /* 设置20.png in Resources */,
 				5ABFED6D201B7E7600565509 /* login36@2x.png in Resources */,
 				234D53182019B8A8001732AC /* note create32@2x.png in Resources */,
 				5ABFED85201B9A0000565509 /* logo@2x.png in Resources */,
+				5A8495EA2029FAFF006840C2 /* 设置32.png in Resources */,
 				234D53162019B819001732AC /* login29@2x.png in Resources */,
 				5ABFED6B201AB12B00565509 /* note create40@2x.png in Resources */,
 			);

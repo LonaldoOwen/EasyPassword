@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="N2d-HP-FTh">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="N2d-HP-FTh">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -116,7 +116,7 @@
                         </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="EasyPassword" id="krs-Cn-Us2">
-                        <barButtonItem key="leftBarButtonItem" title="Item" id="Ecy-R3-wQZ">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="设置32.png" id="Ecy-R3-wQZ">
                             <connections>
                                 <segue destination="f0L-6q-IA1" kind="presentation" identifier="ShowModifyMasterPasswordVC" id="q4x-Yz-8hl"/>
                             </connections>
@@ -437,7 +437,7 @@
                                                                         <rect key="frame" x="0.0" y="0.0" width="220" height="19"/>
                                                                         <nil key="textColor"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                        <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES"/>
                                                                     </textField>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CBc-bH-EqF" userLabel="Line View">
                                                                         <rect key="frame" x="0.0" y="27" width="220" height="1"/>
@@ -455,7 +455,7 @@
                                                                         <rect key="frame" x="0.0" y="0.0" width="220" height="19"/>
                                                                         <nil key="textColor"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                        <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES"/>
                                                                     </textField>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f1r-fX-gne" userLabel="Line View">
                                                                         <rect key="frame" x="0.0" y="27" width="220" height="1"/>
@@ -473,7 +473,7 @@
                                                                         <rect key="frame" x="0.0" y="0.0" width="220" height="19"/>
                                                                         <nil key="textColor"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                        <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES"/>
                                                                     </textField>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ymh-3F-DB9" userLabel="Line View">
                                                                         <rect key="frame" x="0.0" y="27" width="220" height="1"/>
@@ -522,7 +522,7 @@
                                                                             <color key="titleColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                         </state>
                                                                         <connections>
-                                                                            <action selector="modifyMasterPassword:" destination="f0L-6q-IA1" eventType="touchUpInside" id="qOz-9b-MSN"/>
+                                                                            <action selector="handleModifyBtnAction:" destination="f0L-6q-IA1" eventType="touchUpInside" id="4uP-sn-Hjh"/>
                                                                         </connections>
                                                                     </button>
                                                                 </subviews>
@@ -560,9 +560,9 @@
                         <viewLayoutGuide key="safeArea" id="0wr-94-0hC"/>
                     </view>
                     <connections>
-                        <outlet property="confirmBtn" destination="CDq-UO-tah" id="llS-uY-QhS"/>
                         <outlet property="confirmPasswordField" destination="lj5-tE-k65" id="lKO-xw-U7P"/>
                         <outlet property="indicatorField" destination="NeJ-u8-Ek1" id="ddT-SN-v7i"/>
+                        <outlet property="modifyBtn" destination="CDq-UO-tah" id="Gqa-1J-uLo"/>
                         <outlet property="newPasswordField" destination="4ks-al-5RS" id="eFd-tE-wwp"/>
                         <outlet property="oldPasswordField" destination="yYt-eR-gdG" id="esu-GT-HbN"/>
                         <outlet property="scrollView" destination="hUQ-1L-8lD" id="IL8-R5-2gp"/>
@@ -1809,5 +1809,6 @@
         <image name="logo.png" width="80" height="80"/>
         <image name="note create32.png" width="32" height="32"/>
         <image name="tingdan1.png" width="20" height="20"/>
+        <image name="设置32.png" width="32" height="32"/>
     </resources>
 </document>

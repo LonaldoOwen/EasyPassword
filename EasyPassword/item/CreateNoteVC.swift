@@ -170,12 +170,12 @@ class CreateNoteVC: UIViewController {
         // 点击显示edit menu
     }
     
-    @objc func handleObserverUIApplicationDidBecomeActive(_ notification: Notification) {
-        //
-        print("#handleObserverUIApplicationDidBecomeActive: \(notification)")
-        //let app: UIApplication = notification.object as! UIApplication
-        self.showMasterPasswordVC()
-    }
+//    @objc func handleObserverUIApplicationDidBecomeActive(_ notification: Notification) {
+//        //
+//        print("#handleObserverUIApplicationDidBecomeActive: \(notification)")
+//        //let app: UIApplication = notification.object as! UIApplication
+//        //self.showMasterPasswordVC()
+//    }
     
     
     // MARK: -- Helper

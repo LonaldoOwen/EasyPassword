@@ -25,13 +25,20 @@ class ORHelper {
 
 
 extension UIViewController {
-    //增加显示MasterPasswordVC功能
-    func showMasterPasswordVC() {
-        let storyBoard: UIStoryboard = UIStoryboard.init(name: "Main", bundle: nil)
-        let mpVC: MasterPasswordVC = storyBoard.instantiateViewController(withIdentifier: "MasterPasswordVC") as! MasterPasswordVC
-        mpVC.modalTransitionStyle = .crossDissolve
-        mpVC.modalPresentationStyle = .fullScreen
-        self.present(mpVC, animated: true, completion: nil)
+    //增加显示MasterPasswordVC功能(废弃，因为使用了UIView)
+//    func showMasterPasswordVC() {
+//        let storyBoard: UIStoryboard = UIStoryboard.init(name: "Main", bundle: nil)
+//        let mpVC: MasterPasswordVC = storyBoard.instantiateViewController(withIdentifier: "MasterPasswordVC") as! MasterPasswordVC
+//        mpVC.modalTransitionStyle = .crossDissolve
+//        mpVC.modalPresentationStyle = .fullScreen
+//        self.present(mpVC, animated: true, completion: nil)
+//    }
+    
+    // 显示提示信息（好几处都用到相同的功能）
+    func showAlert(title: String, message: String, actionTitle: String) {
+        let alertVC = UIAlertController.init(title: title, message: "\(message)", preferredStyle: UIAlertControllerStyle.alert)
+        alertVC.addAction(UIAlertAction.init(title: actionTitle, style: UIAlertActionStyle.default, handler: nil))
+        self.present(alertVC, animated: true, completion: nil)
     }
 }
 
