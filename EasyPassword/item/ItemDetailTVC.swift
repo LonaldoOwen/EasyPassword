@@ -67,7 +67,7 @@ class ItemDetailTVC: UITableViewController {
         /// 如果复写了setEditing(_:)方法，则编辑功能消失，需要自己实现
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.rightBarButtonItem = self.editButtonItem
-        self.title = "Detail"
+        //self.title = "Detail"
         // 配置tableFooterView，用于显示时间
         tableFooter.addSubview(createTimeLabel)
         tableFooter.addSubview(updateTimeLabel)
@@ -100,6 +100,9 @@ class ItemDetailTVC: UITableViewController {
         print("itemId: \(itemId)")
         print("persistentType: \(persistentType)")
         print("itemType: \(itemType)")
+        
+        //
+        self.editButtonItem.title = "编辑"
         
         // 进入详情页面，隐藏ToolBar
         self.navigationController?.isToolbarHidden = true

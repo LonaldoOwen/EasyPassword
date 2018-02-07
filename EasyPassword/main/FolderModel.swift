@@ -48,11 +48,11 @@ class FolderModel {
         var typeString: String {
             switch self {
             case .all:
-                return "All Item Type on IPHONE"
+                return "All Item Type on IPHONE"    //"IPHONE上的所有类型"
             case .login:
-                return "Login"
+                return  "Login" //"登录信息"
             case .note:
-                return "Note"
+                return  "Note"  //"备忘信息"
             }
         }
         

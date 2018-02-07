@@ -64,10 +64,20 @@ class ItemListTVC: UITableViewController {
         print("persistentType: \(persistentType)")
         print("folderType: \(folderType)")
         // 接收传值，显示title
-        self.title = folderType.typeString
+        //self.title = folderType.typeString
+        switch folderType! {
+        case .all:
+            self.title = "IPHONE上的所有类型"
+        case .login:
+            self.title = "登录信息"
+        case .note:
+            self.title = "备忘信息"
+        }
         // 如果使用db，根据itemType查询db，显示tableView
         queryData()
+        
         // 配置工具栏item状态
+        configureItemOfNavigationBar()
         configureToolBarItems()
         // 刷新UI
         self.tableView.reloadData()
@@ -81,6 +91,7 @@ class ItemListTVC: UITableViewController {
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         // 配置工具栏item状态
+        configureItemOfNavigationBar()
         configureToolBarItems()
     }
     
@@ -174,6 +185,7 @@ class ItemListTVC: UITableViewController {
         }
         
         // 配置工具栏item状态
+        configureItemOfNavigationBar()
         configureToolBarItems()
     }
     
@@ -256,7 +268,7 @@ class ItemListTVC: UITableViewController {
             print("Login action")
             self.showCreateItemVC(withItemType: FolderModel.ItemType.login)
         }))
-        sheet.addAction(UIAlertAction.init(title: "备注信息", style: UIAlertActionStyle.default, handler: { (action) in
+        sheet.addAction(UIAlertAction.init(title: "备忘信息", style: UIAlertActionStyle.default, handler: { (action) in
             // 处理Note操作
             print("Note action")
             self.showCreateNoteVC(withItemType: FolderModel.ItemType.note)
@@ -269,19 +281,28 @@ class ItemListTVC: UITableViewController {
         })
     }
     
+    // 配置导航栏中item名称及状态
+    func configureItemOfNavigationBar() {
+        // 配置edite button文案
+        if self.isEditing {
+            self.editButtonItem.title = "完成"
+        } else {
+            self.editButtonItem.title = "编辑"
+        }
+        // 配置navigationItem状态
+        if items == nil || items.count == 0 {
+            self.navigationItem.rightBarButtonItem = nil
+        } else {
+            self.navigationItem.rightBarButtonItem = self.editButtonItem
+        }
+    }
+    
     // 控制ToolBar中btn显示
     func configureToolBarItems() {
         if self.isEditing {
             addItem.isEnabled = false
         } else {
             addItem.isEnabled = true
-        }
-        
-        // 配置navigationItem状态
-        if items == nil || items.count == 0 {
-            self.navigationItem.rightBarButtonItem = nil
-        } else {
-            self.navigationItem.rightBarButtonItem = self.editButtonItem
         }
     }
     

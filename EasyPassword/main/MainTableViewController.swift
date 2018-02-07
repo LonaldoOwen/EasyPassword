@@ -68,6 +68,7 @@ extension Note: SQLTable {
 class MainTableViewController: UITableViewController {
     
     @IBOutlet weak var addFolderItem: UIBarButtonItem!
+    @IBOutlet weak var settingBtn: UIBarButtonItem!
     
 
     // sqlite db存储
@@ -197,7 +198,14 @@ class MainTableViewController: UITableViewController {
         // iphone
         if let iphoneFolders = iphoneFolders {
             let iphoneFolder = iphoneFolders[indexPath.row]
-            cell.textLabel?.text = iphoneFolder.folderType.typeString
+            //cell.textLabel?.text = iphoneFolder.folderType.typeString
+            if iphoneFolder.folderType == FolderModel.FolderType.all {
+                cell.textLabel?.text = "IPHONE上的所有类型"
+            } else if iphoneFolder.folderType == FolderModel.FolderType.login {
+                cell.textLabel?.text = "登录信息"
+            } else if iphoneFolder.folderType == FolderModel.FolderType.note {
+                cell.textLabel?.text = "备忘信息"
+            }
             cell.detailTextLabel?.text = String(iphoneFolder.count)
             cell.imageView?.image = UIImage.init(named: iphoneFolder.folderType.imageName)
         }
@@ -291,7 +299,7 @@ class MainTableViewController: UITableViewController {
     // 配置导航栏中item名称及状态
     func configureItemOfNavigationBar() {
         // 配置edite button文案
-        if self.tableView.isEditing {
+        if self.isEditing {
             self.editButtonItem.title = "完成"
         } else {
             self.editButtonItem.title = "编辑"
@@ -320,10 +328,15 @@ class MainTableViewController: UITableViewController {
                 addFolderItem.isEnabled = false
             }
             
+            // 设置
+            settingBtn.isEnabled = false
+            
         } else {
             // 创建文件夹
             addFolderItem.title = "新建类型"
             addFolderItem.isEnabled = true
+            // 设置
+            settingBtn.isEnabled = true
         }
         
     }
@@ -341,7 +354,7 @@ class MainTableViewController: UITableViewController {
             // 跳转到CreateItemVC
             self.showCreateItemVC(withItemType: FolderModel.ItemType.login, persistentType: FolderModel.PersistentType.iphone)
         }))
-        sheet.addAction(UIAlertAction.init(title: "备注信息", style: UIAlertActionStyle.default, handler: { (action) in
+        sheet.addAction(UIAlertAction.init(title: "备忘信息", style: UIAlertActionStyle.default, handler: { (action) in
             print("Note action")
             // 处理Note操作
             // 1、第一次创建，创建一个新Note table

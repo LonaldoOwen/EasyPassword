@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="N2d-HP-FTh">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="N2d-HP-FTh">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -106,6 +106,11 @@
                         </connections>
                     </tableView>
                     <toolbarItems>
+                        <barButtonItem title="Item" image="设置32.png" id="gEc-1c-H48">
+                            <connections>
+                                <segue destination="f0L-6q-IA1" kind="presentation" id="Za1-0C-a4R"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="FY3-Mo-tDZ">
                             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </barButtonItem>
@@ -115,17 +120,12 @@
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" title="EasyPassword" id="krs-Cn-Us2">
-                        <barButtonItem key="leftBarButtonItem" title="Item" image="设置32.png" id="Ecy-R3-wQZ">
-                            <connections>
-                                <segue destination="f0L-6q-IA1" kind="presentation" identifier="ShowModifyMasterPasswordVC" id="q4x-Yz-8hl"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="EasyPassword" id="krs-Cn-Us2"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="addFolderItem" destination="NtE-8J-Lh3" id="g4L-b5-ec4"/>
                         <outlet property="searchDisplayController" destination="Zcx-SL-th8" id="QQP-vR-gcU"/>
+                        <outlet property="settingBtn" destination="gEc-1c-H48" id="Iem-R5-xxe"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kok-SL-daV" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -291,7 +291,7 @@
                                                                         <rect key="frame" x="0.0" y="0.0" width="220" height="19"/>
                                                                         <nil key="textColor"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                        <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES"/>
                                                                     </textField>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xp9-nf-jaj" userLabel="Line View">
                                                                         <rect key="frame" x="0.0" y="27" width="220" height="1"/>
@@ -309,7 +309,7 @@
                                                                         <rect key="frame" x="0.0" y="0.0" width="220" height="19"/>
                                                                         <nil key="textColor"/>
                                                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                                        <textInputTraits key="textInputTraits" autocorrectionType="no"/>
+                                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES"/>
                                                                     </textField>
                                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dHu-2B-xo7" userLabel="Line View">
                                                                         <rect key="frame" x="0.0" y="27" width="220" height="1"/>
@@ -570,7 +570,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dcT-oS-EoG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1596" y="-742"/>
+            <point key="canvasLocation" x="1596" y="790"/>
         </scene>
         <!--Item ListTVC-->
         <scene sceneID="8qU-bs-wsr">
