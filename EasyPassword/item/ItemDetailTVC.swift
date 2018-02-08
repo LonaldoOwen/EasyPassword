@@ -312,7 +312,7 @@ class ItemDetailTVC: UITableViewController {
             let editMenu = UIMenuController.shared
             editMenu.menuItems = [
                 UIMenuItem(title: "COPY", action: #selector(handleCopyAction)),
-                UIMenuItem(title: "Big Word", action: #selector(handleBigWordAction))
+                //UIMenuItem(title: "Big Word", action: #selector(handleBigWordAction))
             ]
             editMenu.setTargetRect(cell.frame, in: cell.superview!)
             editMenu.setMenuVisible(true, animated: true)

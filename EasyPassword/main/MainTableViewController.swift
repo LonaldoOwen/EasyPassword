@@ -110,7 +110,6 @@ class MainTableViewController: UITableViewController {
         print("#MainTableViewController--viewWillAppear")
         // 注册UIApplicationDidBecomeActive通知
         //NotificationCenter.default.addObserver(self, selector: #selector(handleObserverUIApplicationDidBecomeActive), name: NSNotification.Name.UIApplicationDidBecomeActive, object: UIApplication.shared)
-        
         // sqlite db存储
         // 页面每次显示时，query db，只查询需要的字段即可，区别plist
         queryData()

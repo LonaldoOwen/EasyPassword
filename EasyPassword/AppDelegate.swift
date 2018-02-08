@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print("#4 applicationDidEnterBackground")
         // 进入后台后，显示master password页面
         // 好处在于，在多任务页面也会锁住页面；
-        //showNewWindow()
+        showNewWindow()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
