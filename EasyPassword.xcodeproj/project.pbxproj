@@ -28,7 +28,6 @@
 		23B33D981FCE666B005403C1 /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B33D971FCE666A005403C1 /* MainTableViewController.swift */; };
 		23B33D9B1FCE66AD005403C1 /* FolderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B33D9A1FCE66AD005403C1 /* FolderModel.swift */; };
 		23DC7C8E1FE274DC00D6A9BB /* ItemDetailTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DC7C8D1FE274DC00D6A9BB /* ItemDetailTVC.swift */; };
-		5A073EC62013B96500BBD3F5 /* Type icon 40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A073EC52013B96400BBD3F5 /* Type icon 40@2x.png */; };
 		5A073EC820148AE100BBD3F5 /* note36@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A073EC720148AE000BBD3F5 /* note36@2x.png */; };
 		5A8495E82029F91B006840C2 /* 设置.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A8495E72029F91A006840C2 /* 设置.png */; };
 		5A8495EA2029FAFF006840C2 /* 设置32.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A8495E92029FAFE006840C2 /* 设置32.png */; };
@@ -40,7 +39,6 @@
 		5ABFED6B201AB12B00565509 /* note create40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABFED6A201AB12A00565509 /* note create40@2x.png */; };
 		5ABFED6D201B7E7600565509 /* login36@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABFED6C201B7E7500565509 /* login36@2x.png */; };
 		5ABFED71201B83FE00565509 /* Item all29@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABFED70201B83FE00565509 /* Item all29@2x.png */; };
-		5ABFED73201B88F600565509 /* launch image750x1334@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABFED72201B88F500565509 /* launch image750x1334@2x.png */; };
 		5ABFED75201B893F00565509 /* MasterPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABFED74201B893F00565509 /* MasterPasswordVC.swift */; };
 		5ABFED80201B986F00565509 /* arrow_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABFED7E201B986E00565509 /* arrow_white@2x.png */; };
 		5ABFED81201B986F00565509 /* arrow_gray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABFED7F201B986E00565509 /* arrow_gray@2x.png */; };
@@ -74,7 +72,6 @@
 		23B33D971FCE666A005403C1 /* MainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
 		23B33D9A1FCE66AD005403C1 /* FolderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderModel.swift; sourceTree = "<group>"; };
 		23DC7C8D1FE274DC00D6A9BB /* ItemDetailTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailTVC.swift; sourceTree = "<group>"; };
-		5A073EC52013B96400BBD3F5 /* Type icon 40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Type icon 40@2x.png"; sourceTree = "<group>"; };
 		5A073EC720148AE000BBD3F5 /* note36@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note36@2x.png"; sourceTree = "<group>"; };
 		5A8495E72029F91A006840C2 /* 设置.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "设置.png"; sourceTree = "<group>"; };
 		5A8495E92029FAFE006840C2 /* 设置32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "设置32.png"; sourceTree = "<group>"; };
@@ -86,7 +83,6 @@
 		5ABFED6A201AB12A00565509 /* note create40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note create40@2x.png"; sourceTree = "<group>"; };
 		5ABFED6C201B7E7500565509 /* login36@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login36@2x.png"; sourceTree = "<group>"; };
 		5ABFED70201B83FE00565509 /* Item all29@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Item all29@2x.png"; sourceTree = "<group>"; };
-		5ABFED72201B88F500565509 /* launch image750x1334@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "launch image750x1334@2x.png"; sourceTree = "<group>"; };
 		5ABFED74201B893F00565509 /* MasterPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterPasswordVC.swift; sourceTree = "<group>"; };
 		5ABFED7E201B986E00565509 /* arrow_white@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_white@2x.png"; sourceTree = "<group>"; };
 		5ABFED7F201B986E00565509 /* arrow_gray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_gray@2x.png"; sourceTree = "<group>"; };
@@ -111,11 +107,9 @@
 		2335AFFE1FDFDA1E00E2A922 /* resource */ = {
 			isa = PBXGroup;
 			children = (
-				5ABFED72201B88F500565509 /* launch image750x1334@2x.png */,
 				234D53132019B819001732AC /* Group login29@2x.png */,
 				234D53142019B819001732AC /* login29@2x.png */,
 				5ABFED6C201B7E7500565509 /* login36@2x.png */,
-				5A073EC52013B96400BBD3F5 /* Type icon 40@2x.png */,
 				5ABD541B2017891F00918486 /* note29@2x.png */,
 				5A073EC720148AE000BBD3F5 /* note36@2x.png */,
 				234D53172019B8A8001732AC /* note create32@2x.png */,
@@ -237,7 +231,7 @@
 				TargetAttributes = {
 					235D7A4B1FCD04CD004DB418 = {
 						CreatedOnToolsVersion = 9.1;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -270,14 +264,12 @@
 				234D53152019B819001732AC /* Group login29@2x.png in Resources */,
 				235D7A571FCD04CD004DB418 /* Assets.xcassets in Resources */,
 				5A8495E82029F91B006840C2 /* 设置.png in Resources */,
-				5ABFED73201B88F600565509 /* launch image750x1334@2x.png in Resources */,
 				231416991FFCC28800F113FC /* NoteCell.xib in Resources */,
 				235D7A551FCD04CD004DB418 /* Main.storyboard in Resources */,
 				5ABFED81201B986F00565509 /* arrow_gray@2x.png in Resources */,
 				5A93B55C1FF37838003C94FC /* GenerateView.xib in Resources */,
 				233BC9AF1FD8E30900C615C5 /* Items.plist in Resources */,
 				5ABFED80201B986F00565509 /* arrow_white@2x.png in Resources */,
-				5A073EC62013B96500BBD3F5 /* Type icon 40@2x.png in Resources */,
 				5ABD541C2017891F00918486 /* note29@2x.png in Resources */,
 				5A8495EC2029FB37006840C2 /* 设置20.png in Resources */,
 				5ABFED6D201B7E7600565509 /* login36@2x.png in Resources */,
@@ -452,15 +444,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = KM6P947ZT3;
 				INFOPLIST_FILE = EasyPassword/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tianyuchen.EasyPassword;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "829c1f50-7bdc-4922-9bdd-1fe38b8bd49e";
+				PROVISIONING_PROFILE_SPECIFIER = "EasyPassword Development Profile";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -471,15 +463,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = KM6P947ZT3;
 				INFOPLIST_FILE = EasyPassword/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tianyuchen.EasyPassword;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "4e349970-75a3-4b28-84e5-c07cdbd39d78";
+				PROVISIONING_PROFILE_SPECIFIER = "EasyPassword Distribution Profile";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
