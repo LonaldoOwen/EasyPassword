@@ -201,7 +201,7 @@ class ModifyMasterPasswordVC: UIViewController {
         if let passwordHistoryTable = db.masterContainTable("PasswordHistory") {
             if passwordHistoryTable {
                 // 两次密码判断通过，Update 主密码
-                let updateMPSQL = "UPDATE PasswordHistory SET Password = '\(newPasswordField.text!)', Create_time = '\(dateStr)' WHERE Item_id = '9999' AND Item_type = '0';"
+                let updateMPSQL = "UPDATE PasswordHistory SET Password = '\(newPasswordField.text!)', Create_time = '\(dateStr)', Note = '\(indicatorField.text!)' WHERE Item_id = '9999' AND Item_type = '0';"
                 if try! db.update(sql: updateMPSQL) {
                     print("更新主密码成功!")
                     self.dismiss(animated: true, completion: nil)
