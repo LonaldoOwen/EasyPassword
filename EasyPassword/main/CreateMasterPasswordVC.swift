@@ -315,12 +315,12 @@ extension CreateMasterPasswordVC: UITextFieldDelegate {
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        print("#CreateItemVC--textFieldDidBeginEditing")
+        print("#CreateMasterPasswordVC--textFieldDidBeginEditing")
         activeField = textField
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        print("#CreateItemVC--textFieldDidEndEditing")
+        print("#CreateMasterPasswordVC--textFieldDidEndEditing")
         activeField = nil
     }
 }

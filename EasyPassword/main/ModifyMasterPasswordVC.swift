@@ -238,17 +238,17 @@ extension ModifyMasterPasswordVC: UITextFieldDelegate {
     }
     
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        print("#textFieldShouldBeginEditing")
+        print("#ModifyMasterPasswordVC--textFieldShouldBeginEditing")
         return true
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        print("#CreateItemVC--textFieldDidBeginEditing")
+        print("#ModifyMasterPasswordVC--textFieldDidBeginEditing")
         activeField = textField
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        print("#CreateItemVC--textFieldDidEndEditing")
+        print("#ModifyMasterPasswordVC--textFieldDidEndEditing")
         activeField = nil
     }
 }

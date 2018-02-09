@@ -24,6 +24,8 @@
 		235F3418202885DF00E48CEE /* ModifyMasterPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235F3417202885DF00E48CEE /* ModifyMasterPasswordVC.swift */; };
 		238A66BD202070EF00BEAACF /* CreateMasterPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238A66BC202070EF00BEAACF /* CreateMasterPasswordVC.swift */; };
 		238FD9691FDA99F70015B855 /* CreateItemVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238FD9681FDA99F70015B855 /* CreateItemVC.swift */; };
+		2396E960202DC00800216A6C /* EPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2396E95F202DC00800216A6C /* EPViewController.swift */; };
+		2396E964202DCD5800216A6C /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2396E963202DCD5800216A6C /* TestViewController.swift */; };
 		23B33D951FCD8069005403C1 /* PlistHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B33D941FCD8069005403C1 /* PlistHelper.swift */; };
 		23B33D981FCE666B005403C1 /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B33D971FCE666A005403C1 /* MainTableViewController.swift */; };
 		23B33D9B1FCE66AD005403C1 /* FolderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B33D9A1FCE66AD005403C1 /* FolderModel.swift */; };
@@ -68,6 +70,8 @@
 		235F3417202885DF00E48CEE /* ModifyMasterPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyMasterPasswordVC.swift; sourceTree = "<group>"; };
 		238A66BC202070EF00BEAACF /* CreateMasterPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMasterPasswordVC.swift; sourceTree = "<group>"; };
 		238FD9681FDA99F70015B855 /* CreateItemVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateItemVC.swift; sourceTree = "<group>"; };
+		2396E95F202DC00800216A6C /* EPViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPViewController.swift; sourceTree = "<group>"; };
+		2396E963202DCD5800216A6C /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		23B33D941FCD8069005403C1 /* PlistHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlistHelper.swift; sourceTree = "<group>"; };
 		23B33D971FCE666A005403C1 /* MainTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTableViewController.swift; sourceTree = "<group>"; };
 		23B33D9A1FCE66AD005403C1 /* FolderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderModel.swift; sourceTree = "<group>"; };
@@ -158,6 +162,8 @@
 				23B33D941FCD8069005403C1 /* PlistHelper.swift */,
 				234C10212007050500CF23B0 /* SQLiteHelper.swift */,
 				5AC8029F201D7E630063B2C9 /* ORHelper.swift */,
+				2396E95F202DC00800216A6C /* EPViewController.swift */,
+				2396E963202DCD5800216A6C /* TestViewController.swift */,
 				23B33D961FCE666A005403C1 /* main */,
 				5AEF16121FD6F0BD00FAD262 /* item */,
 				2335AFFE1FDFDA1E00E2A922 /* resource */,
@@ -298,9 +304,11 @@
 				5A93B55A1FF37829003C94FC /* GenerateView.swift in Sources */,
 				5ABD54202018E19B00918486 /* AddNoteVC.swift in Sources */,
 				23B33D981FCE666B005403C1 /* MainTableViewController.swift in Sources */,
+				2396E964202DCD5800216A6C /* TestViewController.swift in Sources */,
 				23B33D951FCD8069005403C1 /* PlistHelper.swift in Sources */,
 				5AC802A0201D7E630063B2C9 /* ORHelper.swift in Sources */,
 				235D7A521FCD04CD004DB418 /* ViewController.swift in Sources */,
+				2396E960202DC00800216A6C /* EPViewController.swift in Sources */,
 				23B33D9B1FCE66AD005403C1 /* FolderModel.swift in Sources */,
 				5AEF16161FD6F71A00FAD262 /* ItemModel.swift in Sources */,
 				235D7A501FCD04CD004DB418 /* AppDelegate.swift in Sources */,
