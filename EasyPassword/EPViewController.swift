@@ -69,6 +69,7 @@ class EPViewController: UIViewController {
             // 如果textField被键盘遮住，scrollview滚动，显示该textField
             var aRect = self.view.frame
             aRect.size.height -= height
+            
             if let textField = _activeField {
                 let point = textField.convert(textField.frame.origin, to: self.view)
                 if !aRect.contains(point) {
@@ -81,8 +82,12 @@ class EPViewController: UIViewController {
             if let textView = _activeTextView {
                 let point = textView.convert(textView.frame.origin, to: self.view)
                 if !aRect.contains(point) {
-                    let rect = textView.convert(textView.frame, to: self.view)
-                    _scrollView.scrollRectToVisible(rect, animated: true)
+                    /// 问题：此代码不会滚动？？？
+//                    let rect = textView.convert(textView.frame, to: self.view)
+//                    _scrollView.scrollRectToVisible(rect, animated: true)
+                    
+                    let scrollPoint = CGPoint(x: 0.0, y: point.y - keyboardBounds.size.height)
+                    _scrollView.setContentOffset(scrollPoint, animated: true)
                 }
             }
         }
@@ -142,6 +147,7 @@ extension EPViewController: UITextFieldDelegate {
 
 // MARK: - UITextViewDelegate
 extension EPViewController: UITextViewDelegate {
+    
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
         print("#EPViewController--textViewShouldBeginEditing")
         return true

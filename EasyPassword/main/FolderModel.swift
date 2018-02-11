@@ -12,12 +12,6 @@
 ///
 ///
 
-/*
- var persistent: String // 持久化方式
- var folderName: String // 文件夹name
- var itmes: [ItemModel] // 条目
-
- */
 
 import Foundation
 
@@ -97,19 +91,7 @@ class FolderModel {
         }
     }
     
-    
-    // plist存储--data model
-    /*
-    var persistentType: String
-    var itemType: String
-    var items: [Item]
-    
-    init(persistentType: String, itemType: String, items: [Item]?) {
-        self.persistentType = persistentType
-        self.itemType = itemType
-        self.items = items != nil ? items! : [Item]()
-    }
-    */
+
     
     // sqlite db存储--data model
     var persistentType: PersistentType
