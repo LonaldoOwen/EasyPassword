@@ -40,7 +40,7 @@ extension PasswordHistory: SQLTable {
 }
 
 
-class CreateMasterPasswordVC: UIViewController {
+class CreateMasterPasswordVC: EPViewController {
     
     
     @IBOutlet weak var scrollView: UIScrollView!
@@ -67,7 +67,8 @@ class CreateMasterPasswordVC: UIViewController {
         //masterPasswordField.clearButtonMode = UITextFieldViewMode.whileEditing
         
         // 注册keyboard通知(处理键盘遮挡)
-        registerForKeyboardNotifications()
+        //registerForKeyboardNotifications()
+        _scrollView = scrollView
         // 配置所有UITextField
         textFields = [masterPasswordField, confirmPasswordField, indicatorField]
         for textField in textFields {
@@ -136,49 +137,49 @@ class CreateMasterPasswordVC: UIViewController {
     // MARK: - Helper
     
     // Call this method somewhere in your view controller setup code.
-    fileprivate func registerForKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown), name: .UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(CreateItemVC.keyboardWillBeHidden(_:)), name: .UIKeyboardWillHide, object: nil)
-    }
+//    fileprivate func registerForKeyboardNotifications() {
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown), name: .UIKeyboardDidShow, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(CreateItemVC.keyboardWillBeHidden(_:)), name: .UIKeyboardWillHide, object: nil)
+//    }
     
     // Called when the UIKeyboardDidShowNotification is sent.
-    @objc
-    func keyboardWasShown(_ aNotification: Notification) {
-        
-        if let keyboardBounds = (aNotification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            print("Show keyboard: \(keyboardBounds)")
-            
-            let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardBounds.size.height, right: 0)
-            scrollView.contentInset = contentInsets
-            scrollView.scrollIndicatorInsets = contentInsets
-            
-            // If active text field is hidden by keyboard, scroll it so it's visible
-            // Your app might not need or want this behavior.
-            // 如果textField被键盘遮住，scrollview滚动，显示该textField
-            var aRect = self.view.frame
-            aRect.size.height -= keyboardBounds.size.height
-            if let textField = activeField {
-                let point = textField.convert(textField.frame.origin, to: self.view)
-                if !aRect.contains(point) {
-                    let rect = textField.convert(textField.frame, to: self.view)
-                    self.scrollView.scrollRectToVisible(rect, animated: true)
-                }
-            }
-        
-            
-        }
-    }
-    
-    // Called when the UIKeyboardWillHideNotification is sent
-    @objc func keyboardWillBeHidden(_ aNotification: Notification) {
-        // 恢复scrollview为默认状态
-        if let keyboardBounds = (aNotification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            print("Hidden keyboard: \(keyboardBounds)")
-        }
-        let contentInsets = UIEdgeInsets.zero
-        scrollView.contentInset = contentInsets
-        scrollView.scrollIndicatorInsets = contentInsets
-    }
+//    @objc
+//    func keyboardWasShown(_ aNotification: Notification) {
+//
+//        if let keyboardBounds = (aNotification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+//            print("Show keyboard: \(keyboardBounds)")
+//
+//            let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardBounds.size.height, right: 0)
+//            scrollView.contentInset = contentInsets
+//            scrollView.scrollIndicatorInsets = contentInsets
+//
+//            // If active text field is hidden by keyboard, scroll it so it's visible
+//            // Your app might not need or want this behavior.
+//            // 如果textField被键盘遮住，scrollview滚动，显示该textField
+//            var aRect = self.view.frame
+//            aRect.size.height -= keyboardBounds.size.height
+//            if let textField = activeField {
+//                let point = textField.convert(textField.frame.origin, to: self.view)
+//                if !aRect.contains(point) {
+//                    let rect = textField.convert(textField.frame, to: self.view)
+//                    self.scrollView.scrollRectToVisible(rect, animated: true)
+//                }
+//            }
+//
+//
+//        }
+//    }
+//
+//    // Called when the UIKeyboardWillHideNotification is sent
+//    @objc func keyboardWillBeHidden(_ aNotification: Notification) {
+//        // 恢复scrollview为默认状态
+//        if let keyboardBounds = (aNotification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+//            print("Hidden keyboard: \(keyboardBounds)")
+//        }
+//        let contentInsets = UIEdgeInsets.zero
+//        scrollView.contentInset = contentInsets
+//        scrollView.scrollIndicatorInsets = contentInsets
+//    }
     
     // 处理textField输入变化
     @objc func handleTextFieldTextChanged(_ textField: UITextField) {
@@ -299,31 +300,31 @@ class CreateMasterPasswordVC: UIViewController {
 
 // MARK: - UITextFieldDelegate
 
-extension CreateMasterPasswordVC: UITextFieldDelegate {
-    
-    // 点击return收起键盘
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        return textField.resignFirstResponder()
-    }
-    
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        print("#textFieldShouldBeginEditing")
-        //        if textField == self.password!  {
-        //            // 如果想禁止某个textField输入，返回false
-        //        }
-        return true
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        print("#CreateMasterPasswordVC--textFieldDidBeginEditing")
-        activeField = textField
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        print("#CreateMasterPasswordVC--textFieldDidEndEditing")
-        activeField = nil
-    }
-}
+//extension CreateMasterPasswordVC: UITextFieldDelegate {
+//
+//    // 点击return收起键盘
+//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//        return textField.resignFirstResponder()
+//    }
+//
+//    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+//        print("#textFieldShouldBeginEditing")
+//        //        if textField == self.password!  {
+//        //            // 如果想禁止某个textField输入，返回false
+//        //        }
+//        return true
+//    }
+//
+//    func textFieldDidBeginEditing(_ textField: UITextField) {
+//        print("#CreateMasterPasswordVC--textFieldDidBeginEditing")
+//        activeField = textField
+//    }
+//
+//    func textFieldDidEndEditing(_ textField: UITextField) {
+//        print("#CreateMasterPasswordVC--textFieldDidEndEditing")
+//        activeField = nil
+//    }
+//}
 
 
 

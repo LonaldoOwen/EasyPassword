@@ -33,6 +33,7 @@ class AddNoteVC: UIViewController {
         
         // 注册keyboard通知(处理键盘遮挡)
         registerForKeyboardNotifications()
+        //_scrollView = scrollView
         
     }
     
@@ -71,16 +72,16 @@ class AddNoteVC: UIViewController {
 
         if let keyboardBounds = (aNotification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             print("Show keyboard: \(keyboardBounds)")
-            
+
             let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardBounds.size.height, right: 0)
             scrollView.contentInset = contentInsets
             scrollView.scrollIndicatorInsets = contentInsets
-            
+
             // If active text field is hidden by keyboard, scroll it so it's visible
             // Your app might not need or want this behavior.
             var aRect = self.view.frame
             aRect.size.height -= keyboardBounds.size.height
-            
+
             /// 问题：当为textView时，滚动的距离有点大？？？
             ///
             ///
@@ -91,10 +92,10 @@ class AddNoteVC: UIViewController {
                     self.scrollView.scrollRectToVisible(rect, animated: true)
                 }
             }
-            
+
         }
     }
-    
+
     // Called when the UIKeyboardWillHideNotification is sent
     @objc func keyboardWillBeHidden(_ aNotification: Notification) {
         /// 键盘收起，还原scrollView
@@ -123,24 +124,24 @@ class AddNoteVC: UIViewController {
 // MARK: - UITextViewDelegate
 
 extension AddNoteVC: UITextViewDelegate {
-    
+
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
         print("#textViewShouldBeginEditing")
         return true
     }
-    
+
     func textViewDidBeginEditing(_ textView: UITextView) {
         print("#textViewDidBeginEditing")
         activeTextView = textView
     }
-    
+
     func textViewDidEndEditing(_ textView: UITextView) {
         print("#textViewDidEndEditing")
         activeTextView = nil
         //textView.resignFirstResponder()
     }
-    
-    
+
+
 }
 
 

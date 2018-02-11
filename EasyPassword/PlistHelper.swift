@@ -8,6 +8,10 @@
 /// PlistHelper
 /// 功能：用于read、write plist
 ///
+///
+/// 注意：使用sqlite db时，不编译此file
+///
+
 
 import UIKit
 import Foundation

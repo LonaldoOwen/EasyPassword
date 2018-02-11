@@ -29,7 +29,7 @@ import UIKit
 
 
 
-class CreateItemVC: UIViewController, GeneratePasswordDelegate {
+class CreateItemVC: EPViewController, GeneratePasswordDelegate {
     
     
     // MARK: - Properties
@@ -74,7 +74,8 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
         // Do any additional setup after loading the view.
         
         // 注册keyboard通知(处理键盘遮挡)
-        registerForKeyboardNotifications()
+        //registerForKeyboardNotifications()
+        _scrollView = scrollView
         
         // 配置所有UITextField
         textFields = [itemName, userName, password, website]
@@ -85,6 +86,11 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
         }
         saveBtn.isEnabled = false
         
+        // 配置textView
+        note.delegate = self
+        note.text = "add some note here!"
+        note.textColor = UIColor.lightGray
+        
         // 设置“显示密码”
         if #available(iOS 11.0, *) {
             self.showPassword.attributedText = NSAttributedString.init(string: "显示密码", attributes: [NSAttributedStringKey.foregroundColor: UIColor.init(named: "DodgerBlue")!])
@@ -93,11 +99,6 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
             self.showPassword.attributedText = NSAttributedString.init(string: "显示密码", attributes: [NSAttributedStringKey.foregroundColor: UIColor.dodgerBlue])
         }
         self.showPassword.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleTapOnShowPassword)))
-        
-        // 配置textView
-        note.delegate = self
-        note.text = "add some note here!"
-        note.textColor = UIColor.lightGray
         
         /// 使用sqlite存储
         // 创建db实例
@@ -248,70 +249,70 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     
     
     // Called when the UIKeyboardDidShowNotification is sent.
-    @objc
-    func keyboardWasShown(_ aNotification: Notification) {
-        /// 处理键盘遮挡输入框，滚动scrollView
-
-        //        let info = aNotification.userInfo
-//        let keyboardBounds = (info![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-//        let keyboardSize = keyboardBounds.size
-        if let keyboardBounds = (aNotification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            print("Show keyboard: \(keyboardBounds)")
-            
-            let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardBounds.size.height, right: 0)
-            scrollView.contentInset = contentInsets
-            scrollView.scrollIndicatorInsets = contentInsets
-            
-            // If active text field is hidden by keyboard, scroll it so it's visible
-            // Your app might not need or want this behavior.
-            var aRect = self.view.frame
-            aRect.size.height -= keyboardBounds.size.height
-            
-            /// 问题：当textField和textView同时存在时，此处crash
-            /// 原因：当点击textView时，下面activeField=nil
-            /// 解决：添加一步optional binding，明确不为nil的时候才执行
-//            if !aRect.contains(activeField.frame.origin) {
-//                self.scrollView.scrollRectToVisible(activeField.frame, animated: true)
-//            }
-            if let textField = activeField {
-                /// 注意这个origin的相对关系，是相对super，还是相对self.view？？？
-//                if !aRect.contains(textField.frame.origin) {
-//                    self.scrollView.scrollRectToVisible(textField.frame, animated: true)
+//    @objc
+//    func keyboardWasShown(_ aNotification: Notification) {
+//        /// 处理键盘遮挡输入框，滚动scrollView
+//
+////        let info = aNotification.userInfo
+////        let keyboardBounds = (info![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
+////        let keyboardSize = keyboardBounds.size
+//        if let keyboardBounds = (aNotification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+//            print("Show keyboard: \(keyboardBounds)")
+//            
+//            let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardBounds.size.height, right: 0)
+//            scrollView.contentInset = contentInsets
+//            scrollView.scrollIndicatorInsets = contentInsets
+//            
+//            // If active text field is hidden by keyboard, scroll it so it's visible
+//            // Your app might not need or want this behavior.
+//            var aRect = self.view.frame
+//            aRect.size.height -= keyboardBounds.size.height
+//            
+//            /// 问题：当textField和textView同时存在时，此处crash
+//            /// 原因：当点击textView时，下面activeField=nil
+//            /// 解决：添加一步optional binding，明确不为nil的时候才执行
+////            if !aRect.contains(activeField.frame.origin) {
+////                self.scrollView.scrollRectToVisible(activeField.frame, animated: true)
+////            }
+//            if let textField = activeField {
+//                /// 注意这个origin的相对关系，是相对super，还是相对self.view？？？
+////                if !aRect.contains(textField.frame.origin) {
+////                    self.scrollView.scrollRectToVisible(textField.frame, animated: true)
+////                }
+//                /// 问题：textField这块逻辑有与否，实际并不影响tableView的滚动，？？？
+//                /// 原因：
+//                /// 解决：
+//                let point = textField.convert(textField.frame.origin, to: self.view)
+//                if !aRect.contains(point) {
+//                    let rect = textField.convert(textField.frame, to: self.view)
+//                    self.scrollView.scrollRectToVisible(rect, animated: true)
 //                }
-                /// 问题：textField这块逻辑有与否，实际并不影响tableView的滚动，？？？
-                /// 原因：
-                /// 解决：
-                let point = textField.convert(textField.frame.origin, to: self.view)
-                if !aRect.contains(point) {
-                    let rect = textField.convert(textField.frame, to: self.view)
-                    self.scrollView.scrollRectToVisible(rect, animated: true)
-                }
-            }
-            
-            /// 问题：当为textView时，滚动的距离有点大？？？
-            ///
-            ///
-            if let textView = activeTextView {
-                let point = textView.convert(textView.frame.origin, to: self.view)
-                if !aRect.contains(point) {
-                    let rect = textView.convert(textView.frame, to: self.view)
-                    self.scrollView.scrollRectToVisible(rect, animated: true)
-                }
-            }
-            
-        }
-    }
+//            }
+//            
+//            /// 问题：当为textView时，滚动的距离有点大？？？
+//            ///
+//            ///
+//            if let textView = activeTextView {
+//                let point = textView.convert(textView.frame.origin, to: self.view)
+//                if !aRect.contains(point) {
+//                    let rect = textView.convert(textView.frame, to: self.view)
+//                    self.scrollView.scrollRectToVisible(rect, animated: true)
+//                }
+//            }
+//            
+//        }
+//    }
     
     // Called when the UIKeyboardWillHideNotification is sent
-    @objc func keyboardWillBeHidden(_ aNotification: Notification) {
-        /// 键盘收起，还原scrollView
-        if let keyboardBounds = (aNotification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            print("Hidden keyboard: \(keyboardBounds)")
-        }
-        let contentInsets = UIEdgeInsets.zero
-        scrollView.contentInset = contentInsets
-        scrollView.scrollIndicatorInsets = contentInsets
-    }
+//    @objc func keyboardWillBeHidden(_ aNotification: Notification) {
+//        /// 键盘收起，还原scrollView
+//        if let keyboardBounds = (aNotification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+//            print("Hidden keyboard: \(keyboardBounds)")
+//        }
+//        let contentInsets = UIEdgeInsets.zero
+//        scrollView.contentInset = contentInsets
+//        scrollView.scrollIndicatorInsets = contentInsets
+//    }
     
     // 处理textField输入变化
     @objc func handleTextFieldTextChanged(_ textField: UITextField) {
@@ -372,10 +373,10 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
     // MARK: - Helper
     
     // Call this method somewhere in your view controller setup code.
-    fileprivate func registerForKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown), name: .UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(CreateItemVC.keyboardWillBeHidden(_:)), name: .UIKeyboardWillHide, object: nil)
-    }
+//    fileprivate func registerForKeyboardNotifications() {
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown), name: .UIKeyboardDidShow, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(CreateItemVC.keyboardWillBeHidden(_:)), name: .UIKeyboardWillHide, object: nil)
+//    }
     
     
     /*
@@ -394,31 +395,31 @@ class CreateItemVC: UIViewController, GeneratePasswordDelegate {
 
 // MARK: - UITextFieldDelegate
 
-extension CreateItemVC: UITextFieldDelegate {
-    
-    // 点击return收起键盘
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        return textField.resignFirstResponder()
-    }
-    
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        print("#textFieldShouldBeginEditing")
-//        if textField == self.password!  {
-//            // 如果想禁止某个textField输入，返回false
-//        }
-        return true
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        print("#CreateItemVC--textFieldDidBeginEditing")
-        activeField = textField
-    }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        print("#CreateItemVC--textFieldDidEndEditing")
-        activeField = nil
-    }
-    
+//extension CreateItemVC: UITextFieldDelegate {
+//
+//    // 点击return收起键盘
+//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//        return textField.resignFirstResponder()
+//    }
+//
+//    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+//        print("#textFieldShouldBeginEditing")
+////        if textField == self.password!  {
+////            // 如果想禁止某个textField输入，返回false
+////        }
+//        return true
+//    }
+//
+//    func textFieldDidBeginEditing(_ textField: UITextField) {
+//        print("#CreateItemVC--textFieldDidBeginEditing")
+//        activeField = textField
+//    }
+//
+//    func textFieldDidEndEditing(_ textField: UITextField) {
+//        print("#CreateItemVC--textFieldDidEndEditing")
+//        activeField = nil
+//    }
+
     
     // 用这个方法判断合适enable saveButton不好
 //    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -439,37 +440,37 @@ extension CreateItemVC: UITextFieldDelegate {
 //    }
     
     
-}
+//}
 
 
 
 // MARK: - UITextViewDelegate
 
-extension CreateItemVC: UITextViewDelegate {
-    
-    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
-        print("#textViewShouldBeginEditing")
-        return true
-    }
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        print("#textViewDidBeginEditing")
-        activeTextView = textView
-        if textView.text == "add some note here!" {
-            textView.text = ""
-            textView.textColor = UIColor.black
-        }
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        print("#textViewDidEndEditing")
-        activeTextView = nil
-        if textView.text.count < 1 {
-            note.text = "add some note here!"
-            note.textColor = UIColor.lightGray
-        }
-    }
-}
+//extension CreateItemVC: UITextViewDelegate {
+//
+//    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+//        print("#textViewShouldBeginEditing")
+//        return true
+//    }
+//
+//    func textViewDidBeginEditing(_ textView: UITextView) {
+//        print("#textViewDidBeginEditing")
+//        activeTextView = textView
+//        if textView.text == "add some note here!" {
+//            textView.text = ""
+//            textView.textColor = UIColor.black
+//        }
+//    }
+//
+//    func textViewDidEndEditing(_ textView: UITextView) {
+//        print("#textViewDidEndEditing")
+//        activeTextView = nil
+//        if textView.text.count < 1 {
+//            note.text = "add some note here!"
+//            note.textColor = UIColor.lightGray
+//        }
+//    }
+//}
 
 
 

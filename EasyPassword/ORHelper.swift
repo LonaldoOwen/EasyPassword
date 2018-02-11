@@ -25,6 +25,7 @@ class ORHelper {
 
 
 extension UIViewController {
+    
     //增加显示MasterPasswordVC功能(废弃，因为使用了UIView)
 //    func showMasterPasswordVC() {
 //        let storyBoard: UIStoryboard = UIStoryboard.init(name: "Main", bundle: nil)
@@ -47,8 +48,9 @@ extension UIViewController {
 
 
 
-
+// 扩展UIColor
 extension UIColor {
+    
     // DodgerBlue(系统button的蓝色)
     class var dodgerBlue: UIColor {
         return UIColor.init(red: 30.0/255, green: 144.0/255, blue: 255.0/255, alpha: 1.0)
@@ -57,6 +59,13 @@ extension UIColor {
     // 创建密码黄色：255 206 0 1.0
     
 }
+
+
+
+
+
+
+
 
 
 
