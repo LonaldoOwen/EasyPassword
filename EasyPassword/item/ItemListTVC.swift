@@ -157,7 +157,12 @@ class ItemListTVC: UITableViewController {
             } else if item is List {
                 let list: List = item as! List
                 cell.textLabel?.text = list.itemName
-                cell.detailTextLabel?.text = list.note != "" ? list.note : " "
+                //cell.detailTextLabel?.text = list.note != "" ? list.note : " "
+                if item.itemType == FolderModel.ItemType.login {
+                    cell.detailTextLabel?.text = list.userName
+                } else if item.itemType == FolderModel.ItemType.note {
+                    cell.detailTextLabel?.text = list.note != "" ? list.note : " "
+                }
             }
             // 根据item的itemType实际类型，统一设置图像
             if item.itemType == FolderModel.ItemType.login {

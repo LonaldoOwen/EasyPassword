@@ -79,6 +79,7 @@ class EPViewController: UIViewController {
             }
             
             /// 处理textView
+            print("before: \(_scrollView.contentOffset)")
             if let textView = _activeTextView {
                 let point = textView.convert(textView.frame.origin, to: self.view)
                 if !aRect.contains(point) {
@@ -86,8 +87,21 @@ class EPViewController: UIViewController {
 //                    let rect = textView.convert(textView.frame, to: self.view)
 //                    _scrollView.scrollRectToVisible(rect, animated: true)
                     
-                    let scrollPoint = CGPoint(x: 0.0, y: point.y - keyboardBounds.size.height)
+                    /// 问题：
+                    /// 1、向下滚动，说明offset添加反了
+                    /// 2、横屏时，不向上滚动???(添加横竖屏判断，横屏时，滚动过多？？？)
+                    //let scrollPoint = CGPoint(x: 0.0, y: textView.frame.origin.y - keyboardBounds.size.height)    // 1
+                    //let scrollPoint = CGPoint(x: 0.0, y: textView.frame.origin.y + keyboardBounds.size.height)      // 2
+                    let scrollPoint: CGPoint!
+                    if UIInterfaceOrientationIsPortrait(UIApplication.shared.statusBarOrientation) {
+                        // Portrait
+                        scrollPoint = CGPoint(x: 0.0, y: textView.frame.origin.y + keyboardBounds.size.height)
+                    } else {
+                        // Landscape
+                        scrollPoint = CGPoint(x: 0.0, y: textView.frame.origin.y + keyboardBounds.size.width)
+                    }
                     _scrollView.setContentOffset(scrollPoint, animated: true)
+                    print("after: \(_scrollView.contentOffset)")
                 }
             }
         }
@@ -165,7 +179,13 @@ extension EPViewController: UITextViewDelegate {
 }
 
 
-
+extension EPViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        print("#EPViewController-- scrollViewDidEndDecelerating")
+        print(scrollView.contentOffset)
+    }
+}
 
 
 

@@ -25,13 +25,14 @@
 
 import UIKit
 
-class MasterPasswordVC: UIViewController {
+class MasterPasswordVC: EPViewController {
     
     
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollContent: UIView!
-    @IBOutlet weak var masterContent: UIView!
+    //@IBOutlet weak var masterContent: UIView!
+    @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var enterBtn: UIButton!
     @IBOutlet weak var passwordField: UITextField!
     
@@ -47,6 +48,7 @@ class MasterPasswordVC: UIViewController {
         // Do any additional setup after loading the view.
         
         //
+        _scrollView = scrollView
         passwordField.delegate = self
         // 监听textField
         passwordField.addTarget(self, action: #selector(handleTextFieldTextChanged), for: .editingChanged)
@@ -161,8 +163,10 @@ class MasterPasswordVC: UIViewController {
     // shake animation - CABasicAnimation, "position"
     // 未实现
     func shakeWithPosition() {
-        let layer = masterContent.layer
-        let fromPosition: CGPoint = masterContent.center
+        //let layer = masterContent.layer
+        //let fromPosition: CGPoint = masterContent.center
+        let layer = stackView.layer
+        let fromPosition: CGPoint = stackView.center
         let leftPosition: CGPoint = CGPoint(x: fromPosition.x - 30, y: fromPosition.y)
         let rightPosition: CGPoint = CGPoint(x: fromPosition.x + 30, y: fromPosition.y)
         
@@ -198,7 +202,8 @@ class MasterPasswordVC: UIViewController {
         shake.autoreverses = true
         shake.repeatCount = 3
         
-        let layer = masterContent.layer
+        //let layer = masterContent.layer
+        let layer = stackView.layer
         layer.add(shake, forKey: "ShakeAnimation")
     }
     
@@ -218,12 +223,7 @@ class MasterPasswordVC: UIViewController {
 }
 
 
-extension MasterPasswordVC: UITextFieldDelegate {
-    //
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        print("#MasterPasswordVC--textFieldDidBeginEditing")
-    }
-}
+
 
 
 

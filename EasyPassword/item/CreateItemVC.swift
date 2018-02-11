@@ -76,6 +76,7 @@ class CreateItemVC: EPViewController, GeneratePasswordDelegate {
         // 注册keyboard通知(处理键盘遮挡)
         //registerForKeyboardNotifications()
         _scrollView = scrollView
+        scrollView.delegate = self
         
         // 配置所有UITextField
         textFields = [itemName, userName, password, website]
@@ -88,7 +89,7 @@ class CreateItemVC: EPViewController, GeneratePasswordDelegate {
         
         // 配置textView
         note.delegate = self
-        note.text = "add some note here!"
+        note.text = "在这添加备注！"
         note.textColor = UIColor.lightGray
         
         // 设置“显示密码”
