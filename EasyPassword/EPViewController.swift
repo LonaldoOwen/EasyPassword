@@ -49,6 +49,7 @@ class EPViewController: UIViewController {
     // Call this method somewhere in your view controller setup code.
     func registerForKeyboardNotifications() {
         print("#EPViewController--registerForKeyboardNotifications")
+        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }

@@ -129,7 +129,7 @@ extension SQLiteDatabase {
     }
     
     
-    /// 封装s qlite3_exec()方法
+    /// 封装sqlite3_exec()方法
     ///
     /// - Parameter sql: SQL语句
     /// - Returns: Bool type, 执行成功返回true，否则报错
