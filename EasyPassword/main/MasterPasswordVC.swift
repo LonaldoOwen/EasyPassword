@@ -25,7 +25,7 @@
 
 import UIKit
 
-class MasterPasswordVC: EPViewController {
+class MasterPasswordVC: UIViewController, Rollable {
     
     
     
@@ -35,6 +35,13 @@ class MasterPasswordVC: EPViewController {
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var enterBtn: UIButton!
     @IBOutlet weak var passwordField: UITextField!
+    
+    
+    // Rollable defined properties
+    var _scrollView: UIScrollView!
+    var _activeField: UITextField!
+    var _activeTextView: UITextView!
+//    func registerForKeyboardNotifications() {}
     
 
     var db: SQLiteDatabase!
@@ -48,8 +55,13 @@ class MasterPasswordVC: EPViewController {
         // Do any additional setup after loading the view.
         
         //
+        registerForKeyboardNotifications()
+        
+        //
         _scrollView = scrollView
         passwordField.delegate = self
+//        _activeField = passwordField
+//        _activeField.delegate = self
         // 监听textField
         passwordField.addTarget(self, action: #selector(handleTextFieldTextChanged), for: .editingChanged)
         
