@@ -87,6 +87,11 @@ class MasterPasswordVC: UIViewController, Rollable {
         // Dispose of any resources that can be recreated.
     }
     
+    // 验证键盘收起
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        return textField.resignFirstResponder()
+    }
+    
     
     // MARK: - Actions
     
