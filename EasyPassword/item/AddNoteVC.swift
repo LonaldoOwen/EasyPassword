@@ -62,7 +62,7 @@ class AddNoteVC: UIViewController {
     // Call this method somewhere in your view controller setup code.
     fileprivate func registerForKeyboardNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown), name: .UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(CreateItemVC.keyboardWillBeHidden(_:)), name: .UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden), name: .UIKeyboardWillHide, object: nil)
     }
     
     // Called when the UIKeyboardDidShowNotification is sent.

@@ -6,7 +6,7 @@
 //  Copyright © 2018年 libowen. All rights reserved.
 //
 /// EPViewController
-/// 功能：自定义UIViewController，处理键盘遮挡输入框
+/// 功能：自定义UIViewController(Subclassing)，处理键盘遮挡输入框
 /// 1、UITextField
 /// 2、UITextView
 ///
@@ -20,7 +20,7 @@ import UIKit
 
 class EPViewController: UIViewController {
     
-    
+    //
     var _scrollView: UIScrollView!
     var _activeField: UITextField!
     var _activeTextView: UITextView!

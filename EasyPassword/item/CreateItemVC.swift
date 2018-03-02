@@ -29,7 +29,7 @@ import UIKit
 
 
 
-class CreateItemVC: EPViewController, GeneratePasswordDelegate {
+class CreateItemVC: BasicVC, GeneratePasswordDelegate {
     
     
     // MARK: - Properties
@@ -74,7 +74,7 @@ class CreateItemVC: EPViewController, GeneratePasswordDelegate {
         // Do any additional setup after loading the view.
         
         // 注册keyboard通知(处理键盘遮挡)
-        //registerForKeyboardNotifications()
+        registerForKeyboardNotifications()
         _scrollView = scrollView
         scrollView.delegate = self
         

@@ -183,7 +183,7 @@ class CreateNoteVC: UIViewController {
     // Call this method somewhere in your view controller setup code.
     fileprivate func registerForKeyboardNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWasShown), name: .UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(CreateItemVC.keyboardWillBeHidden(_:)), name: .UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillBeHidden), name: .UIKeyboardWillHide, object: nil)
     }
     
     // 处理textField输入变化
@@ -235,3 +235,4 @@ class CreateNoteVC: UIViewController {
     */
 
 }
+

@@ -25,7 +25,7 @@
 
 import UIKit
 
-class MasterPasswordVC: UIViewController, Rollable {
+class MasterPasswordVC: BasicVC {
     
     
     
@@ -38,9 +38,9 @@ class MasterPasswordVC: UIViewController, Rollable {
     
     
     // Rollable defined properties
-    var _scrollView: UIScrollView!
-    var _activeField: UITextField!
-    var _activeTextView: UITextView!
+//    var _scrollView: UIScrollView!
+//    var _activeField: UITextField!
+//    var _activeTextView: UITextView!
 //    func registerForKeyboardNotifications() {}
     
 
@@ -54,14 +54,13 @@ class MasterPasswordVC: UIViewController, Rollable {
 
         // Do any additional setup after loading the view.
         
-        //
+        // 处理键盘遮挡
+        _scrollView = scrollView
         registerForKeyboardNotifications()
         
         //
-        _scrollView = scrollView
         passwordField.delegate = self
-//        _activeField = passwordField
-//        _activeField.delegate = self
+
         // 监听textField
         passwordField.addTarget(self, action: #selector(handleTextFieldTextChanged), for: .editingChanged)
         
@@ -88,9 +87,9 @@ class MasterPasswordVC: UIViewController, Rollable {
     }
     
     // 验证键盘收起
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        return textField.resignFirstResponder()
-    }
+//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//        return textField.resignFirstResponder()
+//    }
     
     
     // MARK: - Actions
