@@ -10,6 +10,9 @@
 /// 1、使用plist时，需要返回所有结果
 /// 2、使用db，则model设置需要的信息即可，根据需要从db查询
 ///
+/// 问题：
+/// 1、FolderModel为什么使用class type，不使用struct ？？？
+///
 ///
 
 
