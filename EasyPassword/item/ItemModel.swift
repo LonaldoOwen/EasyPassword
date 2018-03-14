@@ -20,6 +20,8 @@ import Foundation
 // MARK: - 类型通用协议
 protocol Item {
     var itemId: String { get set }
+    // 实现search功能，增加itemName
+    var itemName: String { get set }
     var persistentType: FolderModel.PersistentType { get set }
     var itemType: FolderModel.ItemType { get set }
     var folderType: FolderModel.FolderType { get set }          // 增加folderType用来判断是来自于哪个folder

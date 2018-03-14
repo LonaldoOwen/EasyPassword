@@ -15,6 +15,7 @@
 /// 5、缺少修改文件夹名称、删除文夹功能（使用db存储后，不需要此功能）
 /// 6、添加sqlite db
 /// 7、第一次进入，未创建table时，不显示？？？，显示一张默认图（）
+/// 8、增加大标题展示
 ///
 ///
 /// 问题：
@@ -90,6 +91,14 @@ class MainTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.rightBarButtonItem = self.editButtonItem
         self.tableView.allowsMultipleSelectionDuringEditing = true
+        
+        // 适配iOS11--设置大标题
+        if #available(iOS 11.0, *) {
+            navigationController?.navigationBar.prefersLargeTitles = true
+            navigationItem.largeTitleDisplayMode = .automatic
+        } else {
+            // Fallback on earlier versions
+        }
         
         /// 使用sqlite存储
         // 创建db实例

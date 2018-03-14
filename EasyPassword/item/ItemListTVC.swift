@@ -14,7 +14,7 @@
 /// 5、search bar使用？？？（V1.0.0暂时砍掉，后面再加）
 /// 6、缺少删除cell的功能、多选、移动到其他文件夹（多选、移动第二版做）
 /// 7、从all进入，查询所有table，显示在一起，按Update_time倒序排列
-/// 8、
+/// 8、增加search bar？？？
 ///
 
 
@@ -22,17 +22,24 @@
 
 import UIKit
 
-class ItemListTVC: UITableViewController {
+class ItemListTVC: BaseTableViewController, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating {
     
+    
+    // MARK: - Properties
     //var itemType: FolderModel.ItemType!
     var persistentType: FolderModel.PersistentType!
     var folderType: FolderModel.FolderType!
     var items: [Item]!
     var db: SQLiteDatabase!
     
+    // 实现search功能：定义属性
+    var searchController: UISearchController!
+    var resultsTableViewController: ResultsTableViewController!
+    
     @IBOutlet weak var addItem: UIBarButtonItem!
     
 
+    // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -41,6 +48,36 @@ class ItemListTVC: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
          self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        
+        /// 实现search功能：实例化
+        resultsTableViewController = ResultsTableViewController()
+        searchController = UISearchController(searchResultsController: resultsTableViewController)
+        searchController.searchResultsUpdater = self
+        searchController.delegate = self
+        searchController.searchBar.delegate = self
+        
+        // 适配iOS11--大标题，列表页面不显示大标题
+        if #available(iOS 11.0, *) {
+            navigationItem.largeTitleDisplayMode = .never
+            
+            navigationItem.searchController = searchController
+            // We want the search bar visible all the time.
+            navigationItem.hidesSearchBarWhenScrolling = false
+        } else {
+            // Fallback on earlier versions
+            // For iOS 10 and earlier, we place the search bar in the table view's header.
+            self.tableView.tableHeaderView = searchController.searchBar
+        }
+        
+        // 使searchController背景变暗，default is YES
+        //searchController.dimsBackgroundDuringPresentation = false
+        
+        // ???
+        // 未添加此句时，searchBar消失？？？
+        definesPresentationContext = true
+        
+        
         
         // 注册通知--用于接收详情页面传来item model（未用到）
         //NotificationCenter.default.addObserver(self, selector: #selector(handlePassBackItemNotification), name: NSNotification.Name(rawValue: "PassBackItemFromDetail"), object: nil)
@@ -145,31 +182,35 @@ class ItemListTVC: UITableViewController {
         // Configure the cell...
         if let items = items {
             let item = items[indexPath.row]
-            if item is Login {
-                print("")
-                let login: Login = item as! Login
-                cell.textLabel?.text = login.itemName
-                cell.detailTextLabel?.text = login.userName
-            } else if item is Note {
-                let note: Note = item as! Note
-                cell.textLabel?.text = note.itemName
-                cell.detailTextLabel?.text = note.note != "" ? note.note : " "
-            } else if item is List {
-                let list: List = item as! List
-                cell.textLabel?.text = list.itemName
-                //cell.detailTextLabel?.text = list.note != "" ? list.note : " "
-                if item.itemType == FolderModel.ItemType.login {
-                    cell.detailTextLabel?.text = list.userName
-                } else if item.itemType == FolderModel.ItemType.note {
-                    cell.detailTextLabel?.text = list.note != "" ? list.note : " "
-                }
-            }
-            // 根据item的itemType实际类型，统一设置图像
-            if item.itemType == FolderModel.ItemType.login {
-                cell.imageView?.image = UIImage(named: "login36")
-            } else if item.itemType == FolderModel.ItemType.note {
-                cell.imageView?.image = UIImage(named: "note36")
-            }
+            configureCell(cell, forItem: item)
+            
+            /// 创建一个BaseUITableViewController用于处理cell的配置，达到Main和Search result能共用的目的
+            ///
+//            if item is Login {
+//                print("")
+//                let login: Login = item as! Login
+//                cell.textLabel?.text = login.itemName
+//                cell.detailTextLabel?.text = login.userName
+//            } else if item is Note {
+//                let note: Note = item as! Note
+//                cell.textLabel?.text = note.itemName
+//                cell.detailTextLabel?.text = note.note != "" ? note.note : " "
+//            } else if item is List {
+//                let list: List = item as! List
+//                cell.textLabel?.text = list.itemName
+//                //cell.detailTextLabel?.text = list.note != "" ? list.note : " "
+//                if item.itemType == FolderModel.ItemType.login {
+//                    cell.detailTextLabel?.text = list.userName
+//                } else if item.itemType == FolderModel.ItemType.note {
+//                    cell.detailTextLabel?.text = list.note != "" ? list.note : " "
+//                }
+//            }
+//            // 根据item的itemType实际类型，统一设置图像
+//            if item.itemType == FolderModel.ItemType.login {
+//                cell.imageView?.image = UIImage(named: "login36")
+//            } else if item.itemType == FolderModel.ItemType.note {
+//                cell.imageView?.image = UIImage(named: "note36")
+//            }
         }
 
         return cell
@@ -427,7 +468,73 @@ class ItemListTVC: UITableViewController {
 }
 
 
+// MARK: - UISearchBarDelegate
 
+extension MainTableViewController {
+    // 目前不起作用？？？(好像点击键盘上的search button时触发)
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        debugPrint("#UISearchBarDelegate: searchBarSearchButtonClicked")
+        searchBar.resignFirstResponder()
+    }
+    
+    // ???
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        debugPrint("searchBarShouldBeginEditing")
+        return true
+    }
+    
+}
+
+
+// MARK: - UISearchControllerDelegate
+// 不起作用？？？
+
+extension MainTableViewController {
+    func presentSearchController(_ searchController: UISearchController) {
+        //debugPrint("#UISearchControllerDelegate: invoked method: \(#function).")
+    }
+    
+    func willPresentSearchController(_ searchController: UISearchController) {
+        //debugPrint("UISearchControllerDelegate invoked method: \(__FUNCTION__).")
+    }
+    
+    func didPresentSearchController(_ searchController: UISearchController) {
+        debugPrint("#UISearchControllerDelegate: invoked method: \(#function).")
+    }
+    
+    func willDismissSearchController(_ searchController: UISearchController) {
+        //debugPrint("UISearchControllerDelegate invoked method: \(__FUNCTION__).")
+    }
+    
+    func didDismissSearchController(_ searchController: UISearchController) {
+        debugPrint("#UISearchControllerDelegate: invoked method: \(#function).")
+    }
+    
+}
+
+
+
+// MARK: - UISearchResultsUpdating
+
+extension ItemListTVC {
+    // 处理搜索逻辑，展示搜索结果
+    func updateSearchResults(for searchController: UISearchController) {
+        //
+        debugPrint("#UISearchResultsUpdating: updateSearchResults")
+        
+        let searchText = searchController.searchBar.text
+        let searchResults = items
+        let filterResults = searchResults?.filter({ (item: Item) -> Bool in
+            print("item.itemName: \(item.itemName)")
+            return item.itemName.lowercased().contains(searchText!.lowercased())
+        })
+        
+        if let resultsController = searchController.searchResultsController as? ResultsTableViewController {
+            resultsController.filteredItems = filterResults!
+            resultsController.tableView.reloadData()
+        }
+    }
+}
 
 
 

@@ -22,6 +22,8 @@
 		235D7A5A1FCD04CD004DB418 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 235D7A581FCD04CD004DB418 /* LaunchScreen.storyboard */; };
 		235F3418202885DF00E48CEE /* ModifyMasterPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 235F3417202885DF00E48CEE /* ModifyMasterPasswordVC.swift */; };
 		238A66BD202070EF00BEAACF /* CreateMasterPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238A66BC202070EF00BEAACF /* CreateMasterPasswordVC.swift */; };
+		238CB29E2057B0BB007D1236 /* BaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238CB29D2057B0BB007D1236 /* BaseTableViewController.swift */; };
+		238CB2A02057B326007D1236 /* ResultsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238CB29F2057B326007D1236 /* ResultsTableViewController.swift */; };
 		238FD9691FDA99F70015B855 /* CreateItemVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 238FD9681FDA99F70015B855 /* CreateItemVC.swift */; };
 		2396E960202DC00800216A6C /* EPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2396E95F202DC00800216A6C /* EPViewController.swift */; };
 		23B33D981FCE666B005403C1 /* MainTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B33D971FCE666A005403C1 /* MainTableViewController.swift */; };
@@ -65,6 +67,8 @@
 		235D7A5B1FCD04CD004DB418 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		235F3417202885DF00E48CEE /* ModifyMasterPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyMasterPasswordVC.swift; sourceTree = "<group>"; };
 		238A66BC202070EF00BEAACF /* CreateMasterPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMasterPasswordVC.swift; sourceTree = "<group>"; };
+		238CB29D2057B0BB007D1236 /* BaseTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTableViewController.swift; sourceTree = "<group>"; };
+		238CB29F2057B326007D1236 /* ResultsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsTableViewController.swift; sourceTree = "<group>"; };
 		238FD9681FDA99F70015B855 /* CreateItemVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateItemVC.swift; sourceTree = "<group>"; };
 		2396E95F202DC00800216A6C /* EPViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPViewController.swift; sourceTree = "<group>"; };
 		23B33D941FCD8069005403C1 /* PlistHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlistHelper.swift; sourceTree = "<group>"; };
@@ -185,7 +189,9 @@
 			isa = PBXGroup;
 			children = (
 				5AEF16151FD6F71A00FAD262 /* ItemModel.swift */,
+				238CB29D2057B0BB007D1236 /* BaseTableViewController.swift */,
 				5AEF16131FD6F43F00FAD262 /* ItemListTVC.swift */,
+				238CB29F2057B326007D1236 /* ResultsTableViewController.swift */,
 				238FD9681FDA99F70015B855 /* CreateItemVC.swift */,
 				5A93B5591FF37829003C94FC /* GenerateView.swift */,
 				5A93B55B1FF37838003C94FC /* GenerateView.xib */,
@@ -290,10 +296,12 @@
 				23DC7C8E1FE274DC00D6A9BB /* ItemDetailTVC.swift in Sources */,
 				231416981FFCC28800F113FC /* NoteCell.swift in Sources */,
 				238FD9691FDA99F70015B855 /* CreateItemVC.swift in Sources */,
+				238CB2A02057B326007D1236 /* ResultsTableViewController.swift in Sources */,
 				238A66BD202070EF00BEAACF /* CreateMasterPasswordVC.swift in Sources */,
 				5ABFED75201B893F00565509 /* MasterPasswordVC.swift in Sources */,
 				234D53122018AD0B001732AC /* CreateNoteVC.swift in Sources */,
 				5A93B55A1FF37829003C94FC /* GenerateView.swift in Sources */,
+				238CB29E2057B0BB007D1236 /* BaseTableViewController.swift in Sources */,
 				5ABD54202018E19B00918486 /* AddNoteVC.swift in Sources */,
 				23B33D981FCE666B005403C1 /* MainTableViewController.swift in Sources */,
 				5AC802A0201D7E630063B2C9 /* ORHelper.swift in Sources */,
