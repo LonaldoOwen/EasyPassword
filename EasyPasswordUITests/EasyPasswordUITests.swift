@@ -2,7 +2,7 @@
 //  EasyPasswordUITests.swift
 //  EasyPasswordUITests
 //
-//  Created by owen on 2018/4/24.
+//  Created by owen on 2018/4/25.
 //  Copyright © 2018 libowen. All rights reserved.
 //
 
@@ -31,7 +31,7 @@ class EasyPasswordUITests: XCTestCase {
     func testExample() {
         // Use recording to get started writing UI tests.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
-        print("test Example!")
+        print("Hello, UITests!")
     }
     
 }

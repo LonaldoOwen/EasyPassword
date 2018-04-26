@@ -30,7 +30,7 @@
 		23B33D9B1FCE66AD005403C1 /* FolderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B33D9A1FCE66AD005403C1 /* FolderModel.swift */; };
 		23DC7C8E1FE274DC00D6A9BB /* ItemDetailTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23DC7C8D1FE274DC00D6A9BB /* ItemDetailTVC.swift */; };
 		5A073EC820148AE100BBD3F5 /* note36@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A073EC720148AE000BBD3F5 /* note36@2x.png */; };
-		5A197170208F74FB0033B45D /* EasyPasswordUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A19716F208F74FB0033B45D /* EasyPasswordUITests.swift */; };
+		5A5A73BB2090B1E2009E9EE0 /* EasyPasswordUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5A73BA2090B1E2009E9EE0 /* EasyPasswordUITests.swift */; };
 		5A8495E82029F91B006840C2 /* 设置.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A8495E72029F91A006840C2 /* 设置.png */; };
 		5A8495EA2029FAFF006840C2 /* 设置32.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A8495E92029FAFE006840C2 /* 设置32.png */; };
 		5A8495EC2029FB37006840C2 /* 设置20.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A8495EB2029FB36006840C2 /* 设置20.png */; };
@@ -51,7 +51,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		5A197172208F74FB0033B45D /* PBXContainerItemProxy */ = {
+		5A5A73BD2090B1E2009E9EE0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 235D7A441FCD04CD004DB418 /* Project object */;
 			proxyType = 1;
@@ -87,9 +87,9 @@
 		23B33D9A1FCE66AD005403C1 /* FolderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderModel.swift; sourceTree = "<group>"; };
 		23DC7C8D1FE274DC00D6A9BB /* ItemDetailTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailTVC.swift; sourceTree = "<group>"; };
 		5A073EC720148AE000BBD3F5 /* note36@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "note36@2x.png"; sourceTree = "<group>"; };
-		5A19716D208F74FB0033B45D /* EasyPasswordUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EasyPasswordUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		5A19716F208F74FB0033B45D /* EasyPasswordUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EasyPasswordUITests.swift; sourceTree = "<group>"; };
-		5A197171208F74FB0033B45D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5A5A73B82090B1E2009E9EE0 /* EasyPasswordUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EasyPasswordUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A5A73BA2090B1E2009E9EE0 /* EasyPasswordUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EasyPasswordUITests.swift; sourceTree = "<group>"; };
+		5A5A73BC2090B1E2009E9EE0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5A8495E72029F91A006840C2 /* 设置.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "设置.png"; sourceTree = "<group>"; };
 		5A8495E92029FAFE006840C2 /* 设置32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "设置32.png"; sourceTree = "<group>"; };
 		5A8495EB2029FB36006840C2 /* 设置20.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "设置20.png"; sourceTree = "<group>"; };
@@ -118,7 +118,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		5A19716A208F74FB0033B45D /* Frameworks */ = {
+		5A5A73B52090B1E2009E9EE0 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -161,7 +161,7 @@
 			isa = PBXGroup;
 			children = (
 				235D7A4E1FCD04CD004DB418 /* EasyPassword */,
-				5A19716E208F74FB0033B45D /* EasyPasswordUITests */,
+				5A5A73B92090B1E2009E9EE0 /* EasyPasswordUITests */,
 				235D7A4D1FCD04CD004DB418 /* Products */,
 				234C102320076BE200CF23B0 /* Frameworks */,
 			);
@@ -171,7 +171,7 @@
 			isa = PBXGroup;
 			children = (
 				235D7A4C1FCD04CD004DB418 /* EasyPassword.app */,
-				5A19716D208F74FB0033B45D /* EasyPasswordUITests.xctest */,
+				5A5A73B82090B1E2009E9EE0 /* EasyPasswordUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -208,11 +208,11 @@
 			path = main;
 			sourceTree = "<group>";
 		};
-		5A19716E208F74FB0033B45D /* EasyPasswordUITests */ = {
+		5A5A73B92090B1E2009E9EE0 /* EasyPasswordUITests */ = {
 			isa = PBXGroup;
 			children = (
-				5A19716F208F74FB0033B45D /* EasyPasswordUITests.swift */,
-				5A197171208F74FB0033B45D /* Info.plist */,
+				5A5A73BA2090B1E2009E9EE0 /* EasyPasswordUITests.swift */,
+				5A5A73BC2090B1E2009E9EE0 /* Info.plist */,
 			);
 			path = EasyPasswordUITests;
 			sourceTree = "<group>";
@@ -256,22 +256,22 @@
 			productReference = 235D7A4C1FCD04CD004DB418 /* EasyPassword.app */;
 			productType = "com.apple.product-type.application";
 		};
-		5A19716C208F74FB0033B45D /* EasyPasswordUITests */ = {
+		5A5A73B72090B1E2009E9EE0 /* EasyPasswordUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5A197174208F74FB0033B45D /* Build configuration list for PBXNativeTarget "EasyPasswordUITests" */;
+			buildConfigurationList = 5A5A73BF2090B1E2009E9EE0 /* Build configuration list for PBXNativeTarget "EasyPasswordUITests" */;
 			buildPhases = (
-				5A197169208F74FB0033B45D /* Sources */,
-				5A19716A208F74FB0033B45D /* Frameworks */,
-				5A19716B208F74FB0033B45D /* Resources */,
+				5A5A73B42090B1E2009E9EE0 /* Sources */,
+				5A5A73B52090B1E2009E9EE0 /* Frameworks */,
+				5A5A73B62090B1E2009E9EE0 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				5A197173208F74FB0033B45D /* PBXTargetDependency */,
+				5A5A73BE2090B1E2009E9EE0 /* PBXTargetDependency */,
 			);
 			name = EasyPasswordUITests;
 			productName = EasyPasswordUITests;
-			productReference = 5A19716D208F74FB0033B45D /* EasyPasswordUITests.xctest */;
+			productReference = 5A5A73B82090B1E2009E9EE0 /* EasyPasswordUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -288,9 +288,9 @@
 						CreatedOnToolsVersion = 9.1;
 						ProvisioningStyle = Manual;
 					};
-					5A19716C208F74FB0033B45D = {
+					5A5A73B72090B1E2009E9EE0 = {
 						CreatedOnToolsVersion = 9.3;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						TestTargetID = 235D7A4B1FCD04CD004DB418;
 					};
 				};
@@ -309,7 +309,7 @@
 			projectRoot = "";
 			targets = (
 				235D7A4B1FCD04CD004DB418 /* EasyPassword */,
-				5A19716C208F74FB0033B45D /* EasyPasswordUITests */,
+				5A5A73B72090B1E2009E9EE0 /* EasyPasswordUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -341,7 +341,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		5A19716B208F74FB0033B45D /* Resources */ = {
+		5A5A73B62090B1E2009E9EE0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -378,21 +378,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		5A197169208F74FB0033B45D /* Sources */ = {
+		5A5A73B42090B1E2009E9EE0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A197170208F74FB0033B45D /* EasyPasswordUITests.swift in Sources */,
+				5A5A73BB2090B1E2009E9EE0 /* EasyPasswordUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		5A197173208F74FB0033B45D /* PBXTargetDependency */ = {
+		5A5A73BE2090B1E2009E9EE0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 235D7A4B1FCD04CD004DB418 /* EasyPassword */;
-			targetProxy = 5A197172208F74FB0033B45D /* PBXContainerItemProxy */;
+			targetProxy = 5A5A73BD2090B1E2009E9EE0 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -528,6 +528,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = KM6P947ZT3;
@@ -548,53 +549,57 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = KM6P947ZT3;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = EasyPassword/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tianyuchen.EasyPassword;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4e349970-75a3-4b28-84e5-c07cdbd39d78";
-				PROVISIONING_PROFILE_SPECIFIER = "EasyPassword Distribution Profile";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
-		5A197175208F74FB0033B45D /* Debug */ = {
+		5A5A73C02090B1E2009E9EE0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = KM6P947ZT3;
 				INFOPLIST_FILE = EasyPasswordUITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.owen.EasyPasswordUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tianyuchen.EasyPassword;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4e349970-75a3-4b28-84e5-c07cdbd39d78";
+				PROVISIONING_PROFILE = "829c1f50-7bdc-4922-9bdd-1fe38b8bd49e";
+				PROVISIONING_PROFILE_SPECIFIER = "EasyPassword Development Profile";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = EasyPassword;
 			};
 			name = Debug;
 		};
-		5A197176208F74FB0033B45D /* Release */ = {
+		5A5A73C12090B1E2009E9EE0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = EasyPasswordUITests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.owen.EasyPasswordUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tianyuchen.EasyPassword;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "4e349970-75a3-4b28-84e5-c07cdbd39d78";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = EasyPassword;
@@ -622,11 +627,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5A197174208F74FB0033B45D /* Build configuration list for PBXNativeTarget "EasyPasswordUITests" */ = {
+		5A5A73BF2090B1E2009E9EE0 /* Build configuration list for PBXNativeTarget "EasyPasswordUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				5A197175208F74FB0033B45D /* Debug */,
-				5A197176208F74FB0033B45D /* Release */,
+				5A5A73C02090B1E2009E9EE0 /* Debug */,
+				5A5A73C12090B1E2009E9EE0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
