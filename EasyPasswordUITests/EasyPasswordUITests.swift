@@ -183,21 +183,26 @@ class EasyPasswordUITests: XCTestCase {
             // wait: using XCTAssertEqual()
             //XCTAssertEqual(app.scrollViews.buttons.element.label, "生成新密码", "Failed: 未找到button=生成新密码。")
             
-            // Wait: 判断是否出现itemName = "qqq"
+            // wait: 判断是否出现itemName = "qqq"
             // identifier: ???label: ???（哪些元素有identifier属性、哪些有label属性）
             XCTContext.runActivity(named: "Activity: Assert") { _ in
                 let itemName = app.scrollViews.firstMatch.textFields.element(matching: NSPredicate(format: "value = %@", "qqq"))
-                
+                // （可行）
 //                let predicate = NSPredicate(format: "exists == true")
 //                expectation(for: predicate, evaluatedWith: itemName, handler: nil)
 //                waitForExpectations(timeout: 10, handler: nil)
-                // 可行
+                
+                // （可行）
                 //self.waitForElementToAppear(itemName, timeOut: 10)
-                // failed
-                //self.waitForExpectation(expectation: expectation(description: "Find qqq"), time: 10)
+                
+                // ？？？（failed）
+                //self.waitForExpectation(expectation: expectation(description: "Find qqq"), time: 5)
+                
+                // 可行（不会退出test）
+//                let result = itemName.waitForExistence(timeout: 5)
+                
                 //
-                let result = itemName.waitForExistence(timeout: 5)
-                print("result: \(result)")
+                _ = self.waitForElementToAppear(itemName)
             }
             
         }
@@ -208,6 +213,7 @@ class EasyPasswordUITests: XCTestCase {
     
     // MARK: - Helper
     
+    // Case：Enter Master Password
     func enterMasterPassword() {
         XCTContext.runActivity(named: "Activity: Enter Master Password ") { _ in
             // enter master password
@@ -223,7 +229,7 @@ class EasyPasswordUITests: XCTestCase {
     }
     
     
-    // wait: using waitForExpectations()
+    // wait: using waitForExpectations(Before Xcode 8.3)
     // 此种方法如果timeout后，test case会失败
     func waitForElementToAppear(_ element: XCUIElement, timeOut: TimeInterval = 5,  file: String = #file, line: UInt = #line) {
         
@@ -238,12 +244,42 @@ class EasyPasswordUITests: XCTestCase {
     }
     
     // wait: using
-    func waitForExpectation(expectation:XCTestExpectation, time: Double, safe: Bool = false) {
+    func waitForExpectation(element: XCUIElement, expectation:XCTestExpectation, time: Double, safe: Bool = false) {
+    
+//        let predicate = NSPredicate(format: "exists == true")
+//        let expectation = expectation(for: predicate, evaluatedWith: element, handler: nil)
         let result: XCTWaiter.Result = XCTWaiter().wait(for: [expectation], timeout: time)
         if !safe && result != .completed {
             // if expectation is strict and was not fulfilled
             XCTFail("Condition was not satisfied during \(time) seconds")
         }
     }
+    
+    // wait: using XCTWaiter(After Xcode 8.3)
+    func waitForElementToAppear(_ element: XCUIElement) -> Bool {
+        let predicate = NSPredicate(format: "exists == true")
+        let expectation = XCTNSPredicateExpectation(predicate: predicate, object: element)
+        
+        // XCTWaiter()
+        // 有了XCTWaiter()，可以处理不同情况的结果（控制力更强）
+        let result = XCTWaiter().wait(for: [expectation], timeout: 5)
+        switch result {
+        case .completed:
+            // 完成：
+            XCTAssert(true, "Find qqq.")
+        case .timedOut:
+            // timeout时，可以不fail test case，结果写入log
+            XCTFail("Condition was not satisfied during \(time) seconds")
+        default:
+            // 其他情况
+            XCTAssertNil(nil, "nil")
+        }
+        return result == .completed
+    }
+    
+    
+    
+    
+    
     
 }
