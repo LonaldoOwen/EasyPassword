@@ -245,10 +245,7 @@
 			children = (
 				235D7A4F1FCD04CD004DB418 /* AppDelegate.swift */,
 				235D7A511FCD04CD004DB418 /* ViewController.swift */,
-				23B33D941FCD8069005403C1 /* PlistHelper.swift */,
-				234C10212007050500CF23B0 /* SQLiteHelper.swift */,
-				5AC8029F201D7E630063B2C9 /* ORHelper.swift */,
-				2396E95F202DC00800216A6C /* EPViewController.swift */,
+				5ADB32E320AFF64C00E9E8D4 /* Helper */,
 				23B33D961FCE666A005403C1 /* main */,
 				5AEF16121FD6F0BD00FAD262 /* item */,
 				2335AFFE1FDFDA1E00E2A922 /* resource */,
@@ -301,21 +298,56 @@
 			path = EasyPasswordUITests;
 			sourceTree = "<group>";
 		};
-		5AEF16121FD6F0BD00FAD262 /* item */ = {
+		5ADB32E020AFF59300E9E8D4 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				5AEF16131FD6F43F00FAD262 /* ItemListTVC.swift */,
+				238FD9681FDA99F70015B855 /* CreateItemVC.swift */,
+				234D53112018AD0B001732AC /* CreateNoteVC.swift */,
+				5ABD541F2018E19B00918486 /* AddNoteVC.swift */,
+				23DC7C8D1FE274DC00D6A9BB /* ItemDetailTVC.swift */,
+				238CB29D2057B0BB007D1236 /* BaseTableViewController.swift */,
+				238CB29F2057B326007D1236 /* ResultsTableViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		5ADB32E120AFF5D900E9E8D4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				5A93B5591FF37829003C94FC /* GenerateView.swift */,
+				5A93B55B1FF37838003C94FC /* GenerateView.xib */,
+				231416961FFCC28800F113FC /* NoteCell.swift */,
+				231416971FFCC28800F113FC /* NoteCell.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		5ADB32E220AFF5E700E9E8D4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				5AEF16151FD6F71A00FAD262 /* ItemModel.swift */,
-				238CB29D2057B0BB007D1236 /* BaseTableViewController.swift */,
-				5AEF16131FD6F43F00FAD262 /* ItemListTVC.swift */,
-				238CB29F2057B326007D1236 /* ResultsTableViewController.swift */,
-				238FD9681FDA99F70015B855 /* CreateItemVC.swift */,
-				5A93B5591FF37829003C94FC /* GenerateView.swift */,
-				5A93B55B1FF37838003C94FC /* GenerateView.xib */,
-				23DC7C8D1FE274DC00D6A9BB /* ItemDetailTVC.swift */,
-				231416961FFCC28800F113FC /* NoteCell.swift */,
-				231416971FFCC28800F113FC /* NoteCell.xib */,
-				234D53112018AD0B001732AC /* CreateNoteVC.swift */,
-				5ABD541F2018E19B00918486 /* AddNoteVC.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		5ADB32E320AFF64C00E9E8D4 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				23B33D941FCD8069005403C1 /* PlistHelper.swift */,
+				234C10212007050500CF23B0 /* SQLiteHelper.swift */,
+				5AC8029F201D7E630063B2C9 /* ORHelper.swift */,
+				2396E95F202DC00800216A6C /* EPViewController.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		5AEF16121FD6F0BD00FAD262 /* item */ = {
+			isa = PBXGroup;
+			children = (
+				5ADB32E220AFF5E700E9E8D4 /* Model */,
+				5ADB32E120AFF5D900E9E8D4 /* View */,
+				5ADB32E020AFF59300E9E8D4 /* Controller */,
 			);
 			path = item;
 			sourceTree = "<group>";

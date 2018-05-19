@@ -162,6 +162,7 @@ class ItemDetailTVC: UITableViewController {
             createItemVCNav?.modalTransitionStyle = .crossDissolve
             createItemVCNav?.modalPresentationStyle = .fullScreen
             self.present(createItemVCNav!, animated: true, completion: nil)
+            
         } else if itemType == FolderModel.ItemType.note {
             // 跳转到CreateNoteVC
             let nav: UINavigationController = storyboard?.instantiateViewController(withIdentifier: "CreateNoteVCNav") as! UINavigationController

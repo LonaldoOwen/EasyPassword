@@ -26,7 +26,8 @@ class EPViewController: UIViewController {
     var _activeTextView: UITextView!
     
     
-
+    
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
 

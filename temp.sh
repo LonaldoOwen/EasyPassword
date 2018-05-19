@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # 按照Google的Shell风格指南编码
+
 # 设备名称
 devices=("platform=iOS Simulator,name=iPhone X,OS=11.3"
 "platform=iOS Simulator,name=iPhone X 2,OS=11.3")
@@ -13,7 +14,7 @@ for (( i=0; i<${#devices[@]}; i++ )); do
   echo ${devices[$i]}
 done
 
-#
+# 拼接-only-testing字段
 i=0
 path_to_test_classes='EasyPasswordUITests'
 for entry in "$path_to_test_classes"/*Test.swift; do
@@ -34,7 +35,7 @@ for entry in "$path_to_test_classes"/*Test.swift; do
   echo ${devices[$i]}
 done
 
-#
+# 拼接成完整命令
 cmd=''
 for (( i=0; i<${#devices[@]}; i++ )); do
   cmd=${cmd}${devices[$i]}" test & "

@@ -5,6 +5,12 @@
 //  Created by libowen on 2018/3/13.
 //  Copyright © 2018年 libowen. All rights reserved.
 //
+/// 功能：
+///
+///
+///
+///
+
 
 import UIKit
 
@@ -12,6 +18,7 @@ class BaseTableViewController: UITableViewController {
 
     // MARK: - Configuration
     
+    // 设置cell数据
     func configureCell(_ cell: UITableViewCell, forItem item: Item) {
         debugPrint("#BaseTableViewController: configureCell")
         

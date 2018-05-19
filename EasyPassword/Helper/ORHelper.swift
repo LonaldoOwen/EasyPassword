@@ -126,7 +126,7 @@ protocol Rollable {
 */
 
 
-// OOP和POP结合
+// MARK: - OOP和POP结合
 
 protocol Rollable {
     var _scrollView: UIScrollView! {get set}
@@ -237,8 +237,8 @@ extension Rollable where Self: UIViewController {
                 let point = textView.convert(textView.frame.origin, to: self.view)
                 if !aRect.contains(point) {
                     /// 问题：此代码不会滚动？？？
-                    //                    let rect = textView.convert(textView.frame, to: self.view)
-                    //                    _scrollView.scrollRectToVisible(rect, animated: true)
+//                    let rect = textView.convert(textView.frame, to: self.view)
+//                    _scrollView.scrollRectToVisible(rect, animated: true)
                     
                     /// 问题：
                     /// 1、向下滚动，说明offset添加反了
