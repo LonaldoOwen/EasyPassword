@@ -52,6 +52,7 @@
 		5ABFED81201B986F00565509 /* arrow_gray@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABFED7F201B986E00565509 /* arrow_gray@2x.png */; };
 		5ABFED85201B9A0000565509 /* logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5ABFED84201B99FF00565509 /* logo@2x.png */; };
 		5AC802A0201D7E630063B2C9 /* ORHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC8029F201D7E630063B2C9 /* ORHelper.swift */; };
+		5ADB32E620B11F2E00E9E8D4 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5ADB32E520B11F2E00E9E8D4 /* CloudKit.framework */; };
 		5AEF16141FD6F43F00FAD262 /* ItemListTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEF16131FD6F43F00FAD262 /* ItemListTVC.swift */; };
 		5AEF16161FD6F71A00FAD262 /* ItemModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEF16151FD6F71A00FAD262 /* ItemModel.swift */; };
 /* End PBXBuildFile section */
@@ -142,6 +143,8 @@
 		5ABFED7F201B986E00565509 /* arrow_gray@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_gray@2x.png"; sourceTree = "<group>"; };
 		5ABFED84201B99FF00565509 /* logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo@2x.png"; sourceTree = "<group>"; };
 		5AC8029F201D7E630063B2C9 /* ORHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ORHelper.swift; sourceTree = "<group>"; };
+		5ADB32E420B021F900E9E8D4 /* EasyPassword.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EasyPassword.entitlements; sourceTree = "<group>"; };
+		5ADB32E520B11F2E00E9E8D4 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		5AEF16131FD6F43F00FAD262 /* ItemListTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemListTVC.swift; sourceTree = "<group>"; };
 		5AEF16151FD6F71A00FAD262 /* ItemModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -152,6 +155,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				234C102520076BE300CF23B0 /* libsqlite3.0.tbd in Frameworks */,
+				5ADB32E620B11F2E00E9E8D4 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,6 +214,7 @@
 		234C102320076BE200CF23B0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5ADB32E520B11F2E00E9E8D4 /* CloudKit.framework */,
 				234C102420076BE200CF23B0 /* libsqlite3.0.tbd */,
 			);
 			name = Frameworks;
@@ -243,13 +248,14 @@
 		235D7A4E1FCD04CD004DB418 /* EasyPassword */ = {
 			isa = PBXGroup;
 			children = (
-				235D7A4F1FCD04CD004DB418 /* AppDelegate.swift */,
-				235D7A511FCD04CD004DB418 /* ViewController.swift */,
+				5ADB32E420B021F900E9E8D4 /* EasyPassword.entitlements */,
 				5ADB32E320AFF64C00E9E8D4 /* Helper */,
 				23B33D961FCE666A005403C1 /* main */,
 				5AEF16121FD6F0BD00FAD262 /* item */,
 				2335AFFE1FDFDA1E00E2A922 /* resource */,
 				235D7A531FCD04CD004DB418 /* Main.storyboard */,
+				235D7A4F1FCD04CD004DB418 /* AppDelegate.swift */,
+				235D7A511FCD04CD004DB418 /* ViewController.swift */,
 				235D7A561FCD04CD004DB418 /* Assets.xcassets */,
 				235D7A581FCD04CD004DB418 /* LaunchScreen.storyboard */,
 				235D7A5B1FCD04CD004DB418 /* Info.plist */,
@@ -457,6 +463,14 @@
 					235D7A4B1FCD04CD004DB418 = {
 						CreatedOnToolsVersion = 9.1;
 						ProvisioningStyle = Manual;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 					5A2584E520981FE900EE381B = {
 						CreatedOnToolsVersion = 9.3;
@@ -778,6 +792,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = EasyPassword/EasyPassword.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
@@ -799,6 +814,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = EasyPassword/EasyPassword.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
